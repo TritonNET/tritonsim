@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/.vs
+/src/TritonSimRenderer/x64
+/src/TritonSimGUI/bin
+/src/TritonSimGUI/obj
