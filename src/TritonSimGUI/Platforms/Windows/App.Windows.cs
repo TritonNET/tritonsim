@@ -15,9 +15,9 @@ namespace TritonSimGUI
             if (nativeWindow is Microsoft.UI.Xaml.Window winuiWindow)
             {
                 // Access your Colors.xaml resources
-                var bgMaui = GetMauiColor("OffBlack");              // #1F1F1F
-                var borderMaui = GetMauiColor("ColorGrayDisabled"); // #A5A5A5
-                var textMaui = GetMauiColor("ColorWhite");          // #FFFFFF
+                var bgMaui = GetMauiColor("StdTitleBarBackground");
+                var borderMaui = GetMauiColor("StdBoarder");
+                var textMaui = GetMauiColor("StdTitleText");
 
                 // Convert for WinUI
                 var bgWin = ToWinUIColor(bgMaui);
@@ -45,15 +45,15 @@ namespace TritonSimGUI
                     titleBar.ButtonForegroundColor = textWin;
 
                     // Hover
-                    titleBar.ButtonHoverBackgroundColor = bgWin;
+                    titleBar.ButtonHoverBackgroundColor = borderWin;
                     titleBar.ButtonHoverForegroundColor = textWin;
 
                     // Pressed
-                    titleBar.ButtonPressedBackgroundColor = bgWin;
+                    titleBar.ButtonPressedBackgroundColor = borderWin;
                     titleBar.ButtonPressedForegroundColor = textWin;
 
                     // Inactive
-                    titleBar.ButtonInactiveBackgroundColor = bgWin;
+                    titleBar.ButtonInactiveBackgroundColor = borderWin;
                     titleBar.ButtonInactiveForegroundColor = textWin;
                 }
 

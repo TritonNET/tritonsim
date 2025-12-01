@@ -4,36 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <Color x:Key="StdTitleBarBackground">#1f1f1f</Color>
+    <Color x:Key="StdBackground">#232323</Color>
+    <Color x:Key="StdBoarder">#A5A5A5</Color>
+    <Color x:Key="StdTitleText">#FFFFFF</Color>
+    
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
-
-    <!-- Navy (Title bar, borders) -->
-    <Color x:Key="ColorNavy">#001A4D</Color>
-
-    <!-- White (Backgrounds, title text) -->
-    <Color x:Key="ColorWhite">#FFFFFF</Color>
-
-    <!-- Slightly lighter Navy (optional accents) -->
-    <Color x:Key="ColorNavyLight">#002060</Color>
-
-    <!-- Dark Navy (optional text or shadows) -->
-    <Color x:Key="ColorNavyDark">#000D26</Color>
-
-    <!-- ========================================== -->
-    <!--  NEUTRALS (Optional for controls)          -->
-    <!-- ========================================== -->
-
-    <!-- Light gray background -->
-    <Color x:Key="ColorGrayLight">#F4F4F4</Color>
-
-    <!-- Text gray -->
-    <Color x:Key="ColorGrayDark">#505050</Color>
-
-    <!-- Disabled text gray -->
-    <Color x:Key="ColorGrayDisabled">#A5A5A5</Color>
-
-    <!-- ========================================== -->
-    <!--  BUTTON + HOVER COLORS (Optional)          -->
-    <!-- ========================================== -->
 
     <!-- Hover background for minimize/max/close on custom bars -->
     <Color x:Key="ButtonHoverLight">#1F2D5A</Color>
@@ -55,7 +31,6 @@
     <Color x:Key="Black">Black</Color>
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>

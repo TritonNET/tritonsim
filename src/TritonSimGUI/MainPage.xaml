@@ -3,7 +3,7 @@
              xmlns:views="clr-namespace:TritonSimGUI.Views"
              x:Class="TritonSimGUI.MainPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="White">
+             BackgroundColor="{StaticResource StdBackground}">
 
     <Grid>
         <Border
