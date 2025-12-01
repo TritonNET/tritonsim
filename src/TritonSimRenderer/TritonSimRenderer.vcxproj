@@ -97,7 +97,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win32_vs2022\bin\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>bgfxDebug.lib;bxDebug.lib;bimgDebug.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxDebug.lib;bxDebug.lib;bimgDebug.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,7 +117,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win64_vs2022\bin\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>bgfxRelease.lib;bxRelease.lib;bimgRelease.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxRelease.lib;bxRelease.lib;bimgRelease.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -136,7 +136,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win64_vs2022\bin\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>bgfxDebug.lib;bxDebug.lib;bimgDebug.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxDebug.lib;bxDebug.lib;bimgDebug.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>true</MapExports>
+      <AssemblyDebug>true</AssemblyDebug>
+      <UseDynamicDebugging>true</UseDynamicDebugging>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,7 +160,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win64_vs2022\bin\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>bgfxRelease.lib;bxRelease.lib;bimgRelease.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxRelease.lib;bxRelease.lib;bimgRelease.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

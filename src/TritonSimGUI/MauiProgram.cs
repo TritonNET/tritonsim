@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using TritonSimGUI.Controls;
+using Microsoft.Maui.Controls.Compatibility.Hosting;
+using TritonSimGUI.Views;
 
 namespace TritonSimGUI
 {
@@ -13,6 +16,12 @@ namespace TritonSimGUI
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                })
+                .ConfigureMauiHandlers(handlers =>
+                {
+#if WINDOWS
+                    handlers.AddHandler(typeof(NativeRendererView), typeof(NativeRendererViewHandler));
+#endif
                 });
 
 #if DEBUG
