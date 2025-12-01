@@ -17,9 +17,7 @@ namespace TritonSimGUI
                 })
                 .ConfigureMauiHandlers(handlers =>
                 {
-#if WINDOWS
                     handlers.AddHandler(typeof(NativeRendererView), typeof(NativeRendererViewHandler));
-#endif
                 });
 
 #if DEBUG

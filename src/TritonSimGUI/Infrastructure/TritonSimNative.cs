@@ -17,18 +17,15 @@ namespace TritonSimGUI.Infrastructure
 #endif
 
         [LibraryImport(LIB_NAME)]
-        public static partial int tritonsim_init_with_swapchainpanel(IntPtr panelNative, int width, int height);
+        public static partial int init(IntPtr windowHandle, int width, int height);
 
         [LibraryImport(LIB_NAME)]
-        public static partial int tritonsim_init(IntPtr windowHandle, int width, int height);
+        public static partial void set_params(float v1, float v2);
 
         [LibraryImport(LIB_NAME)]
-        public static partial void tritonsim_set_params(float v1, float v2);
+        public static partial void render_frame(int clearColor);
 
         [LibraryImport(LIB_NAME)]
-        public static partial void tritonsim_render_frame(int clearColor);
-
-        [LibraryImport(LIB_NAME)]
-        public static partial void tritonsim_shutdown();
+        public static partial void shutdown();
     }
 }
