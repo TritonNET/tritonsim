@@ -3,9 +3,28 @@
              xmlns:views="clr-namespace:TritonSimGUI.Views"
              x:Class="TritonSimGUI.MainPage">
 
-    <views:NativeRendererView 
-        HorizontalOptions="Fill" 
-        VerticalOptions="Fill" 
-        HeightRequest="500" />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Column="1"
+            Grid.Row="1"
+            StrokeThickness="1">
+            <views:NativeRendererView 
+                HorizontalOptions="Fill" 
+                VerticalOptions="Fill" 
+                />
+        </Border>
+        
+    </Grid>
 
 </ContentPage>

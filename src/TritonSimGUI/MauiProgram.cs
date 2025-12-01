@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using TritonSimGUI.Controls;
-using Microsoft.Maui.Controls.Compatibility.Hosting;
 using TritonSimGUI.Views;
 
 namespace TritonSimGUI
