@@ -5,8 +5,17 @@
         public App()
         {
             InitializeComponent();
-
-            MainPage = new AppShell();
         }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            var window = new Window(new MainPage());
+            window.Title = "TritonSimGUI";
+
+            CustomizeWindow(window);
+
+            return window;
+        }
+        partial void CustomizeWindow(Window window);
     }
 }

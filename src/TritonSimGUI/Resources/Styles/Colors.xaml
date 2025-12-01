@@ -6,6 +6,44 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
+    <!-- Navy (Title bar, borders) -->
+    <Color x:Key="ColorNavy">#001A4D</Color>
+
+    <!-- White (Backgrounds, title text) -->
+    <Color x:Key="ColorWhite">#FFFFFF</Color>
+
+    <!-- Slightly lighter Navy (optional accents) -->
+    <Color x:Key="ColorNavyLight">#002060</Color>
+
+    <!-- Dark Navy (optional text or shadows) -->
+    <Color x:Key="ColorNavyDark">#000D26</Color>
+
+    <!-- ========================================== -->
+    <!--  NEUTRALS (Optional for controls)          -->
+    <!-- ========================================== -->
+
+    <!-- Light gray background -->
+    <Color x:Key="ColorGrayLight">#F4F4F4</Color>
+
+    <!-- Text gray -->
+    <Color x:Key="ColorGrayDark">#505050</Color>
+
+    <!-- Disabled text gray -->
+    <Color x:Key="ColorGrayDisabled">#A5A5A5</Color>
+
+    <!-- ========================================== -->
+    <!--  BUTTON + HOVER COLORS (Optional)          -->
+    <!-- ========================================== -->
+
+    <!-- Hover background for minimize/max/close on custom bars -->
+    <Color x:Key="ButtonHoverLight">#1F2D5A</Color>
+
+    <!-- Close button hover (if you style manually later) -->
+    <Color x:Key="ButtonCloseHover">#C62828</Color>
+
+    <!-- Accent color (if needed later, optional) -->
+    <Color x:Key="AccentBlue">#3A7BFF</Color>
+
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>

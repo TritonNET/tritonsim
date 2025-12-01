@@ -5,4 +5,24 @@
     xmlns:maui="using:Microsoft.Maui"
     xmlns:local="using:TritonSimGUI.WinUI">
 
+    <maui:MauiWinUIApplication.Resources>
+        <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#1F1F1F" />
+        
+        <DataTemplate x:Key="MauiAppTitleBarTemplate">
+            <Grid >
+                <Border
+                    Canvas.ZIndex="1"
+                    VerticalAlignment="Stretch"
+                    Background="{StaticResource TitleBarBackgroundBrush}"
+                    Margin="0,0,0,0">
+                    <TextBlock
+                        Padding="10,0,0,0"
+                        Foreground="WhiteSmoke"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Text="Triton Simulation Setup"/>
+                </Border>
+            </Grid>
+        </DataTemplate>
+    </maui:MauiWinUIApplication.Resources>
 </maui:MauiWinUIApplication>
