@@ -1,9 +1,9 @@
 #pragma once
+#include "defs.h"
 
 extern "C"
 {
-    __declspec(dllexport) BOOL init(void* handle, int width, int height);
-    __declspec(dllexport) void set_params(float value1, float value2);
-    __declspec(dllexport) void render_frame(int clearColor);
-    __declspec(dllexport) void shutdown();
+    __declspec(dllexport) ResponseCode init(const SimConfig& config, SimContext& ctx);
+    __declspec(dllexport) ResponseCode render_frame(const SimContext& ctx);
+    __declspec(dllexport) ResponseCode shutdown(const SimContext& ctx);
 }

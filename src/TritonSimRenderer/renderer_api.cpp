@@ -1,56 +1,34 @@
 #include "pch.h"
 #include "renderer_api.h"
-
-#include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
+#include "RendererFactory.h"
+#include "RendererBase.h"
 
 static float gValue1 = 0.0f;
 static float gValue2 = 0.0f;
 
-BOOL init(void* nativeWindowHandle, int width, int height)
+ResponseCode init(const SimConfig& config, SimContext& ctx)
 {
-    // Setup the Init struct
-    bgfx::Init init;
-    init.type = bgfx::RendererType::Direct3D11; // Force D3D11 for WinUI 3
-    init.vendorId = BGFX_PCI_ID_NONE;
-    init.resolution.width = width;
-    init.resolution.height = height;
-    init.resolution.reset = BGFX_RESET_VSYNC;
+    ResponseCode result = RendererFactory::CreateRenderer(config, ctx);
+    if (!result & RC_SUCCESS)
+        return result;
 
-    // CRITICAL FIX: Set platform data INSIDE the Init struct
-    // The global bgfx::setPlatformData() is ignored if this is passed.
-    init.platformData.nwh = nativeWindowHandle;
-    init.platformData.ndt = NULL;
-    init.platformData.context = NULL;
-    init.platformData.backBuffer = NULL;
-    init.platformData.backBufferDS = NULL;
-
-    if (!bgfx::init(init))
-    {
-        return 0;
-    }
-
-    // Set clear color to something obvious (Red) to prove it's working
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xFF0000FF, 1.0f, 0);
-    bgfx::setViewRect(0, 0, 0, width, height);
-
-    return 1;
+    return ctx.Renderer->Init();
 }
 
-void set_params(float v1, float v2)
+ResponseCode render_frame(const SimContext& ctx)
 {
-    gValue1 = v1;
-    gValue2 = v2;
+    if (ctx.Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
+
+    return ctx.Renderer->RenderFrame();
 }
 
-void render_frame(int clearColor)
+ResponseCode shutdown(const SimContext& ctx)
 {
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, (uint32_t)clearColor, 1.0f, 0);
-    bgfx::touch(0);
-    bgfx::frame();
-}
+    if (ctx.Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
 
-void shutdown()
-{
-    bgfx::shutdown();
+    delete ctx.Renderer;
+
+    return RC_SUCCESS;
 }

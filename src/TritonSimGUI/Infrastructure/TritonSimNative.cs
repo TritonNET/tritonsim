@@ -17,15 +17,12 @@ namespace TritonSimGUI.Infrastructure
 #endif
 
         [LibraryImport(LIB_NAME)]
-        public static partial int init(IntPtr windowHandle, int width, int height);
+        public static partial ResponseCode init(ref SimConfig config, out SimContext ctx);
 
         [LibraryImport(LIB_NAME)]
-        public static partial void set_params(float v1, float v2);
+        public static partial ResponseCode render_frame(ref SimContext ctx);
 
         [LibraryImport(LIB_NAME)]
-        public static partial void render_frame(int clearColor);
-
-        [LibraryImport(LIB_NAME)]
-        public static partial void shutdown();
+        public static partial ResponseCode shutdown(ref SimContext ctx);
     }
 }

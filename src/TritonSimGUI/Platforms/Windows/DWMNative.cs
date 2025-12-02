@@ -2,7 +2,7 @@
 
 namespace TritonSimGUI.Platforms.Windows
 {
-    internal static class DWMNative
+    public static class DWMNative
     {
         // P/Invoke for DWM (UInt version for Colors)
         [DllImport("dwmapi.dll", PreserveSig = true)]

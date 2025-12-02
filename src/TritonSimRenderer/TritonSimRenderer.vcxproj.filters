@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Renderers">
+      <UniqueIdentifier>{02691ccf-ac5a-4cf1-a4ba-550e6061e4a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -24,6 +27,27 @@
     <ClInclude Include="renderer_api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResponseCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererBase.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererFactory.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererTest.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererGameOfLife.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -34,6 +58,18 @@
     </ClCompile>
     <ClCompile Include="renderer_api.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererBase.cpp">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererFactory.cpp">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererTest.cpp">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererGameOfLife.cpp">
+      <Filter>Renderers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

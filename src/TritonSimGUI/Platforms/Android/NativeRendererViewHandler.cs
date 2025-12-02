@@ -2,8 +2,6 @@
 
 namespace TritonSimGUI.Views
 {
-    // Fix: Explicitly use 'Android.Views.View' for the second generic argument.
-    // This tells the compiler strictly to use the Android Native View, not the MAUI View.
     public partial class NativeRendererViewHandler : ViewHandler<NativeRendererView, Android.Views.View>
     {
         protected override Android.Views.View CreatePlatformView()

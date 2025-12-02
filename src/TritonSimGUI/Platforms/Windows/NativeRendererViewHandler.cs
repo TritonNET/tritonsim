@@ -1,129 +1,142 @@
 ﻿using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
+using Microsoft.UI.Xaml;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using TritonSimGUI.Infrastructure;
-using Microsoft.Maui.Dispatching;
-using System.Diagnostics;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Media;
+using TritonSimGUI.Platforms.Windows;
+using MGrid = Microsoft.UI.Xaml.Controls.Grid;
 
 namespace TritonSimGUI.Views
 {
     // This file is implicitly compiled ONLY for Windows, so no #if checks are needed.
-    public partial class NativeRendererViewHandler : ViewHandler<NativeRendererView, Microsoft.UI.Xaml.Controls.Grid>
+    public partial class NativeRendererViewHandler : ViewHandler<NativeRendererView, MGrid>
     {
-        private static bool _bgfxInitialized = false;
-        private IDispatcherTimer? _renderTimer;
-        private IntPtr _childWindowHandle = IntPtr.Zero;
+        private IDispatcherTimer? m_renderTimer;
 
-        private Microsoft.UI.Xaml.Controls.Grid? _platformGrid;
+        private SimContext m_context;
+        private SimConfig m_config;
 
-        protected override Microsoft.UI.Xaml.Controls.Grid CreatePlatformView()
+        private MGrid? m_platformGrid;
+
+        protected override MGrid CreatePlatformView()
         {
-            return new Microsoft.UI.Xaml.Controls.Grid();
+            return new MGrid();
         }
 
-        protected override void ConnectHandler(Microsoft.UI.Xaml.Controls.Grid platformView)
+        protected override void ConnectHandler(MGrid platformView)
         {
             base.ConnectHandler(platformView);
 
-            _platformGrid = platformView;
+            m_platformGrid = platformView;
+            m_platformGrid.Loaded += PlatformGrid_Loaded;
+            m_platformGrid.SizeChanged += PlatformGrid_SizeChanged;
+            m_platformGrid.LayoutUpdated += (s, e) => UpdateRect();
+            m_platformGrid.Unloaded += PlatformGrid_Unloaded;
+        }
 
-            void EnsureNativeView()
+        private void PlatformGrid_Unloaded(object sender, RoutedEventArgs e)
+        {
+            StopRenderLoop();
+
+            if (m_context.IsInitialized())
             {
-                if (_platformGrid.ActualWidth <= 0 || _platformGrid.ActualHeight <= 0)
-                    return;
+                var response = TritonSimNative.shutdown(ref m_context);
+                if ((response & ResponseCode.Success) != 0)
+                    throw new InvalidOperationException("Failed to shutdown the renderer.");
 
-                IntPtr parentWindowHandle = IntPtr.Zero;
-                var mauiWindow = this.VirtualView?.Window;
-                var nativeWindow = mauiWindow?.Handler?.PlatformView as Microsoft.UI.Xaml.Window;
-
-                if (nativeWindow != null)
-                {
-                    parentWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-                }
-
-                if (parentWindowHandle == IntPtr.Zero) return;
-
-                if (_childWindowHandle == IntPtr.Zero)
-                {
-                    _childWindowHandle = CreateChildWindow(parentWindowHandle);
-                    if (_childWindowHandle == IntPtr.Zero)
-                    {
-                        Debug.WriteLine($"[Bgfx Error] CreateWindowEx FAILED. Error: {Marshal.GetLastWin32Error()}");
-                        return;
-                    }
-                }
-
-                _platformGrid.DispatcherQueue.TryEnqueue(() =>
-                {
-                    UpdateRect();
-
-                    if (!_bgfxInitialized)
-                    {
-                        double scale = _platformGrid.XamlRoot?.RasterizationScale ?? 1.0;
-                        ushort physWidth = (ushort)(_platformGrid.ActualWidth * scale);
-                        ushort physHeight = (ushort)(_platformGrid.ActualHeight * scale);
-
-                        int initResult = TritonSimNative.init(_childWindowHandle, physWidth, physHeight);
-                        _bgfxInitialized = initResult == 1;
-                        Debug.WriteLine($"[Bgfx Status] Initialization {(_bgfxInitialized ? "SUCCESS" : "FAILED")}");
-
-                        if (_bgfxInitialized)
-                        {
-                            StartRenderLoop();
-                        }
-                    }
-                });
+                Debug.Assert(!m_context.IsInitialized(), "Renderer is not properly uninitialized");
             }
 
-            _platformGrid.Loaded += async (s, e) =>
+            if (m_config.Handle != IntPtr.Zero)
             {
-                await Task.Delay(100);
+                User32Native.DestroyWindow(m_config.Handle);
+                m_config.Handle = IntPtr.Zero;
+            }
+        }
+
+        private void PlatformGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!m_context.IsInitialized())
                 EnsureNativeView();
-                await Task.Delay(100);
-                UpdateRect();
-            };
 
-            _platformGrid.SizeChanged += (s, e) =>
+            UpdateRect();
+        }
+
+        private async void PlatformGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            await Task.Delay(100);
+
+            EnsureNativeView();
+
+            await Task.Delay(100);
+
+            UpdateRect();
+        }
+
+        private void EnsureNativeView()
+        {
+            if (m_platformGrid.ActualWidth <= 0 || m_platformGrid.ActualHeight <= 0)
+                return;
+
+            IntPtr parentWindowHandle = IntPtr.Zero;
+            var mauiWindow = this.VirtualView?.Window;
+            var nativeWindow = mauiWindow?.Handler?.PlatformView as Microsoft.UI.Xaml.Window;
+
+            if (nativeWindow != null)
+                parentWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+
+            if (parentWindowHandle == IntPtr.Zero) return;
+
+            if (m_config.Handle == IntPtr.Zero)
             {
-                if (!_bgfxInitialized) EnsureNativeView();
-                UpdateRect();
-            };
+                m_config.Handle = CreateChildWindow(parentWindowHandle);
+                if (m_config.Handle == IntPtr.Zero)
+                {
+                    Debug.WriteLine($"[Bgfx Error] CreateWindowEx FAILED. Error: {Marshal.GetLastWin32Error()}");
+                    return;
+                }
+            }
 
-            _platformGrid.LayoutUpdated += (s, e) => UpdateRect();
-
-            _platformGrid.Unloaded += (s, e) =>
+            m_platformGrid.DispatcherQueue.TryEnqueue(() =>
             {
-                StopRenderLoop();
+                UpdateRect();
 
-                if (_bgfxInitialized)
+                if (!m_context.IsInitialized())
                 {
-                    TritonSimNative.shutdown();
-                    _bgfxInitialized = false;
-                }
+                    double scale = m_platformGrid.XamlRoot?.RasterizationScale ?? 1.0;
 
-                if (_childWindowHandle != IntPtr.Zero)
-                {
-                    DestroyWindow(_childWindowHandle);
-                    _childWindowHandle = IntPtr.Zero;
+                    m_config.Width = (ushort)(m_platformGrid.ActualWidth * scale);
+                    m_config.Height = (ushort)(m_platformGrid.ActualHeight * scale);
+                    m_config.Type = RendererType.RT_TEST;
+
+                    ResponseCode result = TritonSimNative.init(ref m_config, out m_context);
+
+                    var success = (result & ResponseCode.Success) == 0;
+
+                    Debug.WriteLine($"[Bgfx Status] Initialization {(success ? "SUCCESS" : "FAILED")}");
+                    Debug.Assert(success ? m_context.IsInitialized() : !m_context.IsInitialized(), "Got success response, but renderer is not initialized");
+
+                    if (m_context.IsInitialized())
+                    {
+                        StartRenderLoop();
+                    }
                 }
-            };
+            });
         }
 
         private void UpdateRect()
         {
-            if (_childWindowHandle == IntPtr.Zero || _platformGrid == null || _platformGrid.XamlRoot == null) return;
+            if (m_config.Handle == IntPtr.Zero || m_platformGrid == null || m_platformGrid.XamlRoot == null) 
+                return;
 
-            double scale = _platformGrid.XamlRoot.RasterizationScale;
+            double scale = m_platformGrid.XamlRoot.RasterizationScale;
             int x = 0, y = 0;
-            int w = (int)(_platformGrid.ActualWidth * scale);
-            int h = (int)(_platformGrid.ActualHeight * scale);
+            int w = (int)(m_platformGrid.ActualWidth * scale);
+            int h = (int)(m_platformGrid.ActualHeight * scale);
 
             try
             {
-                var transform = _platformGrid.TransformToVisual(null);
+                var transform = m_platformGrid.TransformToVisual(null);
                 var topLeft = transform.TransformPoint(new Windows.Foundation.Point(0, 0));
                 x = (int)(topLeft.X * scale);
                 y = (int)(topLeft.Y * scale);
@@ -135,7 +148,7 @@ namespace TritonSimGUI.Views
 
             if (w > 0 && h > 0)
             {
-                SetWindowPos(_childWindowHandle, new IntPtr(0), x, y, w, h, 0x0040);
+                User32Native.SetWindowPos(m_config.Handle, new IntPtr(0), x, y, w, h, 0x0040);
             }
         }
 
@@ -144,7 +157,7 @@ namespace TritonSimGUI.Views
             uint wsStyle = 0x40000000 | 0x10000000 | 0x04000000 | 0x02000000;
             IntPtr hInstance = Marshal.GetHINSTANCE(typeof(NativeRendererViewHandler).Module);
 
-            return CreateWindowEx(
+            return User32Native.CreateWindowEx(
                 0, "STATIC", "", wsStyle,
                 0, 0, 0, 0,
                 parentHwnd, IntPtr.Zero, hInstance, IntPtr.Zero);
@@ -152,34 +165,23 @@ namespace TritonSimGUI.Views
 
         private void StartRenderLoop()
         {
-            _renderTimer = this.VirtualView.Dispatcher.CreateTimer();
-            _renderTimer.Interval = TimeSpan.FromMilliseconds(16);
-            _renderTimer.Tick += (s, e) =>
-            {
-                if (_bgfxInitialized)
-                {
-                    long ticks = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                    int r = (int)((Math.Sin(ticks * 0.005) + 1.0) * 127.5);
-                    uint color = (uint)((r << 24) | 0x000000FF);
+            m_renderTimer = this.VirtualView.Dispatcher.CreateTimer();
+            m_renderTimer.Interval = TimeSpan.FromMilliseconds(16);
+            m_renderTimer.Tick += RenderTimer_Tick;
+            m_renderTimer.Start();
+        }
 
-                    TritonSimNative.render_frame((int)color);
-                }
-            };
-            _renderTimer.Start();
+        private void RenderTimer_Tick(object? sender, EventArgs e)
+        {
+            if (!m_context.IsInitialized())
+                return;
+
+            TritonSimNative.render_frame(ref m_context);
         }
 
         private void StopRenderLoop()
         {
-            _renderTimer?.Stop();
+            m_renderTimer?.Stop();
         }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern IntPtr CreateWindowEx(uint dwExStyle, string lpClassName, string lpWindowName, uint dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool DestroyWindow(IntPtr hWnd);
     }
 }
