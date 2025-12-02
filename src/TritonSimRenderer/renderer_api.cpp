@@ -23,6 +23,22 @@ ResponseCode render_frame(const SimContext& ctx)
     return ctx.Renderer->RenderFrame();
 }
 
+ResponseCode start(const SimContext& ctx)
+{
+    if (ctx.Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
+
+    return ctx.Renderer->Start();
+}
+
+ResponseCode stop(const SimContext& ctx)
+{
+    if (ctx.Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
+
+    return ctx.Renderer->Stop();
+}
+
 ResponseCode shutdown(const SimContext& ctx)
 {
     if (ctx.Renderer == nullptr)

@@ -23,6 +23,12 @@ namespace TritonSimGUI.Infrastructure
         public static partial ResponseCode render_frame(ref SimContext ctx);
 
         [LibraryImport(LIB_NAME)]
+        public static partial ResponseCode start(ref SimContext ctx);
+
+        [LibraryImport(LIB_NAME)]
+        public static partial ResponseCode stop(ref SimContext ctx);
+
+        [LibraryImport(LIB_NAME)]
         public static partial ResponseCode shutdown(ref SimContext ctx);
     }
 }

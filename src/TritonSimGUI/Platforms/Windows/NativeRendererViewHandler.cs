@@ -111,10 +111,12 @@ namespace TritonSimGUI.Views
 
                     ResponseCode result = TritonSimNative.init(ref m_config, out m_context);
 
-                    var success = (result & ResponseCode.Success) == 0;
+                    var success = (result & ResponseCode.Success) != 0;
 
                     Debug.WriteLine($"[Bgfx Status] Initialization {(success ? "SUCCESS" : "FAILED")}");
                     Debug.Assert(success ? m_context.IsInitialized() : !m_context.IsInitialized(), "Got success response, but renderer is not initialized");
+
+                    TritonSimNative.start(ref m_context);
 
                     if (m_context.IsInitialized())
                     {

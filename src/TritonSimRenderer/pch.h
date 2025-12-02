@@ -7,7 +7,17 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include <atomic>
+#include <thread>
+#include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
+
 // add headers that you want to pre-compile here
 #include "framework.h"
+
+#include "defs.h"
+#include "RendererType.h"
+#include "ResponseCode.h"
+#include "RendererBase.h"
 
 #endif //PCH_H

@@ -1,16 +1,21 @@
 #pragma once
-#include "defs.h"
-#include "RendererType.h"
-#include "ResponseCode.h"
+#include "pch.h"
 
 class RendererBase
 {
 public:
 	RendererBase(const SimConfig& cfg);
+	virtual ~RendererBase();
 
 	ResponseCode Init();
-	ResponseCode RenderFrame();
-	ResponseCode Shutdown();
+	ResponseCode Start();
+	ResponseCode Stop();
+	virtual ResponseCode RenderFrame();
+	virtual ResponseCode Shutdown();
+
+protected:
+	virtual void RunAsync();
+
 protected:
 	RendererType m_type;
 
@@ -18,5 +23,8 @@ protected:
 	UINT32 m_height;
 
 	void* m_nwh;
+
+	std::atomic<bool> m_running{ false };
+	std::thread m_thread;
 };
 

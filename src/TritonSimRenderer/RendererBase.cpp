@@ -1,7 +1,4 @@
 #include "pch.h"
-#include "RendererBase.h"
-#include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
 
 RendererBase::RendererBase(const SimConfig& cfg)
 	: m_type(cfg.Type)
@@ -10,6 +7,12 @@ RendererBase::RendererBase(const SimConfig& cfg)
     , m_nwh(cfg.handle)
 {
 
+}
+
+RendererBase::~RendererBase()
+{
+    Stop();
+    Shutdown();
 }
 
 ResponseCode RendererBase::Init()
@@ -44,6 +47,38 @@ ResponseCode RendererBase::RenderFrame()
     bgfx::frame();
 
     return RC_SUCCESS;
+}
+
+ResponseCode RendererBase::Start()
+{
+    if (m_running.load())
+        return RC_SUCCESS;
+
+    m_running.store(true);
+    m_thread = std::thread(&RendererBase::RunAsync, this);
+
+    return RC_SUCCESS;
+}
+
+ResponseCode RendererBase::Stop()
+{
+    if (!m_running.load())
+        return RC_SUCCESS;
+
+    m_running.store(false);
+
+    if (m_thread.joinable())
+        m_thread.join();
+
+    return RC_SUCCESS;
+}
+
+void RendererBase::RunAsync()
+{
+    while (m_running.load())
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // avoid 100% CPU
+    }
 }
 
 ResponseCode RendererBase::Shutdown()
