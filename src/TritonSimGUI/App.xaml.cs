@@ -2,14 +2,19 @@
 {
     public partial class App : Application
     {
-        public App()
+        public static IServiceProvider Services { get; private set; }
+
+        public App(IServiceProvider provider)
         {
             InitializeComponent();
+            Services = provider;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            var window = new Window(new MainPage());
+            var mainPage = Services.GetRequiredService<MainPage>();
+
+            var window = new Window(mainPage);
             window.Title = "TritonSimGUI";
 
             CustomizeWindow(window);

@@ -1,22 +1,81 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:TritonSimGUI.Views"
+             xmlns:vm="clr-namespace:TritonSimGUI.ViewModels"
              x:Class="TritonSimGUI.MainPage"
+             x:DataType="vm:VmMain"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource StdBackground}">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        
+        
         <Border
-            StrokeThickness="1"
-            WidthRequest="300"
-            HeightRequest="300"
-            HorizontalOptions="Center"
-            VerticalOptions="Center">
+            Grid.Row="1"
+            Grid.Column="1"
+            StrokeThickness="0.5"
+            Stroke="{StaticResource StdInternalBoarder}"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="27"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid
+                    Grid.Row="3"
+                    Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Text="Start"
+                        IsEnabled="{Binding Path=IsRunning, Mode=OneWay, Converter={StaticResource InvertedBoolConverter}}"
+                        Command="{Binding Path=StartCommand}"/>
+
+                    <Button
+                        Grid.Column="2"
+                        Text="Stop"
+                        IsEnabled="{Binding Path=IsRunning, Mode=OneWay}"
+                        Command="{Binding Path=StopCommand}"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Grid.Column="3"
+            StrokeThickness="0.5"
+            Stroke="{StaticResource StdInternalBoarder}"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill">
 
             <views:NativeRendererView 
+                x:Name="rendererView"
                 HorizontalOptions="Fill" 
-                VerticalOptions="Fill" 
-                />
+                VerticalOptions="Fill"/>
         </Border>
     </Grid>
 

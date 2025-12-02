@@ -10,5 +10,13 @@ namespace TritonSimGUI.Views
             // 'Context' is available because we are inside a Maui ViewHandler on Android.
             return new Android.Views.View(Context);
         }
+
+        public partial void StartPlatform()
+        {
+        }
+
+        public partial void StopPlatform()
+        {
+        }
     }
 }

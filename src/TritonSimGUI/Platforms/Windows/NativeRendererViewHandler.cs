@@ -18,6 +18,23 @@ namespace TritonSimGUI.Views
 
         private MGrid? m_platformGrid;
 
+        public partial void StartPlatform()
+        {
+            if (!m_context.IsInitialized())
+                return;
+
+            TritonSimNative.start(ref m_context);
+            StartRenderLoop();
+        }
+
+        public partial void StopPlatform()
+        {
+            StopRenderLoop();
+
+            if (m_context.IsInitialized())
+                TritonSimNative.stop(ref m_context);
+        }
+
         protected override MGrid CreatePlatformView()
         {
             return new MGrid();
@@ -115,8 +132,6 @@ namespace TritonSimGUI.Views
 
                     Debug.WriteLine($"[Bgfx Status] Initialization {(success ? "SUCCESS" : "FAILED")}");
                     Debug.Assert(success ? m_context.IsInitialized() : !m_context.IsInitialized(), "Got success response, but renderer is not initialized");
-
-                    TritonSimNative.start(ref m_context);
 
                     if (m_context.IsInitialized())
                     {

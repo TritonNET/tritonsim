@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TritonSimGUI.ViewModels;
 using TritonSimGUI.Views;
 
 namespace TritonSimGUI
@@ -20,8 +21,11 @@ namespace TritonSimGUI
                     handlers.AddHandler(typeof(NativeRendererView), typeof(NativeRendererViewHandler));
                 });
 
+            builder.Services.AddTransient<VmMain>();
+            builder.Services.AddTransient<MainPage>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

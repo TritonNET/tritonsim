@@ -72,4 +72,10 @@
 	<ItemGroup>
 	  <Folder Include="Controls\" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Resources\Converters.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
 </Project>
