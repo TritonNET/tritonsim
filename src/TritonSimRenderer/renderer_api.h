@@ -4,6 +4,7 @@
 extern "C"
 {
     __declspec(dllexport) ResponseCode init(const SimConfig& config, SimContext& ctx);
+    __declspec(dllexport) ResponseCode update_config(const SimContext& ctx, const SimConfig& config);
     __declspec(dllexport) ResponseCode render_frame(const SimContext& ctx);
     __declspec(dllexport) ResponseCode start(const SimContext& ctx);
     __declspec(dllexport) ResponseCode stop(const SimContext& ctx);

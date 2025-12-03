@@ -8,13 +8,16 @@ public:
 	virtual ~RendererBase();
 
 	virtual ResponseCode Init();
+	virtual ResponseCode UpdateConfig(const SimConfig& cfg);
+
 	ResponseCode Start();
 	ResponseCode Stop();
 	virtual ResponseCode RenderFrame();
 	virtual ResponseCode Shutdown();
 
 protected:
-	virtual void RunAsync();
+	virtual void WorkerLoop();
+	virtual void OnUpdate() {}
 
 protected:
 	RendererType m_type;
@@ -26,5 +29,7 @@ protected:
 
 	std::atomic<bool> m_running{ false };
 	std::thread m_thread;
+
+	const uint32_t m_resetFlags = BGFX_RESET_VSYNC | BGFX_RESET_MSAA_X16;
 };
 

@@ -143,9 +143,9 @@ namespace TritonSimGUI.Views
 
             double scale = m_platformGrid.XamlRoot.RasterizationScale;
             int x = 0, y = 0;
-            int w = (int)(m_platformGrid.ActualWidth * scale);
-            int h = (int)(m_platformGrid.ActualHeight * scale);
-
+            m_config.Width = (int)(m_platformGrid.ActualWidth * scale);
+            m_config.Height = (int)(m_platformGrid.ActualHeight * scale);
+            
             try
             {
                 var transform = m_platformGrid.TransformToVisual(null);
@@ -158,9 +158,12 @@ namespace TritonSimGUI.Views
                 // Fallback if not in visual tree
             }
 
-            if (w > 0 && h > 0)
+            if (m_config.Width > 0 && m_config.Height > 0)
             {
-                User32Native.SetWindowPos(m_config.Handle, new IntPtr(0), x, y, w, h, 0x0040);
+                User32Native.SetWindowPos(m_config.Handle, new IntPtr(0), x, y, m_config.Width, m_config.Height, 0x0040);
+
+                if (m_context.IsInitialized())
+                    TritonSimNative.update_config(ref m_context, ref m_config);
             }
         }
 

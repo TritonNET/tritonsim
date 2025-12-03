@@ -23,7 +23,7 @@ ResponseCode RendererBase::Init()
     init.vendorId = BGFX_PCI_ID_NONE;
     init.resolution.width = m_width;
     init.resolution.height = m_height;
-    init.resolution.reset = BGFX_RESET_VSYNC;
+    init.resolution.reset = m_resetFlags;
 
     init.platformData.nwh = m_nwh;
     init.platformData.ndt = NULL;
@@ -38,6 +38,18 @@ ResponseCode RendererBase::Init()
     bgfx::setViewRect(0, 0, 0, m_width, m_height);
 
 	return RC_SUCCESS;
+}
+
+ResponseCode RendererBase::UpdateConfig(const SimConfig& cfg)
+{
+    m_width = cfg.width;
+    m_height = cfg.height;
+
+    bgfx::reset(m_width, m_height, m_resetFlags); // Reset bgfx (Recreates the backbuffer/swap chain)
+
+    bgfx::setViewRect(0, 0, 0, m_width, m_height); // Update the View Rect immediately (optional here, as RenderFrame does it too)
+
+    return RC_SUCCESS;
 }
 
 ResponseCode RendererBase::RenderFrame()
@@ -55,7 +67,7 @@ ResponseCode RendererBase::Start()
         return RC_SUCCESS;
 
     m_running.store(true);
-    m_thread = std::thread(&RendererBase::RunAsync, this);
+    m_thread = std::thread(&RendererBase::WorkerLoop, this);
 
     return RC_SUCCESS;
 }
@@ -73,10 +85,12 @@ ResponseCode RendererBase::Stop()
     return RC_SUCCESS;
 }
 
-void RendererBase::RunAsync()
+void RendererBase::WorkerLoop()
 {
     while (m_running.load())
     {
+        OnUpdate();
+
         std::this_thread::sleep_for(std::chrono::milliseconds(1)); // avoid 100% CPU
     }
 }

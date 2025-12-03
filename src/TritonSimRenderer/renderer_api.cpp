@@ -15,6 +15,14 @@ ResponseCode init(const SimConfig& config, SimContext& ctx)
     return ctx.Renderer->Init();
 }
 
+ResponseCode update_config(const SimContext& ctx, const SimConfig& config)
+{
+    if (ctx.Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
+
+    return ctx.Renderer->UpdateConfig(config);
+}
+
 ResponseCode render_frame(const SimContext& ctx)
 {
     if (ctx.Renderer == nullptr)

@@ -14,22 +14,17 @@ ResponseCode RendererTestColorChanging::RenderFrame()
     return RC_SUCCESS;
 }
 
-void RendererTestColorChanging::RunAsync()
+void RendererTestColorChanging::OnUpdate()
 {
-    while (m_running.load())
-    {
-        using namespace std::chrono;
+    using namespace std::chrono;
 
-        long long ticks = duration_cast<milliseconds>(
-            steady_clock::now().time_since_epoch()
-        ).count();
+    long long ticks = duration_cast<milliseconds>(
+        steady_clock::now().time_since_epoch()
+    ).count();
 
-        double r = (std::sin(ticks * 0.005) + 1.0) * 127.5;  // 0–255
+    double r = (std::sin(ticks * 0.005) + 1.0) * 127.5;  // 0–255
 
-        int red = static_cast<int>(r);
+    int red = static_cast<int>(r);
 
-        m_color = static_cast<uint32_t>((red << 24) | 0x000000FF);
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // avoid 100% CPU
-    }
+    m_color = static_cast<uint32_t>((red << 24) | 0x000000FF);
 }

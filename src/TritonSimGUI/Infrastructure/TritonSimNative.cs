@@ -20,6 +20,9 @@ namespace TritonSimGUI.Infrastructure
         public static partial ResponseCode init(ref SimConfig config, out SimContext ctx);
 
         [LibraryImport(LIB_NAME)]
+        public static partial ResponseCode update_config(ref SimContext ctx, ref SimConfig config);
+
+        [LibraryImport(LIB_NAME)]
         public static partial ResponseCode render_frame(ref SimContext ctx);
 
         [LibraryImport(LIB_NAME)]

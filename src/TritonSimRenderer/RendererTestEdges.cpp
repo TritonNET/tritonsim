@@ -61,13 +61,33 @@ ResponseCode RendererTestEdges::Init()
     return RC_SUCCESS;
 }
 
-void RendererTestEdges::RunAsync()
+void RendererTestEdges::OnUpdate()
 {
+    // 1. Thread Safety: Stop RenderFrame from trying to draw while we are updating
+    m_ready = false;
+
+    // 2. CPU Cleanup: Clear vectors so we don't append new lines to old ones
+    m_vertices.clear();
+    m_indices.clear();
+
+    // 3. Generate new geometry (fills the cleared vectors)
     createGeometry();
 
-    // Debug check: This must print 24. If it prints 32, the struct is wrong.
-    // printf("Vertex Size: %d\n", sizeof(Vertex)); 
+    // 4. GPU Cleanup: Destroy the old buffers if they exist
+    // If you don't do this, you will leak VRAM every time you regenerate.
+    if (bgfx::isValid(m_vbh))
+    {
+        bgfx::destroy(m_vbh);
+        m_vbh = BGFX_INVALID_HANDLE;
+    }
 
+    if (bgfx::isValid(m_ibh))
+    {
+        bgfx::destroy(m_ibh);
+        m_ibh = BGFX_INVALID_HANDLE;
+    }
+
+    // 5. Upload new data to GPU
     m_vbh = bgfx::createVertexBuffer(
         bgfx::copy(m_vertices.data(), uint32_t(m_vertices.size() * sizeof(Vertex))),
         m_layout
@@ -77,6 +97,7 @@ void RendererTestEdges::RunAsync()
         bgfx::copy(m_indices.data(), uint32_t(m_indices.size() * sizeof(uint16_t)))
     );
 
+    // 6. Resume Rendering
     m_ready = true;
 }
 
@@ -139,7 +160,7 @@ ResponseCode RendererTestEdges::RenderFrame()
     bgfx::setVertexBuffer(0, m_vbh);
     bgfx::setIndexBuffer(m_ibh);
 
-    bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_PT_LINES);
+    bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_PT_LINES | BGFX_STATE_MSAA);
 
     bgfx::submit(0, m_program);
     bgfx::frame();

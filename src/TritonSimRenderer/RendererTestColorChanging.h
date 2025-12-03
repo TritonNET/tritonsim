@@ -9,7 +9,7 @@ public:
 
 	ResponseCode RenderFrame() override;
 protected:
-	void RunAsync() override;
+	void OnUpdate() override;
 
 private:
 	uint32_t m_color;
