@@ -7,7 +7,7 @@ public:
 	RendererBase(const SimConfig& cfg);
 	virtual ~RendererBase();
 
-	ResponseCode Init();
+	virtual ResponseCode Init();
 	ResponseCode Start();
 	ResponseCode Stop();
 	virtual ResponseCode RenderFrame();

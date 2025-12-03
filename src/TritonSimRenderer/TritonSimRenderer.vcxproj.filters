@@ -42,10 +42,13 @@
     <ClInclude Include="RendererType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RendererTest.h">
+    <ClInclude Include="RendererTestColorChanging.h">
       <Filter>Renderers</Filter>
     </ClInclude>
     <ClInclude Include="RendererGameOfLife.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererTestEdges.h">
       <Filter>Renderers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,11 +68,28 @@
     <ClCompile Include="RendererFactory.cpp">
       <Filter>Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="RendererTest.cpp">
+    <ClCompile Include="RendererTestColorChanging.cpp">
       <Filter>Renderers</Filter>
     </ClCompile>
     <ClCompile Include="RendererGameOfLife.cpp">
       <Filter>Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="RendererTestEdges.cpp">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertex.sc">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="frag.sc">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="varying.def.sc">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaderc_cmd.bat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

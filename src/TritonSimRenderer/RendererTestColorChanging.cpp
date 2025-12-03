@@ -3,19 +3,9 @@
 #include <chrono>
 #include <cmath>
 
-#include "RendererTest.h"
+#include "RendererTestColorChanging.h"
 
-RendererTest::RendererTest(const SimConfig& cfg) : RendererBase(cfg)
-{
-
-}
-
-RendererTest::~RendererTest()
-{
-
-}
-
-ResponseCode RendererTest::RenderFrame()
+ResponseCode RendererTestColorChanging::RenderFrame()
 {
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_color, 1.0f, 0);
     bgfx::touch(0);
@@ -24,7 +14,7 @@ ResponseCode RendererTest::RenderFrame()
     return RC_SUCCESS;
 }
 
-void RendererTest::RunAsync()
+void RendererTestColorChanging::RunAsync()
 {
     while (m_running.load())
     {

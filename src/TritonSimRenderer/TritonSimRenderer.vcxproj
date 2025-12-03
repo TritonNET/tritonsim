@@ -86,11 +86,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;BX_CONFIG_DEBUG;WIN32;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,11 +109,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,12 +130,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;BX_CONFIG_DEBUG;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,11 +158,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,7 +182,8 @@
     <ClInclude Include="RendererBase.h" />
     <ClInclude Include="RendererFactory.h" />
     <ClInclude Include="RendererGameOfLife.h" />
-    <ClInclude Include="RendererTest.h" />
+    <ClInclude Include="RendererTestColorChanging.h" />
+    <ClInclude Include="RendererTestEdges.h" />
     <ClInclude Include="RendererType.h" />
     <ClInclude Include="renderer_api.h" />
     <ClInclude Include="ResponseCode.h" />
@@ -186,8 +199,15 @@
     <ClCompile Include="RendererBase.cpp" />
     <ClCompile Include="RendererFactory.cpp" />
     <ClCompile Include="RendererGameOfLife.cpp" />
-    <ClCompile Include="RendererTest.cpp" />
+    <ClCompile Include="RendererTestColorChanging.cpp" />
+    <ClCompile Include="RendererTestEdges.cpp" />
     <ClCompile Include="renderer_api.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="frag.sc" />
+    <None Include="shaderc_cmd.bat" />
+    <None Include="varying.def.sc" />
+    <None Include="vertex.sc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

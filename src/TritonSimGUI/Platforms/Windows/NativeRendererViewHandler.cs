@@ -124,7 +124,7 @@ namespace TritonSimGUI.Views
 
                     m_config.Width = (ushort)(m_platformGrid.ActualWidth * scale);
                     m_config.Height = (ushort)(m_platformGrid.ActualHeight * scale);
-                    m_config.Type = RendererType.RT_TEST;
+                    m_config.Type = RendererType.RT_TEST_EDGES;
 
                     ResponseCode result = TritonSimNative.init(ref m_config, out m_context);
 
@@ -132,11 +132,6 @@ namespace TritonSimGUI.Views
 
                     Debug.WriteLine($"[Bgfx Status] Initialization {(success ? "SUCCESS" : "FAILED")}");
                     Debug.Assert(success ? m_context.IsInitialized() : !m_context.IsInitialized(), "Got success response, but renderer is not initialized");
-
-                    if (m_context.IsInitialized())
-                    {
-                        StartRenderLoop();
-                    }
                 }
             });
         }
