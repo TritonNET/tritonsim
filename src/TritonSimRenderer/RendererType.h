@@ -1,10 +1,19 @@
 #pragma once
 
-enum RendererType
+enum RendererType : uint32_t
 {
-	RT_UNKNOWN = 0,
-	RT_TEST_COLOR_CHANGING = 1,
-	RT_TEST_EDGES = 2,
+	RT_TESTS = 0x80000000, // Test Renderers
+	RT_2DSIM = 0x40000000, // All 2D simulations
+	RT_3DSIM = 0x20000000, // All 3D simulations
+	RT_RESER = 0x10000000, // Reserved
 
-	RT_GAMEOFLIFE = 100
+	RT_UNKNOWN = 0x00,
+
+	RT_TEST_COLOR_CHANGING = RT_TESTS | 0x01,
+	RT_TEST_EDGES = RT_TESTS | 0x02,
+	RT_TEST_BOUNCING_CIRCLE = RT_TESTS | 0x03,
+
+
+	RT_GAMEOFLIFE2D = RT_2DSIM | 0x01,
+	RT_GAMEOFLIFE3D = RT_3DSIM | 0x01
 };

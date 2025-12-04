@@ -3,6 +3,7 @@
 #include "RendererTestColorChanging.h"
 #include "RendererTestEdges.h"
 #include "RendererGameOfLife.h"
+#include "RendererBouncingCircle.h"
 
 ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext& ctx)
 {
@@ -14,8 +15,11 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 	case RT_TEST_EDGES:
 		ctx.Renderer = new RendererTestEdges(config);
 		break;
-	case RT_GAMEOFLIFE:
+	case RT_GAMEOFLIFE2D:
 		ctx.Renderer = new RendererGameOfLife(config);
+		break;
+	case RT_TEST_BOUNCING_CIRCLE:
+		ctx.Renderer = new RendererBouncingCircle(config);
 		break;
 	case RT_UNKNOWN:
 	default:

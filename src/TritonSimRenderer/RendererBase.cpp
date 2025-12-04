@@ -101,3 +101,44 @@ ResponseCode RendererBase::Shutdown()
 
     return RC_SUCCESS;
 }
+
+ResponseCode RendererBase::LoadFile(const char* path, const bgfx::Memory** mem)
+{
+    std::ifstream f(path, std::ios::binary | std::ios::ate);
+    if (!f.is_open()) 
+        return RC_FAILED_OPEN_FILE;
+
+    size_t size = (size_t)f.tellg();
+    f.seekg(0);
+
+    const bgfx::Memory* pMem = bgfx::alloc(uint32_t(size));
+
+    f.read((char*)pMem->data, size);
+    f.close();
+
+    *mem = pMem;
+
+    return RC_SUCCESS;
+}
+
+ResponseCode RendererBase::LoadProgram(const char* vs, const char* fs, bgfx::ProgramHandle* handle)
+{
+    const bgfx::Memory* vshMem = nullptr;
+    auto rc = LoadFile(vs, &vshMem);
+    if (rc & RC_FAILED)
+        return rc;
+
+    const bgfx::Memory* fshMem = nullptr;
+    rc = LoadFile(fs, &fshMem);
+    if (rc & RC_FAILED)
+        return rc;
+
+    auto vsh = bgfx::createShader(vshMem);
+    auto fsh = bgfx::createShader(fshMem);
+    *handle = bgfx::createProgram(vsh, fsh, true);
+
+    if (!bgfx::isValid(*handle))
+        return RC_FAILED;
+
+    return RC_SUCCESS;
+}

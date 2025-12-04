@@ -18,6 +18,8 @@ public:
 protected:
 	virtual void WorkerLoop();
 	virtual void OnUpdate() {}
+	virtual ResponseCode LoadFile(const char* path, const bgfx::Memory** mem);
+	virtual ResponseCode LoadProgram(const char* vs, const char* fs, bgfx::ProgramHandle* handle);
 
 protected:
 	RendererType m_type;

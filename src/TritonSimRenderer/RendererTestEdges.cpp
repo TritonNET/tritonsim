@@ -1,28 +1,5 @@
 #include "pch.h"
 #include "RendererTestEdges.h"
-#include <fstream>
-#include <bx/math.h>
-
-static const bgfx::Memory* loadFile(const char* path)
-{
-    std::ifstream f(path, std::ios::binary | std::ios::ate);
-    if (!f.is_open()) return nullptr;
-
-    size_t size = (size_t)f.tellg();
-    f.seekg(0);
-
-    const bgfx::Memory* mem = bgfx::alloc(uint32_t(size));
-    f.read((char*)mem->data, size);
-
-    return mem;
-}
-
-static bgfx::ProgramHandle loadProgram(const char* vs, const char* fs)
-{
-    auto vsh = bgfx::createShader(loadFile(vs));
-    auto fsh = bgfx::createShader(loadFile(fs));
-    return bgfx::createProgram(vsh, fsh, true);
-}
 
 RendererTestEdges::RendererTestEdges(const SimConfig& cfg)
     : RendererBase(cfg)
@@ -39,16 +16,16 @@ RendererTestEdges::~RendererTestEdges()
 ResponseCode RendererTestEdges::Init()
 {
     auto rc = RendererBase::Init();
-    if (!(rc & RC_SUCCESS))
+    if ((rc & RC_FAILED))
         return rc;
 
-    m_program = loadProgram(
+    rc = LoadProgram(
         "D:\\projects\\tritonnet\\tritonsim\\src\\TritonSimRenderer\\vertex.bin",
-        "D:\\projects\\tritonnet\\tritonsim\\src\\TritonSimRenderer\\frag.bin"
-    );
+        "D:\\projects\\tritonnet\\tritonsim\\src\\TritonSimRenderer\\frag.bin",
+        &m_program);
 
-    if (!bgfx::isValid(m_program))
-        return RC_FAILED;
+    if ((rc & RC_FAILED))
+        return rc;
 
     m_layout.begin()
         .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
@@ -56,25 +33,18 @@ ResponseCode RendererTestEdges::Init()
         .add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
         .end();
 
-    //u_mvp = bgfx::createUniform("u_modelViewProj", bgfx::UniformType::Mat4);
-
     return RC_SUCCESS;
 }
 
 void RendererTestEdges::OnUpdate()
 {
-    // 1. Thread Safety: Stop RenderFrame from trying to draw while we are updating
     m_ready = false;
 
-    // 2. CPU Cleanup: Clear vectors so we don't append new lines to old ones
     m_vertices.clear();
     m_indices.clear();
 
-    // 3. Generate new geometry (fills the cleared vectors)
     createGeometry();
 
-    // 4. GPU Cleanup: Destroy the old buffers if they exist
-    // If you don't do this, you will leak VRAM every time you regenerate.
     if (bgfx::isValid(m_vbh))
     {
         bgfx::destroy(m_vbh);
@@ -87,7 +57,6 @@ void RendererTestEdges::OnUpdate()
         m_ibh = BGFX_INVALID_HANDLE;
     }
 
-    // 5. Upload new data to GPU
     m_vbh = bgfx::createVertexBuffer(
         bgfx::copy(m_vertices.data(), uint32_t(m_vertices.size() * sizeof(Vertex))),
         m_layout
@@ -97,7 +66,6 @@ void RendererTestEdges::OnUpdate()
         bgfx::copy(m_indices.data(), uint32_t(m_indices.size() * sizeof(uint16_t)))
     );
 
-    // 6. Resume Rendering
     m_ready = true;
 }
 

@@ -180,6 +180,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RendererBase.h" />
+    <ClInclude Include="RendererBouncingCircle.h" />
     <ClInclude Include="RendererFactory.h" />
     <ClInclude Include="RendererGameOfLife.h" />
     <ClInclude Include="RendererTestColorChanging.h" />
@@ -197,6 +198,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RendererBase.cpp" />
+    <ClCompile Include="RendererBouncingCircle.cpp" />
     <ClCompile Include="RendererFactory.cpp" />
     <ClCompile Include="RendererGameOfLife.cpp" />
     <ClCompile Include="RendererTestColorChanging.cpp" />

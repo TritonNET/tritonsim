@@ -124,7 +124,7 @@ namespace TritonSimGUI.Views
 
                     m_config.Width = (ushort)(m_platformGrid.ActualWidth * scale);
                     m_config.Height = (ushort)(m_platformGrid.ActualHeight * scale);
-                    m_config.Type = RendererType.RT_TEST_EDGES;
+                    m_config.Type = RendererType.RT_TEST_BOUNCING_CIRCLE;
 
                     ResponseCode result = TritonSimNative.init(ref m_config, out m_context);
 
