@@ -1,4 +1,6 @@
-﻿namespace TritonSimGUI.Infrastructure
+﻿using System.ComponentModel;
+
+namespace TritonSimGUI.Infrastructure
 {
     [Flags]
     public enum RendererType : uint
@@ -12,11 +14,19 @@
         RT_UNKNOWN = 0x00,
 
         // Individual renderers
+        [Description("Test Color Changing")]
         RT_TEST_COLOR_CHANGING = RT_TESTS | 0x01,
+
+        [Description("Test Edges")]
         RT_TEST_EDGES = RT_TESTS | 0x02,
+
+        [Description("Test Bouncing Circle")]
         RT_TEST_BOUNCING_CIRCLE = RT_TESTS | 0x03,
 
+        [Description("2D Game of Life")]
         RT_GAMEOFLIFE2D = RT_2DSIM | 0x01,
+
+        [Description("3D Game of Life")]
         RT_GAMEOFLIFE3D = RT_3DSIM | 0x01
     }
 }

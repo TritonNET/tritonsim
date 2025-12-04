@@ -21,7 +21,7 @@
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         
-        
+        <!--Control Area-->
         <Border
             Grid.Row="1"
             Grid.Column="1"
@@ -31,7 +31,7 @@
             VerticalOptions="Fill">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="27"/>
                 </Grid.RowDefinitions>
@@ -40,9 +40,18 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <Picker
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Title="Select Renderer"
+                    ItemsSource="{Binding Path=RendererTypes, Mode=OneWay}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding Path=SelectedRenderer, Mode=TwoWay}"/>
+                
+
                 <Grid
                     Grid.Row="3"
-                    Grid.Column="1">
+                    Grid.Column="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="5"/>
@@ -64,6 +73,7 @@
             </Grid>
         </Border>
 
+        <!--Display Area-->
         <Border
             Grid.Row="1"
             Grid.Column="3"
