@@ -9,9 +9,6 @@ namespace TritonSim.GUI.Desktop.Infrastructure
         [return: MarshalAs(UnmanagedType.Bool)]
         public static partial bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
-        // LibraryImport is the modern replacement for DllImport in .NET 7+
-        // It supports SetLastError even when runtime marshalling is disabled.
-        // We strictly define StringMarshalling.Utf16 to replace the old "CharSet=Auto/Unicode" magic.
         [LibraryImport("user32.dll", EntryPoint = "CreateWindowExW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
         public static partial IntPtr CreateWindowEx(
             uint dwExStyle,

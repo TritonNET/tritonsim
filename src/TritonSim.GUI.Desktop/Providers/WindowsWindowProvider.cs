@@ -5,24 +5,31 @@ using TritonSim.GUI.Providers;
 
 namespace TritonSim.GUI.Desktop.Providers
 {
+    [Flags]
+    public enum WindowStyles : uint
+    {
+        WS_CHILD = 0x40000000,
+        WS_VISIBLE = 0x10000000,
+        WS_CLIPCHILDREN = 0x02000000,
+        WS_CLIPSIBLINGS = 0x04000000
+    }
+
     public class WindowsWindowProvider : INativeWindowProvider
     {
         public IntPtr CreateChildWindow(IntPtr parentWindowHandle, double width, double height)
         {
-            // WS_CHILD (0x40000000) | WS_VISIBLE (0x10000000) 
-            // | WS_CLIPCHILDREN (0x02000000) | WS_CLIPSIBLINGS (0x04000000)
-            uint wsStyle = 0x40000000 | 0x10000000 | 0x02000000 | 0x04000000;
+            WindowStyles style = WindowStyles.WS_CHILD |
+                                 WindowStyles.WS_VISIBLE |
+                                 WindowStyles.WS_CLIPCHILDREN |
+                                 WindowStyles.WS_CLIPSIBLINGS;
 
-            // Use IntPtr.Zero for hInstance usually works fine for this context in .NET
             IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsWindowProvider).Module);
 
-            // "STATIC" is a standard Windows class name. 
-            // If you need a custom WndProc, you'll need to register a custom class instead.
             return User32Native.CreateWindowEx(
                 0,
                 "STATIC",
                 "",
-                wsStyle,
+                (uint)style, // 3. Cast the enum back to uint for the P/Invoke call
                 0, 0,
                 (int)width, (int)height,
                 parentWindowHandle,

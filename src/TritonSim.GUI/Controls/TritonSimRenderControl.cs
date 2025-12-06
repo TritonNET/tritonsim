@@ -11,11 +11,14 @@ namespace TritonSim.GUI.Controls
 {
     public class TritonSimRenderControl : NativeControlHost
     {
-        public static readonly StyledProperty<SimulationState> StateProperty = AvaloniaProperty.Register<TritonSimRenderControl, SimulationState>(nameof(State), SimulationState.Unknown);
+        public static readonly StyledProperty<SimulationState> StateProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, SimulationState>(nameof(State), SimulationState.Unknown);
 
-        public static readonly StyledProperty<ITritonSimNativeProvider?> SimProviderProperty = AvaloniaProperty.Register<TritonSimRenderControl, ITritonSimNativeProvider?>(nameof(SimProvider));
+        public static readonly StyledProperty<ITritonSimNativeProvider?> SimProviderProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, ITritonSimNativeProvider?>(nameof(SimProvider));
 
-        public static readonly StyledProperty<INativeWindowProvider?> WindowProviderProperty = AvaloniaProperty.Register<TritonSimRenderControl, INativeWindowProvider?>(nameof(WindowProvider));
+        public static readonly StyledProperty<INativeWindowProvider?> WindowProviderProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, INativeWindowProvider?>(nameof(WindowProvider));
 
         public SimulationState State
         {
@@ -49,7 +52,6 @@ namespace TritonSim.GUI.Controls
             };
             m_renderTimer.Tick += RenderTimer_Tick;
 
-            this.AttachedToVisualTree += OnAttachedToVisualTree;
             this.DetachedFromVisualTree += OnDetachedFromVisualTree;
         }
 
@@ -63,17 +65,50 @@ namespace TritonSim.GUI.Controls
 
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
         {
-            // Validate Providers
             if (WindowProvider == null)
                 throw new InvalidOperationException("WindowProvider is null.");
 
             IntPtr rawHandle = WindowProvider.CreateChildWindow(parent.Handle, this.Bounds.Width, this.Bounds.Height);
 
+            m_mountedHandle = rawHandle;
             m_config.Handle = rawHandle;
 
-            InitializeBgfx();
-
             return new PlatformHandle(rawHandle, "HWND");
+        }
+
+        protected override void DestroyNativeControlCore(IPlatformHandle control)
+        {
+            ShutdownBgfx();
+
+            if (WindowProvider != null && m_mountedHandle != IntPtr.Zero)
+            {
+                WindowProvider.DestroyWindow(m_mountedHandle);
+            }
+
+            m_mountedHandle = IntPtr.Zero;
+            base.DestroyNativeControlCore(control);
+        }
+
+        protected override void OnSizeChanged(SizeChangedEventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            if (m_mountedHandle == IntPtr.Zero || SimProvider == null)
+                return;
+
+            var size = e.NewSize;
+
+            if (size.Width <= 0 || size.Height <= 0)
+                return;
+
+            if (!m_context.IsInitialized())
+            {
+                InitializeBgfx();
+            }
+            else
+            {
+                ResizeBgfx(size);
+            }
         }
 
         private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -81,34 +116,26 @@ namespace TritonSim.GUI.Controls
             StopRenderLoop();
         }
 
-        private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-        {
-
-        }
-
         private void RenderTimer_Tick(object? sender, EventArgs e)
         {
-            if (!m_context.IsInitialized())
-                return;
-
-            if (SimProvider == null)
-                throw new InvalidOperationException("SimProvider is null. Ensure it is bound in XAML and the DataContext is set.");
-
-            SimProvider.RenderFrame(ref m_context);
+            if (!m_context.IsInitialized()) return;
+            SimProvider?.RenderFrame(ref m_context);
         }
 
         private void HandleStateChange(SimulationState newState)
         {
-            if (SimProvider == null)
-                throw new InvalidOperationException("SimProvider is null. Ensure it is bound in XAML and the DataContext is set.");
+            if (SimProvider == null) return;
 
             if (newState == SimulationState.Running)
             {
                 if (!m_context.IsInitialized())
                     InitializeBgfx();
 
-                SimProvider.Start(ref m_context);
-                StartRenderLoop();
+                if (m_context.IsInitialized())
+                {
+                    SimProvider.Start(ref m_context);
+                    StartRenderLoop();
+                }
             }
             else if (newState == SimulationState.Initialized || newState == SimulationState.Paused)
             {
@@ -122,7 +149,7 @@ namespace TritonSim.GUI.Controls
 
         public void StartRenderLoop()
         {
-            if (!m_renderTimer.IsEnabled)
+            if (m_renderTimer != null && !m_renderTimer.IsEnabled)
                 m_renderTimer.Start();
         }
 
@@ -134,22 +161,31 @@ namespace TritonSim.GUI.Controls
         protected void InitializeBgfx()
         {
             if (m_context.IsInitialized()) return;
-
-            if (SimProvider == null)
-                throw new InvalidOperationException("SimProvider is null. Ensure it is bound in XAML and the DataContext is set.");
+            if (SimProvider == null) return;
+            if (m_mountedHandle == IntPtr.Zero) return;
 
             var topLevel = TopLevel.GetTopLevel(this);
             double scale = topLevel?.RenderScaling ?? 1.0;
+            var bounds = this.Bounds;
 
-            m_config.Width = (ushort)(this.Bounds.Width * scale);
-            m_config.Height = (ushort)(this.Bounds.Height * scale);
-            m_config.Type = RendererType.RT_TEST_BOUNCING_CIRCLE; // Or bind this property
+            if (bounds.Width <= 0 || bounds.Height <= 0)
+            {
+                Debug.WriteLine("[Bgfx] Deferred Init: Bounds are still empty.");
+                return;
+            }
+
+            m_config.Handle = m_mountedHandle;
+            m_config.Width = (ushort)(bounds.Width * scale);
+            m_config.Height = (ushort)(bounds.Height * scale);
+            m_config.Type = RendererType.RT_TEST_BOUNCING_CIRCLE;
 
             ResponseCode result = SimProvider.Init(ref m_config, out m_context);
 
             if ((result & ResponseCode.Success) != 0)
             {
-                Debug.WriteLine("[Bgfx] Init Success");
+                Debug.WriteLine($"[Bgfx] Init Success ({m_config.Width}x{m_config.Height})");
+
+                // If the state was already set to Running waiting for Init, start now.
                 if (State == SimulationState.Running)
                 {
                     SimProvider.Start(ref m_context);
@@ -167,16 +203,25 @@ namespace TritonSim.GUI.Controls
             }
         }
 
+        protected void ResizeBgfx(Size newSize)
+        {
+            if (!m_context.IsInitialized() || SimProvider == null) return;
+
+            var topLevel = TopLevel.GetTopLevel(this);
+            double scale = topLevel?.RenderScaling ?? 1.0;
+
+            m_config.Width = (ushort)(newSize.Width * scale);
+            m_config.Height = (ushort)(newSize.Height * scale);
+
+            SimProvider.UpdateConfig(ref m_context, ref m_config);
+        }
+
         private void ShutdownBgfx()
         {
-            if (SimProvider == null)
-                throw new InvalidOperationException("SimProvider is null. Ensure it is bound in XAML and the DataContext is set.");
-
-            if (m_context.IsInitialized())
+            if (SimProvider != null && m_context.IsInitialized())
             {
                 SimProvider.Stop(ref m_context);
                 SimProvider.Shutdown(ref m_context);
-
                 m_context = default;
             }
         }

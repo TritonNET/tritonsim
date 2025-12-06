@@ -24,4 +24,13 @@
   <ItemGroup>
     <ProjectReference Include="..\TritonSim.GUI\TritonSim.GUI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+  	<None Include="$(SolutionDir)TritonSimRenderer\x64\$(Configuration)\TritonSimRenderer.dll">
+  		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  	</None>
+  	<None Include="$(SolutionDir)TritonSimRenderer\x64\$(Configuration)\TritonSimRenderer.pdb">
+  		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  	</None>
+  </ItemGroup>
 </Project>
