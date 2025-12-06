@@ -1,10 +1,11 @@
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using TritonSim.GUI.ViewModels;
 using TritonSim.GUI.Views;
 
@@ -12,6 +13,8 @@ namespace TritonSim.GUI
 {
     public partial class App : Application
     {
+        public IServiceProvider Services { get; private set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -19,16 +22,22 @@ namespace TritonSim.GUI
 
         public override void OnFrameworkInitializationCompleted()
         {
+            var collection = new ServiceCollection();
+
+            RegisterServices(collection);
+
+            Services = collection.BuildServiceProvider();
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = new SimulationWindow(new VmSimulation());
+                desktop.MainWindow = Services.GetRequiredService<SimulationWindow>();
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
-                singleViewPlatform.MainView = new SimulationWindow(new VmSimulation());
+                singleViewPlatform.MainView = Services.GetRequiredService<SimulationWindow>();
             }
 
             base.OnFrameworkInitializationCompleted();
@@ -47,9 +56,10 @@ namespace TritonSim.GUI
             }
         }
 
-        protected virtual void RegisterServices(IServiceCollection serviceCollection)
+        protected virtual void RegisterServices(IServiceCollection services)
         {
-            
+            services.AddTransient<VmSimulation>();
+            services.AddTransient<SimulationWindow>();
         }
     }
 }

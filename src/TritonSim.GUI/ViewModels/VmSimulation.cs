@@ -30,10 +30,10 @@ namespace TritonSim.GUI.ViewModels
         public ITritonSimNativeProvider SimProvider { get; }
         public INativeWindowProvider WindowProvider { get; }
 
-        public VmSimulation()
+        public VmSimulation(ITritonSimNativeProvider simProvider, INativeWindowProvider windowProvider)
         {
-            SimProvider = null;
-            WindowProvider = null;
+            SimProvider = simProvider;
+            WindowProvider = windowProvider;
 
             RendererTypes = new ObservableCollection<VmRendererType>();
 
