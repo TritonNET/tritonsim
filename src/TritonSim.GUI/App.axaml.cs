@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using TritonSim.GUI.ViewModels;
 using TritonSim.GUI.Views;
 
@@ -44,6 +45,11 @@ namespace TritonSim.GUI
             {
                 BindingPlugins.DataValidators.Remove(plugin);
             }
+        }
+
+        protected virtual void RegisterServices(IServiceCollection serviceCollection)
+        {
+            
         }
     }
 }
