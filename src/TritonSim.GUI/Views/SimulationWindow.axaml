@@ -97,11 +97,10 @@
 				Grid.Column="3"
 				BorderThickness="1"
 				BorderBrush="Green">
-				<!--SimProvider="{Binding SimProvider}"
-				WindowProvider="{Binding WindowProvider}"
-				State="{Binding CurrentState, Mode=TwoWay}"-->
 				<ctrl:TritonSimRenderControl
-					/>
+					SimProvider="{Binding SimProvider}"
+					WindowProvider="{Binding WindowProvider}"
+					State="{Binding CurrentState, Mode=TwoWay}"/>
 			</Border>
 		</Grid>
 	</Grid>

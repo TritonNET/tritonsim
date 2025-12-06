@@ -9,17 +9,26 @@ namespace TritonSim.GUI.Desktop.Providers
     {
         public IntPtr CreateChildWindow(IntPtr parentWindowHandle, double width, double height)
         {
-            // WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS
+            // WS_CHILD (0x40000000) | WS_VISIBLE (0x10000000) 
+            // | WS_CLIPCHILDREN (0x02000000) | WS_CLIPSIBLINGS (0x04000000)
             uint wsStyle = 0x40000000 | 0x10000000 | 0x02000000 | 0x04000000;
 
-            // Note: GetHINSTANCE might need a specific module, or IntPtr.Zero for current process usually works
-            //IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsWindowProvider).Module);
-            IntPtr hInstance = IntPtr.Zero;
+            // Use IntPtr.Zero for hInstance usually works fine for this context in .NET
+            IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsWindowProvider).Module);
 
+            // "STATIC" is a standard Windows class name. 
+            // If you need a custom WndProc, you'll need to register a custom class instead.
             return User32Native.CreateWindowEx(
-                0, "STATIC", "", wsStyle,
-                0, 0, (int)width, (int)height,
-                parentWindowHandle, IntPtr.Zero, hInstance, IntPtr.Zero);
+                0,
+                "STATIC",
+                "",
+                wsStyle,
+                0, 0,
+                (int)width, (int)height,
+                parentWindowHandle,
+                IntPtr.Zero,
+                hInstance,
+                IntPtr.Zero);
         }
 
         public void DestroyWindow(IntPtr windowHandle)
