@@ -1,13 +1,19 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using TritonSim.GUI.ViewModels;
 
 namespace TritonSim.GUI.Views;
 
 public partial class SimulationWindow : Window
 {
-    public SimulationWindow()
+    private readonly VmSimulation m_vm;
+
+    public SimulationWindow(VmSimulation vm)
     {
         InitializeComponent();
+
+        DataContext = vm;
+        m_vm = vm;
     }
 }

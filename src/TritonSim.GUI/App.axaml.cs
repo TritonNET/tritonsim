@@ -23,17 +23,11 @@ namespace TritonSim.GUI
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = new SimulationWindow
-                {
-                    
-                };
+                desktop.MainWindow = new SimulationWindow(new VmSimulation());
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
-                singleViewPlatform.MainView = new SimulationWindow
-                {
-                    DataContext = new MainViewModel()
-                };
+                singleViewPlatform.MainView = new SimulationWindow(new VmSimulation());
             }
 
             base.OnFrameworkInitializationCompleted();
