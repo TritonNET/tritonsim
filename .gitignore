@@ -6,3 +6,15 @@
 /src/TritonSimRenderer/x64
 /src/TritonSimGUI/bin
 /src/TritonSimGUI/obj
+/src/TritonSim.GUI/bin
+/src/TritonSim.GUI/obj
+/src/TritonSim.GUI.Android/bin
+/src/TritonSim.GUI.Android/obj
+/src/TritonSim.GUI.Browser/bin
+/src/TritonSim.GUI.Browser/obj
+/src/TritonSim.GUI.Desktop/bin
+/src/TritonSim.GUI.Desktop/obj
+/src/TritonSim.GUI.iOS/bin
+/src/TritonSim.GUI.iOS/obj
+/src/TritonSim.GUI.Test/bin
+/src/TritonSim.GUI.Test/obj
