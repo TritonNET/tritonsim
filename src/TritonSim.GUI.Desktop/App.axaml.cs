@@ -6,12 +6,12 @@ namespace TritonSim.GUI.Desktop
 {
     public class App : GUI.App
     {
-        protected override void RegisterServices(IServiceCollection serviceCollection)
+        protected override void RegisterServices(IServiceCollection services)
         {
-            base.RegisterServices(serviceCollection);
+            services.AddSingleton<INativeSimulator, DesktopNativeSimulator>();
+            services.AddSingleton<INativeWindowProvider, WindowsWindowProvider>();
 
-            serviceCollection.AddSingleton<ITritonSimNativeProvider, DesktopNativeProvider>();
-            serviceCollection.AddSingleton<INativeWindowProvider, WindowsWindowProvider>();
+            base.RegisterServices(services);
         }
     }
 }

@@ -1,9 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 
@@ -11,8 +15,8 @@ namespace TritonSim.GUI.Controls
 {
     public class TritonSimRenderControl : NativeControlHost
     {
-        public static readonly StyledProperty<SimulationState> StateProperty =
-            AvaloniaProperty.Register<TritonSimRenderControl, SimulationState>(nameof(State), SimulationState.Unknown);
+        public static readonly StyledProperty<SimulationMode> ModeProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, SimulationMode>(nameof(Mode), SimulationMode.NotReady);
 
         public static readonly StyledProperty<ITritonSimNativeProvider?> SimProviderProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, ITritonSimNativeProvider?>(nameof(SimProvider));
@@ -20,10 +24,13 @@ namespace TritonSim.GUI.Controls
         public static readonly StyledProperty<INativeWindowProvider?> WindowProviderProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, INativeWindowProvider?>(nameof(WindowProvider));
 
-        public SimulationState State
+        public static readonly StyledProperty<RendererType> RendererProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, RendererType>(nameof(Renderer), RendererType.RT_UNKNOWN);
+
+        public SimulationMode Mode
         {
-            get => GetValue(StateProperty);
-            set => SetValue(StateProperty, value);
+            get => GetValue(ModeProperty);
+            set => SetValue(ModeProperty, value);
         }
 
         public ITritonSimNativeProvider? SimProvider
@@ -38,11 +45,15 @@ namespace TritonSim.GUI.Controls
             set => SetValue(WindowProviderProperty, value);
         }
 
-        private DispatcherTimer? m_renderTimer;
-        protected SimContext m_context;
-        protected SimConfig m_config;
+        public RendererType Renderer
+        {
+            get => GetValue(RendererProperty);
+            set => SetValue(RendererProperty, value);
+        }
 
-        private IntPtr m_mountedHandle = IntPtr.Zero;
+        private DispatcherTimer? m_renderTimer;
+        private Popup? m_overlayPopup;
+        private bool m_attached;
 
         public TritonSimRenderControl()
         {
@@ -52,15 +63,60 @@ namespace TritonSim.GUI.Controls
             };
             m_renderTimer.Tick += RenderTimer_Tick;
 
-            this.DetachedFromVisualTree += OnDetachedFromVisualTree;
+            m_attached = false;
+
+            AttachedToVisualTree += OnAttachedToVisualTree;
+            DetachedFromVisualTree += OnDetachedFromVisualTree;
+        }
+
+        private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            m_attached = true;
+
+            InitializeRenderer();
+        }
+
+        private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            StopRenderLoop();
+            m_attached = false;
+        }
+
+        public void Start() 
+        {
+            if (!m_attached) return;
+
+            PerformProviderAction(() => {
+
+                var success = SimProvider.Start();
+
+                if (success)
+                    StartRenderLoop();
+
+                return success;
+            });
+
+        }
+
+        public void Stop() 
+        {
+            if (!m_attached) return;
+
+            PerformProviderAction(() => {
+
+                StopRenderLoop();
+                return SimProvider.Stop();
+            });
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
 
-            if (change.Property == StateProperty)
-                HandleStateChange(change.GetNewValue<SimulationState>());
+            if (!m_attached) return;
+
+            if (change.Property == RendererProperty)
+                HandleRendererChange(change.GetNewValue<RendererType>());
         }
 
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
@@ -70,22 +126,18 @@ namespace TritonSim.GUI.Controls
 
             IntPtr rawHandle = WindowProvider.CreateChildWindow(parent.Handle, this.Bounds.Width, this.Bounds.Height);
 
-            m_mountedHandle = rawHandle;
-            m_config.Handle = rawHandle;
+            PerformProviderAction(() => SimProvider.SetWindowHandle(rawHandle));
 
             return new PlatformHandle(rawHandle, "HWND");
         }
 
         protected override void DestroyNativeControlCore(IPlatformHandle control)
         {
-            ShutdownBgfx();
+            ShutdownRenderer();
 
-            if (WindowProvider != null && m_mountedHandle != IntPtr.Zero)
-            {
-                WindowProvider.DestroyWindow(m_mountedHandle);
-            }
+            if (WindowProvider != null)
+                WindowProvider.DestroyWindow();
 
-            m_mountedHandle = IntPtr.Zero;
             base.DestroyNativeControlCore(control);
         }
 
@@ -93,136 +145,122 @@ namespace TritonSim.GUI.Controls
         {
             base.OnSizeChanged(e);
 
-            if (m_mountedHandle == IntPtr.Zero || SimProvider == null)
-                return;
-
             var size = e.NewSize;
 
             if (size.Width <= 0 || size.Height <= 0)
                 return;
 
-            if (!m_context.IsInitialized())
-            {
-                InitializeBgfx();
-            }
-            else
-            {
-                ResizeBgfx(size);
-            }
-        }
+            var scale = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
 
-        private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-        {
-            StopRenderLoop();
+            PerformProviderAction(() => SimProvider.SetSize(new Avalonia.Size(size.Width * scale, size.Height * scale)));
         }
 
         private void RenderTimer_Tick(object? sender, EventArgs e)
         {
-            if (!m_context.IsInitialized()) return;
-            SimProvider?.RenderFrame(ref m_context);
+            PerformProviderAction(() => SimProvider.RenderFrame());
         }
 
-        private void HandleStateChange(SimulationState newState)
+        private void HandleRendererChange(RendererType newType)
         {
-            if (SimProvider == null) return;
+            if (SimProvider == null)
+                return;
 
-            if (newState == SimulationState.Running)
-            {
-                if (!m_context.IsInitialized())
-                    InitializeBgfx();
+            Debug.WriteLine($"[Bgfx] Switching Renderer to: {newType}");
 
-                if (m_context.IsInitialized())
-                {
-                    SimProvider.Start(ref m_context);
-                    StartRenderLoop();
-                }
-            }
-            else if (newState == SimulationState.Initialized || newState == SimulationState.Paused)
-            {
-                StopRenderLoop();
-                if (m_context.IsInitialized())
-                {
-                    SimProvider.Stop(ref m_context);
-                }
-            }
+            StopRenderLoop();
+
+            ShutdownRenderer();
+
+            InitializeRenderer();
         }
 
-        public void StartRenderLoop()
+        private void StartRenderLoop()
         {
             if (m_renderTimer != null && !m_renderTimer.IsEnabled)
                 m_renderTimer.Start();
         }
 
-        public void StopRenderLoop()
+        private void StopRenderLoop()
         {
-            m_renderTimer?.Stop();
+            if (m_renderTimer.IsEnabled)
+                m_renderTimer?.Stop();
         }
 
-        protected void InitializeBgfx()
+        protected void InitializeRenderer()
         {
-            if (m_context.IsInitialized()) return;
             if (SimProvider == null) return;
-            if (m_mountedHandle == IntPtr.Zero) return;
 
-            var topLevel = TopLevel.GetTopLevel(this);
-            double scale = topLevel?.RenderScaling ?? 1.0;
-            var bounds = this.Bounds;
-
-            if (bounds.Width <= 0 || bounds.Height <= 0)
-            {
-                Debug.WriteLine("[Bgfx] Deferred Init: Bounds are still empty.");
-                return;
-            }
-
-            m_config.Handle = m_mountedHandle;
-            m_config.Width = (ushort)(bounds.Width * scale);
-            m_config.Height = (ushort)(bounds.Height * scale);
-            m_config.Type = RendererType.RT_TEST_BOUNCING_CIRCLE;
-
-            ResponseCode result = SimProvider.Init(ref m_config, out m_context);
-
-            if ((result & ResponseCode.Success) != 0)
-            {
-                Debug.WriteLine($"[Bgfx] Init Success ({m_config.Width}x{m_config.Height})");
-
-                // If the state was already set to Running waiting for Init, start now.
-                if (State == SimulationState.Running)
-                {
-                    SimProvider.Start(ref m_context);
-                    StartRenderLoop();
-                }
-                else
-                {
-                    SetCurrentValue(StateProperty, SimulationState.Initialized);
-                }
-            }
-            else
-            {
-                Debug.WriteLine("[Bgfx] Init Failed");
-                SetCurrentValue(StateProperty, SimulationState.Error);
-            }
+            PerformProviderAction(() => SimProvider.Init());
         }
 
-        protected void ResizeBgfx(Size newSize)
+        private void PerformProviderAction(Func<bool> action)
         {
-            if (!m_context.IsInitialized() || SimProvider == null) return;
+            var success = action();
 
-            var topLevel = TopLevel.GetTopLevel(this);
-            double scale = topLevel?.RenderScaling ?? 1.0;
+            SetCurrentValue(ModeProperty, SimProvider.GetMode());
 
-            m_config.Width = (ushort)(newSize.Width * scale);
-            m_config.Height = (ushort)(newSize.Height * scale);
-
-            SimProvider.UpdateConfig(ref m_context, ref m_config);
+            if (!success)
+                ShowOverlayText(SimProvider.GetLastError());
         }
 
-        private void ShutdownBgfx()
+        private void ShutdownRenderer()
         {
-            if (SimProvider != null && m_context.IsInitialized())
+            var success = SimProvider.Shutdown();
+
+            SetCurrentValue(ModeProperty, SimProvider.GetMode());
+
+            if (!success)
+                ShowOverlayText(SimProvider.GetLastError());
+        }
+
+        private void ShowOverlayText(string text)
+        {
+            // 1. Clear existing popup if present
+            HideOverlayText();
+
+            // 2. Create the content (TextBox inside Border)
+            var textBox = new TextBox
             {
-                SimProvider.Stop(ref m_context);
-                SimProvider.Shutdown(ref m_context);
-                m_context = default;
+                Text = text,
+                IsReadOnly = true,
+                TextAlignment = TextAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                MinWidth = 200,
+                Background = Brushes.White,
+                Foreground = Brushes.Black
+            };
+
+            var overlayBorder = new Border
+            {
+                Child = textBox,
+                BorderBrush = Brushes.Red,
+                BorderThickness = new Thickness(2),
+                Background = Brushes.White,
+                Padding = new Thickness(5),
+                CornerRadius = new CornerRadius(4)
+            };
+
+            // 3. Create a Popup
+            // A Popup creates a new native window handle, allowing it to sit 
+            // visually on top of the NativeControlHost's window handle.
+            m_overlayPopup = new Popup
+            {
+                PlacementTarget = this,            // Position relative to this control
+                Placement = PlacementMode.Center,  // Center it
+                Child = overlayBorder,
+                IsOpen = true,
+                Topmost = true                     // Ensure it stays on top
+            };
+        }
+
+        private void HideOverlayText()
+        {
+            if (m_overlayPopup != null)
+            {
+                m_overlayPopup.IsOpen = false;
+                m_overlayPopup.Child = null; // Help GC
+                m_overlayPopup = null;
             }
         }
     }

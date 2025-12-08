@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using TritonSim.GUI.Providers;
 using TritonSim.GUI.ViewModels;
 using TritonSim.GUI.Views;
 
@@ -58,6 +59,8 @@ namespace TritonSim.GUI
 
         protected virtual void RegisterServices(IServiceCollection services)
         {
+            services.AddSingleton<ITritonSimNativeProvider, NativeProvider>();
+
             services.AddTransient<VmSimulation>();
             services.AddTransient<SimulationWindow>();
         }

@@ -16,6 +16,6 @@ namespace TritonSim.GUI.Providers
         /// <summary>
         /// Destroys the window handle created by CreateChildWindow.
         /// </summary>
-        void DestroyWindow(IntPtr windowHandle);
+        void DestroyWindow();
     }
 }

@@ -1,19 +1,29 @@
-﻿using TritonSim.GUI.Infrastructure;
+﻿using Avalonia;
+using System;
+using TritonSim.GUI.Infrastructure;
 
 namespace TritonSim.GUI.Providers
 {
     public interface ITritonSimNativeProvider
     {
-        ResponseCode Init(ref SimConfig config, out SimContext ctx);
+        bool Init();
 
-        ResponseCode UpdateConfig(ref SimContext ctx, ref SimConfig config);
-        
-        ResponseCode RenderFrame(ref SimContext ctx);
-        
-        ResponseCode Start(ref SimContext ctx);
-        
-        ResponseCode Stop(ref SimContext ctx);
-        
-        ResponseCode Shutdown(ref SimContext ctx);
+        bool RenderFrame();
+
+        bool Start();
+
+        bool Stop();
+
+        bool Shutdown();
+
+        bool SetWindowHandle(IntPtr handle);
+
+        bool SetType(RendererType type);
+
+        bool SetSize(Size size);
+
+        SimulationMode GetMode();
+
+        string GetLastError();
     }
 }

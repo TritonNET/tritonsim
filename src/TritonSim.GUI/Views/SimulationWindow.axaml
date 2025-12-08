@@ -98,9 +98,11 @@
 				BorderThickness="1"
 				BorderBrush="Green">
 				<ctrl:TritonSimRenderControl
+					x:Name="simControl"
 					SimProvider="{Binding SimProvider}"
 					WindowProvider="{Binding WindowProvider}"
-					State="{Binding CurrentState, Mode=TwoWay}"/>
+					Renderer="{Binding SelectedRenderer.Type, Mode=OneWay}"
+					Mode="{Binding CurrentMode, Mode=TwoWay}"/>
 			</Border>
 		</Grid>
 	</Grid>

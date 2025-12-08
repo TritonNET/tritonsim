@@ -8,24 +8,26 @@ using TritonSim.GUI.Providers;
 
 namespace TritonSim.GUI.ViewModels
 {
+    public delegate void SimulationModeEventHandler();
+
     public partial class VmSimulation : ObservableObject
     {
+        public event SimulationModeEventHandler StartSimulation;
+
+        public event SimulationModeEventHandler StopSimulation;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(StartCommand), nameof(StopCommand))]
-        private SimulationState m_currentState = SimulationState.Initialized;
+        private SimulationMode m_currentMode = SimulationMode.NotReady;
 
-        public bool CanStart => true;//CurrentState == SimulationState.Initialized || CurrentState == SimulationState.Paused;
+        public bool CanStart => CurrentMode == SimulationMode.Ready;
 
-        public bool CanStop => CurrentState == SimulationState.Running;
+        public bool CanStop => CurrentMode == SimulationMode.Running;
+
+        [ObservableProperty]
+        private VmRendererType m_selectedRenderer;
 
         public ObservableCollection<VmRendererType> RendererTypes { get; }
-
-        private VmRendererType m_selectedRenderer;
-        public VmRendererType SelectedRenderer
-        {
-            get => m_selectedRenderer;
-            set => SetProperty(ref m_selectedRenderer, value);
-        }
 
         public ITritonSimNativeProvider SimProvider { get; }
         public INativeWindowProvider WindowProvider { get; }
@@ -53,15 +55,9 @@ namespace TritonSim.GUI.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanStart))]
-        private void Start()
-        {
-            CurrentState = SimulationState.Running;
-        }
+        private void Start() => StartSimulation?.Invoke();
 
         [RelayCommand(CanExecute = nameof(CanStop))]
-        private void Stop()
-        {
-            CurrentState = SimulationState.Initialized;
-        }
+        private void Stop() => StopSimulation?.Invoke();
     }
 }

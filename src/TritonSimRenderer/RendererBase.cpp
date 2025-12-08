@@ -45,9 +45,9 @@ ResponseCode RendererBase::UpdateConfig(const SimConfig& cfg)
     m_width = cfg.width;
     m_height = cfg.height;
 
-    bgfx::reset(m_width, m_height, m_resetFlags); // Reset bgfx (Recreates the backbuffer/swap chain)
+    bgfx::reset(m_width, m_height, m_resetFlags);
 
-    bgfx::setViewRect(0, 0, 0, m_width, m_height); // Update the View Rect immediately (optional here, as RenderFrame does it too)
+    bgfx::setViewRect(0, 0, 0, m_width, m_height);
 
     return RC_SUCCESS;
 }

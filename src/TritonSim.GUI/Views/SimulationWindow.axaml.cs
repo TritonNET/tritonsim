@@ -15,5 +15,18 @@ public partial class SimulationWindow : Window
 
         DataContext = vm;
         m_vm = vm;
+
+        vm.StartSimulation += StartSimulation;
+        vm.StopSimulation += StopSimulation;
+    }
+
+    private void StopSimulation()
+    {
+        simControl.Stop();
+    }
+
+    private void StartSimulation()
+    {
+        simControl.Start();
     }
 }

@@ -22,8 +22,8 @@ namespace TritonSim.GUI.ViewModels
             set => SetProperty(ref m_type, value);
         }
 
-        private string m_message;
-        public string Message
+        private string? m_message;
+        public string? Message
         {
             get => m_message;
             set => SetProperty(ref m_message, value);

@@ -1,14 +1,26 @@
 #pragma once
+#include <cstdint>
 
-enum ResponseCode
+// Enforce int32_t to match C# 'int' (System.Int32)
+enum ResponseCode : int32_t
 {
-    // FAILURE FLAGS (negative mask)
-    RC_FAILED = 0x80000000,   // Top bit = indicates failure
-    RC_UNKNOWN_RENDERER_TYPE = RC_FAILED | 0x01,
-    RC_RENDERER_NOT_INITIALIZED = RC_FAILED | 0x02,
-    RC_FAILED_OPEN_FILE = RC_FAILED | 0x03,
+    // Standard: 0 is Success
+    RC_SUCCESS = 0,
 
-    // SUCCESS FLAGS (positive mask)
-    RC_SUCCESS = 0x00000001,
-    //RC_PARTIAL_SUCCESS = 0x00000002
+    // Positive values for "Success with issues" (Warnings)
+    RC_PARTIAL_SUCCESS = 1,
+
+    // FAILURE FLAGS (negative mask)
+    // We static_cast to force the unsigned hex literal into a signed int representation
+    RC_FAILED = static_cast<int32_t>(0x80000000),
+
+    // Specific Failures
+    // These must match the IDs used in your C# Enum exactly
+    RC_UNKNOWN_RENDERER_TYPE = RC_FAILED | 0x04,
+    RC_RENDERER_NOT_INITIALIZED = RC_FAILED | 0x05,
+    RC_FAILED_OPEN_FILE = RC_FAILED | 0x06,
 };
+
+// Optional: Helper macros or inline functions for C++ logic
+inline bool RC_IS_SUCCESS(ResponseCode rc) { return rc >= 0; }
+inline bool RC_IS_FAILURE(ResponseCode rc) { return rc < 0; }

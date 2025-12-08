@@ -16,6 +16,8 @@ namespace TritonSim.GUI.Desktop.Providers
 
     public class WindowsWindowProvider : INativeWindowProvider
     {
+        private IntPtr m_windowHandle = IntPtr.Zero;
+
         public IntPtr CreateChildWindow(IntPtr parentWindowHandle, double width, double height)
         {
             WindowStyles style = WindowStyles.WS_CHILD |
@@ -25,7 +27,7 @@ namespace TritonSim.GUI.Desktop.Providers
 
             IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsWindowProvider).Module);
 
-            return User32Native.CreateWindowEx(
+            m_windowHandle = User32Native.CreateWindowEx(
                 0,
                 "STATIC",
                 "",
@@ -36,13 +38,15 @@ namespace TritonSim.GUI.Desktop.Providers
                 IntPtr.Zero,
                 hInstance,
                 IntPtr.Zero);
+
+            return m_windowHandle;
         }
 
-        public void DestroyWindow(IntPtr windowHandle)
+        public void DestroyWindow()
         {
-            if (windowHandle != IntPtr.Zero)
+            if (m_windowHandle != IntPtr.Zero)
             {
-                User32Native.DestroyWindow(windowHandle);
+                User32Native.DestroyWindow(m_windowHandle);
             }
         }
     }
