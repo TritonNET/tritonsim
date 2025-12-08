@@ -8,11 +8,8 @@ namespace TritonSim.GUI.Desktop.Providers
     {
         private const string LIB_NAME = "TritonSimRenderer.dll";
 
-        public ResponseCode Init(ref SimConfig config, out SimContext ctx) {
-            ctx = new SimContext();
-            return ResponseCode.UnknownRendererType;
-        }
-            //=> NativeInit(ref config, out ctx);
+        public ResponseCode Init(ref SimConfig config, out SimContext ctx) 
+            => NativeInit(ref config, out ctx);
 
         public ResponseCode UpdateConfig(ref SimContext ctx, ref SimConfig config)
             => NativeUpdateConfig(ref ctx, ref config);

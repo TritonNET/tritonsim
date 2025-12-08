@@ -70,6 +70,33 @@ namespace TritonSim.GUI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Render Surface Handle.
+        /// </summary>
+        internal static string InvalidRenderSurfaceHandle {
+            get {
+                return ResourceManager.GetString("InvalidRenderSurfaceHandle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Render Surface Height.
+        /// </summary>
+        internal static string InvalidRenderSurfaceHeight {
+            get {
+                return ResourceManager.GetString("InvalidRenderSurfaceHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Render Surface Width.
+        /// </summary>
+        internal static string InvalidRenderSurfaceWidth {
+            get {
+                return ResourceManager.GetString("InvalidRenderSurfaceWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operation completed with warnings..
         /// </summary>
         internal static string PartialSuccess {

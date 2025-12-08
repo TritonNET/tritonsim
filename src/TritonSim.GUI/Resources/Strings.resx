@@ -121,6 +121,15 @@
     <value>General Failure</value>
     <comment>0x80000000</comment>
   </data>
+  <data name="InvalidRenderSurfaceHandle" xml:space="preserve">
+    <value>Invalid Render Surface Handle</value>
+  </data>
+  <data name="InvalidRenderSurfaceHeight" xml:space="preserve">
+    <value>Invalid Render Surface Height</value>
+  </data>
+  <data name="InvalidRenderSurfaceWidth" xml:space="preserve">
+    <value>Invalid Render Surface Width</value>
+  </data>
   <data name="PartialSuccess" xml:space="preserve">
     <value>Operation completed with warnings.</value>
   </data>

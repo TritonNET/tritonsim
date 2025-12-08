@@ -80,9 +80,9 @@
 							Grid.Column="0"
 							HorizontalAlignment="Stretch"
 							HorizontalContentAlignment="Center"
-							IsEnabled="{Binding Path=CanStart, Mode=OneWay}"
+							
 							Command="{Binding Path=StartCommand}">Start</Button>
-
+						<!--IsEnabled="{Binding Path=CanStart, Mode=OneWay}"-->
 						<Button
 							Grid.Column="2"
 							HorizontalAlignment="Stretch"
@@ -99,6 +99,8 @@
 				BorderBrush="Green">
 				<ctrl:TritonSimRenderControl
 					x:Name="simControl"
+					HorizontalAlignment="Stretch"
+					HorizontalContentAlignment="Stretch"
 					SimProvider="{Binding SimProvider}"
 					WindowProvider="{Binding WindowProvider}"
 					Renderer="{Binding SelectedRenderer.Type, Mode=OneWay}"

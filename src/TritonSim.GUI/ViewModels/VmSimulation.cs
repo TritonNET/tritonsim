@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
@@ -51,7 +52,18 @@ namespace TritonSim.GUI.ViewModels
                 });
             }
 
-            SelectedRenderer = RendererTypes.FirstOrDefault();
+            SelectedRenderer = RendererTypes.Where(e=> e.Type == RendererType.RT_TEST_COLOR_CHANGING).FirstOrDefault();
+        }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+
+            if (e.PropertyName == nameof(CurrentMode))
+            {
+                OnPropertyChanged(nameof(CanStart));
+                OnPropertyChanged(nameof(CanStop));
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanStart))]

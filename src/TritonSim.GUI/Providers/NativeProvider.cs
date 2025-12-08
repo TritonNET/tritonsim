@@ -34,10 +34,7 @@ namespace TritonSim.GUI.Providers
             m_lastResponse = m_native.UpdateConfig(ref m_context, ref m_config);
 
             if (m_lastResponse.IsSuccess())
-            {
-                m_mode = SimulationMode.Running;
                 return true;
-            }
 
             m_flags |= SimulationFlags.Error;
             return false;

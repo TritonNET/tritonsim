@@ -20,5 +20,10 @@ namespace TritonSim.GUI.Infrastructure
         // though strictly strictly speaking, the 'Failed' bit makes them distinct values.
         UnknownRendererType = Failed | 0x04,
         RendererNotInitialized = Failed | 0x05,
+        FailedOpenFile = Failed | 0x06,
+
+        InvalidRenderSurfaceHeight = Failed | 0x07,
+        InvalidRenderSurfaceWidth = Failed | 0x08,
+        InvalidRenderSurfaceHandle = Failed | 0x09,
     }
 }
