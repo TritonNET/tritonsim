@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TritonSim.GUI.Controls.TritonSimRenderControl">
+	<Grid>
+		<Border 
+			x:Name="NativeContainer"
+			HorizontalAlignment="Stretch" 
+			VerticalAlignment="Stretch" />
+
+		<StackPanel 
+			x:Name="OverlayBorder"
+			HorizontalAlignment="Center" 
+			VerticalAlignment="Center" 
+			Spacing="10">
+			<TextBlock 
+				Text="STATUS" 
+				FontWeight="Bold" 
+				Foreground="Red" 
+				HorizontalAlignment="Center"/>
+			
+			<TextBlock 
+				x:Name="OverlayTextBox"
+				Text="Initializing..."
+				TextAlignment="Center"
+				Background="Transparent"
+				Foreground="White"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

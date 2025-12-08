@@ -5,6 +5,7 @@ RendererBase::RendererBase(const SimConfig& cfg)
     , m_width(cfg.width)
     , m_height(cfg.height)
     , m_nwh(cfg.handle)
+    , m_backgroundColor(cfg.BackgroundColor)
 {
 
 }
@@ -34,8 +35,10 @@ ResponseCode RendererBase::Init()
     if (!bgfx::init(init))
         return RC_FAILED;
 
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xFF0000FF, 1.0f, 0);
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
     bgfx::setViewRect(0, 0, 0, m_width, m_height);
+    bgfx::touch(0);
+    bgfx::frame();
 
 	return RC_SUCCESS;
 }
@@ -44,17 +47,23 @@ ResponseCode RendererBase::UpdateConfig(const SimConfig& cfg)
 {
     m_width = cfg.width;
     m_height = cfg.height;
+    m_backgroundColor = cfg.BackgroundColor;
 
-    bgfx::reset(m_width, m_height, m_resetFlags); // Reset bgfx (Recreates the backbuffer/swap chain)
+    bgfx::reset(m_width, m_height, m_resetFlags);
 
-    bgfx::setViewRect(0, 0, 0, m_width, m_height); // Update the View Rect immediately (optional here, as RenderFrame does it too)
+    bgfx::setViewRect(0, 0, 0, m_width, m_height);
+
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
+
+    bgfx::touch(0);
+    bgfx::frame();
 
     return RC_SUCCESS;
 }
 
 ResponseCode RendererBase::RenderFrame()
 {
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xFF0000FF, 1.0f, 0);
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
     bgfx::touch(0);
     bgfx::frame();
 

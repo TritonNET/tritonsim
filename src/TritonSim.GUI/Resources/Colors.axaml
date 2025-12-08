@@ -1,0 +1,26 @@
+<ResourceDictionary 
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+    <SolidColorBrush x:Key="StdBorder">#1E1E1E</SolidColorBrush>
+    <SolidColorBrush x:Key="StdBackground">#232323</SolidColorBrush>
+    
+    <SolidColorBrush x:Key="TitleForeground">#FFFFFF</SolidColorBrush> 
+
+    <SolidColorBrush x:Key="BtnBackground">#2D2D30</SolidColorBrush> 
+    <SolidColorBrush x:Key="BtnBorder">#3E3E42</SolidColorBrush>
+    <SolidColorBrush x:Key="BtnForeground">#F1F1F1</SolidColorBrush>
+
+    <SolidColorBrush x:Key="BtnBackgroundHover">#3E3E40</SolidColorBrush>
+    <SolidColorBrush x:Key="BtnAccent">#1BA1E2</SolidColorBrush>
+
+    <SolidColorBrush x:Key="BtnBackgroundDisabled">#1E1E1E</SolidColorBrush>
+    <SolidColorBrush x:Key="BtnBorderDisabled">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="BtnForegroundDisabled">#666666</SolidColorBrush>
+
+    <SolidColorBrush x:Key="BtnPrimary">#0050EF</SolidColorBrush>
+    <SolidColorBrush x:Key="BtnPrimaryLight">#2a73ff</SolidColorBrush>
+
+    <SolidColorBrush x:Key="PopupBackground">#1B1B1C</SolidColorBrush>
+
+</ResourceDictionary>

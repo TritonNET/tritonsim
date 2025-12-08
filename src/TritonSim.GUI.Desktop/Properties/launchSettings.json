@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TritonSim.GUI.Desktop": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -9,7 +9,7 @@ static float gValue2 = 0.0f;
 ResponseCode init(const SimConfig& config, SimContext& ctx)
 {
     ResponseCode result = RendererFactory::CreateRenderer(config, ctx);
-    if (!result & RC_SUCCESS)
+    if (result & RC_FAILED)
         return result;
 
     return ctx.Renderer->Init();

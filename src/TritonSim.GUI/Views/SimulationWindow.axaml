@@ -1,0 +1,113 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TritonSim.GUI.Views.SimulationWindow"
+		xmlns:vm="using:TritonSim.GUI.ViewModels"
+		xmlns:ctrl="using:TritonSim.GUI.Controls"
+		
+		x:DataType="vm:VmSimulation"
+		
+		SystemDecorations="Full"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaChromeHints="PreferSystemChrome"
+
+		ExtendClientAreaTitleBarHeightHint="40"
+		
+		Background="{StaticResource StdBackground}"
+		
+        Title="TritonNET - Simulations">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="40"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<Grid 
+			Grid.Row="0" 
+			Background="Transparent"
+			PointerPressed="TitleBar_PointerPressed">
+			<TextBlock
+				Text="{Binding Path=Title}"
+				VerticalAlignment="Center"
+				Padding="10,0,0,0"
+				FontSize="16"
+				Foreground="{StaticResource TitleForeground}"/>
+		</Grid>
+
+		<Grid Grid.Row="1" Margin="0,0,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="200"/>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="10"/>
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="10"/>
+			</Grid.RowDefinitions>
+
+			<Border
+				Grid.Column="1"
+				BorderThickness="1"
+				BorderBrush="{StaticResource StdBorder}"
+				Background="Transparent">
+
+				<Grid Margin="10">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<ComboBox
+						Grid.Row="0"
+						HorizontalAlignment="Stretch"
+						ItemsSource="{Binding Path=RendererTypes, Mode=OneWay}"
+						SelectedItem="{Binding Path=SelectedRenderer, Mode=TwoWay}">
+					</ComboBox>
+
+					<Grid Grid.Row="2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="5"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Button
+							Grid.Column="0"
+							HorizontalAlignment="Stretch"
+							HorizontalContentAlignment="Center"
+							IsEnabled="{Binding Path=CanStart, Mode=OneWay}"	
+							Command="{Binding Path=StartCommand}">Start</Button>
+						<Button
+							Grid.Column="2"
+							HorizontalAlignment="Stretch"
+							HorizontalContentAlignment="Center"
+							IsEnabled="{Binding Path=CanStop, Mode=OneWay}"
+							Command="{Binding Path=StopCommand}">Stop</Button>
+					</Grid>
+				</Grid>
+			</Border>
+
+			<Border
+				Grid.Column="3"
+				BorderThickness="1"
+				BorderBrush="{StaticResource StdBorder}">
+				<ctrl:TritonSimRenderControl
+					x:Name="simControl"					
+					HorizontalAlignment="Stretch"
+					HorizontalContentAlignment="Stretch"
+					SimProvider="{Binding SimProvider}"
+					WindowProvider="{Binding WindowProvider}"
+					Renderer="{Binding SelectedRenderer.Type, Mode=OneWay}"
+					Mode="{Binding CurrentMode, Mode=TwoWay}"
+					Background="{StaticResource StdBackground}"/>
+			</Border>
+		</Grid>
+	</Grid>
+
+</Window>

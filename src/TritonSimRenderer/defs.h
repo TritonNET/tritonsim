@@ -10,6 +10,7 @@ struct SimConfig
     int width;
     int height;
     RendererType Type;
+    int BackgroundColor;
 };
 
 struct SimContext
