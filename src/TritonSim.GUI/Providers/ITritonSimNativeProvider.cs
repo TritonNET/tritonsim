@@ -25,5 +25,7 @@ namespace TritonSim.GUI.Providers
         SimulationMode GetMode();
 
         string GetLastError();
+
+        bool SetBackgroundColor(UInt32 rgb);
     }
 }

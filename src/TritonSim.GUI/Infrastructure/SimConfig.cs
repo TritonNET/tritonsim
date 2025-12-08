@@ -13,5 +13,7 @@ namespace TritonSim.GUI.Infrastructure
         public int Height;
 
         public RendererType Type;
+
+        public UInt32 BackgroundColor;
     }
 }

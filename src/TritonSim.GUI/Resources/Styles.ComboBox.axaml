@@ -1,0 +1,72 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Design.PreviewWith>
+        <Border Padding="20" Background="{StaticResource StdBorder}" Width="300" Height="200">
+            <StackPanel Spacing="10">
+                <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                    <ComboBoxItem>3D Game of Life</ComboBoxItem>
+                    <ComboBoxItem>2D Game of Life</ComboBoxItem>
+                </ComboBox>
+                <ComboBox IsEnabled="False" PlaceholderText="Disabled" HorizontalAlignment="Stretch" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="ComboBox">
+        <Style.Resources>
+            <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#1B1B1C"/>
+            
+            <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#434346"/>
+            
+            <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#F1F1F1"/>
+            
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#3E3E40"/>
+            
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#1BA1E2"/>
+            <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#1BA1E2"/>
+            <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="White"/>
+        </Style.Resources>
+
+        <Setter Property="Background" Value="{StaticResource BtnBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnBorder}" />
+        <Setter Property="Foreground" Value="{StaticResource BtnForeground}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12,5,0,7" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="ComboBox:pointerover /template/ Border#Background">
+        <Setter Property="Background" Value="{StaticResource BtnBackgroundHover}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnAccent}" />
+    </Style>
+
+    <Style Selector="ComboBox:dropdownopen /template/ Border#Background">
+        <Setter Property="Background" Value="{StaticResource BtnBackgroundHover}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnAccent}" />
+    </Style>
+
+    <Style Selector="ComboBox:disabled /template/ Border#Background">
+        <Setter Property="Background" Value="{StaticResource BtnBackgroundDisabled}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnBorderDisabled}" />
+    </Style>
+
+    <Style Selector="ComboBox:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{StaticResource BtnForegroundDisabled}" />
+    </Style>
+
+    <Style Selector="ComboBox:disabled /template/ TextBlock#PlaceholderTextBlock">
+        <Setter Property="Foreground" Value="{StaticResource BtnForegroundDisabled}" />
+    </Style>
+
+    <Style Selector="ComboBox /template/ PathIcon#DropDownGlyph">
+        <Setter Property="Foreground" Value="{StaticResource BtnForeground}" />
+    </Style>
+    
+    <Style Selector="ComboBox:pointerover /template/ PathIcon#DropDownGlyph">
+        <Setter Property="Foreground" Value="{StaticResource BtnAccent}" />
+    </Style>
+
+</Styles>

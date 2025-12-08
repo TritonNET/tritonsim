@@ -144,7 +144,6 @@ namespace TritonSim.GUI.Test
         [Fact]
         public void Init_ShouldCall_SetWindowHandle_Before_Init()
         {
-            // Arrange
             SimulateAttachToVisualTree();
             m_control.Renderer = RendererType.RT_TEST_BOUNCING_CIRCLE;
 

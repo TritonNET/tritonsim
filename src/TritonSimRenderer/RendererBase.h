@@ -33,5 +33,7 @@ protected:
 	std::thread m_thread;
 
 	const uint32_t m_resetFlags = BGFX_RESET_VSYNC | BGFX_RESET_MSAA_X16;
+
+	uint32_t m_backgroundColor = COLOR_BLACK; // black
 };
 

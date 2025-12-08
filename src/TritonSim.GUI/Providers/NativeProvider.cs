@@ -40,6 +40,22 @@ namespace TritonSim.GUI.Providers
             return false;
         }
 
+        public bool SetBackgroundColor(UInt32 rgb)
+        {
+            m_config.BackgroundColor = rgb;
+
+            if (m_mode == SimulationMode.NotReady)
+                return true;
+
+            m_lastResponse = m_native.UpdateConfig(ref m_context, ref m_config);
+
+            if (m_lastResponse.IsSuccess())
+                return true;
+
+            m_flags |= SimulationFlags.Error;
+            return false;
+        }
+
         public bool SetType(RendererType type)
         {
             if (m_mode == SimulationMode.Running)

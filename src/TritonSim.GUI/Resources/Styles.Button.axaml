@@ -1,0 +1,67 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Design.PreviewWith>
+        <Border Padding="20" Background="{StaticResource StdBorder}">
+            <StackPanel Spacing="10">
+                <Button Content="Standard Button" />
+                <Button Classes="accent" Content="Accent Button" />
+                <Button IsEnabled="False" Content="Disabled Button" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Button">
+        <Setter Property="Background" Value="{StaticResource BtnBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource BtnForeground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="15,8" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.1" />
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.1" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.05" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource BtnBackgroundHover}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnAccent}" />
+        <Setter Property="Foreground" Value="{StaticResource BtnForeground}" />
+    </Style>
+
+    <Style Selector="Button:pressed">
+        <Setter Property="RenderTransform" Value="scale(0.98)" />
+    </Style>
+
+    <Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource BtnAccent}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnAccent}" />
+        <Setter Property="Foreground" Value="{StaticResource BtnForeground}" />
+    </Style>
+
+    <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource BtnBackgroundDisabled}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnBorderDisabled}" />
+        <Setter Property="Foreground" Value="{StaticResource BtnForegroundDisabled}" />
+    </Style>
+
+    <Style Selector="Button.accent">
+        <Setter Property="Background" Value="{StaticResource BtnPrimary}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnPrimary}" />
+    </Style>
+
+    <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource BtnPrimaryLight}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BtnPrimaryLight}" />
+    </Style>
+
+</Styles>

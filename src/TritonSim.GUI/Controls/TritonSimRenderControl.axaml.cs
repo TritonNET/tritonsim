@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using System;
 using TritonSim.GUI.Infrastructure;
@@ -92,11 +93,11 @@ namespace TritonSim.GUI.Controls
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
-
+            
             if (change.Property == RendererProperty)
             {
                 var newType = change.GetNewValue<RendererType>();
-
+                
                 if (m_initState.IsInitCompleted())
                 {
                     HandleRendererChange(newType);
@@ -113,6 +114,10 @@ namespace TritonSim.GUI.Controls
                 UpdateSize();
 
                 SetInitState(RendererInitState.SizeSet);
+            }
+            else if (change.Property == BackgroundProperty)
+            {
+                UpdateBackgroundColor();
             }
         }
 
@@ -142,7 +147,14 @@ namespace TritonSim.GUI.Controls
             var topLevel = TopLevel.GetTopLevel(this);
             var scale = topLevel?.RenderScaling ?? 1.0;
 
-            SimProvider.SetSize(new Size(size.Width * scale, size.Height * scale));
+            PerformProviderAction(() => SimProvider.SetSize(new Size(size.Width * scale, size.Height * scale)));
+        }
+
+        private void UpdateBackgroundColor()
+        {
+            var rgb = GetBackgroundColor();
+
+            PerformProviderAction(() => SimProvider.SetBackgroundColor(rgb));
         }
 
         private void ShowOverlayText(string text)
@@ -195,6 +207,7 @@ namespace TritonSim.GUI.Controls
                 HideOverlayText();
 
                 UpdateSize();
+                UpdateBackgroundColor();
 
                 var success = SimProvider.Init();
 
@@ -250,6 +263,18 @@ namespace TritonSim.GUI.Controls
         private void StopRenderLoop()
         {
             m_renderTimer?.Stop();
+        }
+
+        public UInt32 GetBackgroundColor()
+        {
+            if (Background is ISolidColorBrush solidBrush)
+            {
+                var c = solidBrush.Color;
+
+                return ((uint)c.R << 24) | ((uint)c.G << 16) | ((uint)c.B << 8) | (uint)c.A;
+            }
+
+            return 0;
         }
     }
 }

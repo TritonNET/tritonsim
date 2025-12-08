@@ -21,6 +21,9 @@ namespace TritonSim.GUI.ViewModels
         [NotifyCanExecuteChangedFor(nameof(StartCommand), nameof(StopCommand))]
         private SimulationMode m_currentMode = SimulationMode.NotReady;
 
+        [ObservableProperty]
+        private string m_title = "TritonNET - Simulation";
+
         public bool CanStart => CurrentMode == SimulationMode.Ready;
 
         public bool CanStop => CurrentMode == SimulationMode.Running;

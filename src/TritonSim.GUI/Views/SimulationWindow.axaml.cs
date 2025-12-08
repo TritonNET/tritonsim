@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using TritonSim.GUI.ViewModels;
 
@@ -28,5 +29,10 @@ public partial class SimulationWindow : Window
     private void StartSimulation()
     {
         simControl.Start();
+    }
+
+    private void TitleBar_PointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        BeginMoveDrag(e);
     }
 }

@@ -48,6 +48,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Android", "TritonSim.GUI.Android\TritonSim.GUI.Android.csproj", "{E364DE76-D1B3-42F2-80EE-4599A7EF92EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Desktop", "TritonSim.GUI.Desktop\TritonSim.GUI.Desktop.csproj", "{D194B90E-F412-423B-BA3C-12FDCB75F1FD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FCC507EF-AEC0-432B-B6E4-27A5F8466205} = {FCC507EF-AEC0-432B-B6E4-27A5F8466205}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.iOS", "TritonSim.GUI.iOS\TritonSim.GUI.iOS.csproj", "{A8F36875-417D-434B-8ADF-0CFB93A5B649}"
 EndProject
