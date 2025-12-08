@@ -5,7 +5,7 @@ using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 using Xunit;
 
-namespace TritonSim.Tests.Providers
+namespace TritonSim.GUI.Test
 {
     public class NativeProviderTests
     {

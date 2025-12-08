@@ -2,14 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using System;
-using System.Reflection.Metadata;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 
 namespace TritonSim.GUI.Controls
 {
-    
-
     public partial class TritonSimRenderControl : UserControl
     {
         public static readonly StyledProperty<SimulationMode> ModeProperty =
@@ -78,14 +75,14 @@ namespace TritonSim.GUI.Controls
             SetInitState(RendererInitState.AttachedToVisualTree);
         }
 
-        internal void OnNativeHandleCreated(IntPtr handle)
+        public void OnNativeHandleCreated(IntPtr handle)
         {
             PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
 
             SetInitState(RendererInitState.HandleSet);
         }
 
-        internal void OnNativeHandleDestroyed()
+        public void OnNativeHandleDestroyed()
         {
             ShutdownRenderer();
 
