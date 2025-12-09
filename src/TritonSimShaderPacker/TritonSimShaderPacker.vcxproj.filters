@@ -13,10 +13,72 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="shaderc">
+      <UniqueIdentifier>{e8339971-9906-436f-aea8-c39ce4bdd459}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TritonSimShaderPacker.cpp">
+    <ClCompile Include="shader_packer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\src\shader.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\src\shader_dxbc.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\src\shader_spirv.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc_glsl.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc_hlsl.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc_metal.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc_pssl.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc_spirv.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\bgfx\src\vertexlayout.cpp">
+      <Filter>shaderc</Filter>
+    </ClCompile>
+    <ClCompile Include="shader_compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\shader_def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\bgfx\src\shader.h">
+      <Filter>shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\bgfx\src\shader_dxbc.h">
+      <Filter>shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\bgfx\src\shader_spirv.h">
+      <Filter>shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\bgfx\tools\shaderc\shaderc.h">
+      <Filter>shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\bgfx\src\vertexlayout.h">
+      <Filter>shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\shader_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

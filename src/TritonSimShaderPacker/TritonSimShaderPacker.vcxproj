@@ -70,11 +70,27 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\ShaderBin</OutDir>
+    <TargetName>shader_packer</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\ShaderBin</OutDir>
+    <TargetName>shader_packer</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\ShaderBin</OutDir>
+    <TargetName>shader_packer</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\ShaderBin</OutDir>
+    <TargetName>shader_packer</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalOptions>/wd4201 /wd4324 /Ob2 /Zc:__cplusplus /Zc:preprocessor  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;..\3rdparty\json\include;..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;..\3rdparty\bgfx\tools\shaderc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__STDC_LIMIT_MACROS;__STDC_FORMAT_MACROS;__STDC_CONSTANT_MACROS;_DEBUG;WIN32;_WIN32;_HAS_EXCEPTIONS=0;_SCL_SECURE=0;_SECURE_SCL=0;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;BX_CONFIG_DEBUG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -85,7 +101,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
@@ -114,7 +130,7 @@
     <ClCompile>
       <AdditionalOptions>/wd4201 /wd4324 /Ob2 /Zc:__cplusplus /Zc:preprocessor  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;..\3rdparty\json\include;..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;..\3rdparty\bgfx\tools\shaderc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__STDC_LIMIT_MACROS;__STDC_FORMAT_MACROS;__STDC_CONSTANT_MACROS;_DEBUG;WIN32;_WIN32;_HAS_EXCEPTIONS=0;_SCL_SECURE=0;_SECURE_SCL=0;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_WIN64;BX_CONFIG_DEBUG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -125,7 +141,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
@@ -154,7 +170,7 @@
     <ClCompile>
       <AdditionalOptions>/wd4201 /wd4324 /Ob2 /Zc:__cplusplus /Zc:preprocessor  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;..\3rdparty\json\include;..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;..\3rdparty\bgfx\tools\shaderc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__STDC_LIMIT_MACROS;__STDC_FORMAT_MACROS;__STDC_CONSTANT_MACROS;NDEBUG;WIN32;_WIN32;_HAS_EXCEPTIONS=0;_SCL_SECURE=0;_SECURE_SCL=0;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;BX_CONFIG_DEBUG=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -166,7 +182,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
@@ -197,7 +213,7 @@
     <ClCompile>
       <AdditionalOptions>/wd4201 /wd4324 /Ob2 /Zc:__cplusplus /Zc:preprocessor  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Common;..\3rdparty\json\include;..\3rdparty\bx\include\compat\msvc;..\3rdparty\bimg\include;..\3rdparty\bgfx\include;..\3rdparty\dxsdk\include;..\3rdparty\bgfx\3rdparty\fcpp;..\3rdparty\bgfx\3rdparty\glslang\glslang\Public;..\3rdparty\glslang\glslang\Include;..\3rdparty\bgfx\3rdparty\glslang;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\src\glsl;..\3rdparty\bgfx\3rdparty\spirv-cross;..\3rdparty\bgfx\3rdparty\spirv-tools\include;..\3rdparty\bx\include;..\3rdparty\bgfx\3rdparty\glsl-optimizer\include\c99;..\3rdparty\bgfx\tools\shaderc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__STDC_LIMIT_MACROS;__STDC_FORMAT_MACROS;__STDC_CONSTANT_MACROS;NDEBUG;WIN32;_WIN32;_HAS_EXCEPTIONS=0;_SCL_SECURE=0;_SECURE_SCL=0;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_WIN64;BX_CONFIG_DEBUG=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -209,7 +225,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
@@ -242,6 +258,9 @@
     <ClInclude Include="..\3rdparty\bgfx\src\shader.h" />
     <ClInclude Include="..\3rdparty\bgfx\src\shader_dxbc.h" />
     <ClInclude Include="..\3rdparty\bgfx\src\shader_spirv.h" />
+    <ClInclude Include="..\Common\shader_def.h" />
+    <ClInclude Include="..\Common\shader_types.h" />
+    <ClInclude Include="shader_compiler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc.cpp">
@@ -264,6 +283,8 @@
     </ClCompile>
     <ClCompile Include="..\3rdparty\bgfx\src\shader_spirv.cpp">
     </ClCompile>
+    <ClCompile Include="shader_compiler.cpp" />
+    <ClCompile Include="shader_packer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\3rdparty\bgfx\.build\projects\vs2022\bx.vcxproj">
