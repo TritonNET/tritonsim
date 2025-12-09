@@ -1,0 +1,29 @@
+{
+	"output_file" :  "tritonsim_windows.bin",
+	"tmp_dir": "./tmp",
+	"profile": "s_5_0",
+	"dependencies" : ["../3rdparty/bgfx/src", "../TritonSimRenderer"],
+	"platforms": ["windows"],
+	"shaders": [
+		{
+			"type": "debug_line",
+			"file_vertex": "debug_line_vs.sc",
+			"file_fragment": "debug_line_fs.sc",
+			"file_varying_def": "debug_line_varying.def.sc"
+		},
+
+		{
+			"type": "bouncing_circle",
+			"file_vertex": "bouncing_circle_vs.sc",
+			"file_fragment": "bouncing_circle_fs.sc",
+			"file_varying_def": "bouncing_circle_varying.def.sc"
+		},
+
+		{
+			"type": "procedural_neon_pulse",
+			"file_vertex": "procedural_neon_pulse_vs.sc",
+			"file_fragment": "procedural_neon_pulse_fs.sc",
+			"file_varying_def": "procedural_neon_pulse_varying.def.sc"
+		}
+	]
+}

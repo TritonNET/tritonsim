@@ -66,6 +66,9 @@
     <ClInclude Include="..\Common\shader_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RendererNeonPulse.h">
+      <Filter>Renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -97,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="..\Common\shader_packer.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererNeonPulse.cpp">
+      <Filter>Renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

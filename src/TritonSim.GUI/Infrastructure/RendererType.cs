@@ -30,6 +30,9 @@ namespace TritonSim.GUI.Infrastructure
         RT_GAMEOFLIFE2D = RT_2DSIM | 0x01,
 
         [Description("3D Game of Life")]
-        RT_GAMEOFLIFE3D = RT_3DSIM | 0x01
+        RT_GAMEOFLIFE3D = RT_3DSIM | 0x01,
+
+        [Description("3D Neon Pulse")]
+        RT_NEONPULSE3D  = RT_3DSIM | 0x02,
     }
 }

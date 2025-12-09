@@ -2,7 +2,7 @@
 #include "RendererTestEdges.h"
 
 RendererTestEdges::RendererTestEdges(ShaderPacker* sp, const SimConfig& cfg)
-    : RendererBase(sp, ShaderType::UnlitPrimitive, cfg)
+    : RendererBase(sp, ShaderType::DebugLine, cfg)
 {
 }
 

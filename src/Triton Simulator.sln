@@ -69,10 +69,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TritonSimShaderPacker", "Tr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{90EA5824-C375-4D97-AFF8-DA9900B2CD17}"
 	ProjectSection(SolutionItems) = preProject
-		ShaderBin\shader_config.json = ShaderBin\shader_config.json
-		ShaderBin\unlit_primitive_fs.sc = ShaderBin\unlit_primitive_fs.sc
-		ShaderBin\unlit_primitive_varying.def.sc = ShaderBin\unlit_primitive_varying.def.sc
-		ShaderBin\unlit_primitive_vs.sc = ShaderBin\unlit_primitive_vs.sc
+		ShaderBin\bouncing_circle_fs.sc = ShaderBin\bouncing_circle_fs.sc
+		ShaderBin\bouncing_circle_varying.def.sc = ShaderBin\bouncing_circle_varying.def.sc
+		ShaderBin\bouncing_circle_vs.sc = ShaderBin\bouncing_circle_vs.sc
+		ShaderBin\debug_line_varying.def.sc = ShaderBin\debug_line_varying.def.sc
+		ShaderBin\debug_line_vs.sc = ShaderBin\debug_line_vs.sc
+		ShaderBin\debug_line_fs.sc = ShaderBin\debug_line_fs.sc
+		ShaderBin\procedural_neon_pulse_fs.sc = ShaderBin\procedural_neon_pulse_fs.sc
+		ShaderBin\procedural_neon_pulse_varying.def.sc = ShaderBin\procedural_neon_pulse_varying.def.sc
+		ShaderBin\procedural_neon_pulse_vs.sc = ShaderBin\procedural_neon_pulse_vs.sc
+		ShaderBin\_shader_config.json = ShaderBin\_shader_config.json
 	EndProjectSection
 EndProject
 Global

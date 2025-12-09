@@ -186,6 +186,7 @@
     <ClInclude Include="RendererBouncingCircle.h" />
     <ClInclude Include="RendererFactory.h" />
     <ClInclude Include="RendererGameOfLife.h" />
+    <ClInclude Include="RendererNeonPulse.h" />
     <ClInclude Include="RendererTestColorChanging.h" />
     <ClInclude Include="RendererTestEdges.h" />
     <ClInclude Include="RendererType.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="RendererBouncingCircle.cpp" />
     <ClCompile Include="RendererFactory.cpp" />
     <ClCompile Include="RendererGameOfLife.cpp" />
+    <ClCompile Include="RendererNeonPulse.cpp" />
     <ClCompile Include="RendererTestColorChanging.cpp" />
     <ClCompile Include="RendererTestEdges.cpp" />
     <ClCompile Include="renderer_api.cpp" />

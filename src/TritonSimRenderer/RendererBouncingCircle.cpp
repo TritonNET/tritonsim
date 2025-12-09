@@ -5,7 +5,7 @@
 #include "RendererTestEdges.h"
 
 RendererBouncingCircle::RendererBouncingCircle(ShaderPacker* sp, const SimConfig& cfg)
-    : RendererBase(sp, ShaderType::UnlitPrimitive, cfg)
+    : RendererBase(sp, ShaderType::BouncingCircle, cfg)
 {
 }
 

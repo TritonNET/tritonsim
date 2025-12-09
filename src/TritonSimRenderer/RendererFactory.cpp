@@ -4,6 +4,7 @@
 #include "RendererTestEdges.h"
 #include "RendererGameOfLife.h"
 #include "RendererBouncingCircle.h"
+#include "RendererNeonPulse.h"
 #include "resource.h"
 
 #ifdef WINDOWS
@@ -32,18 +33,27 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 
 	switch (config.Type)
 	{
+	// Test Renderes
+	case RT_TEST_BOUNCING_CIRCLE:
+		ctx.Renderer = new RendererBouncingCircle(sp, config);
+		break;
 	case RT_TEST_COLOR_CHANGING:
 		ctx.Renderer = new RendererTestColorChanging(sp, config);
 		break;
 	case RT_TEST_EDGES:
 		ctx.Renderer = new RendererTestEdges(sp, config);
 		break;
+
+	/* 2D Renderes*/
 	case RT_GAMEOFLIFE2D:
 		ctx.Renderer = new RendererGameOfLife(sp, config);
 		break;
-	case RT_TEST_BOUNCING_CIRCLE:
-		ctx.Renderer = new RendererBouncingCircle(sp, config);
+
+	/* 3D Renderes*/
+	case RT_NEONPULSE3D:
+		ctx.Renderer = new RendererNeonPulse(sp, config);
 		break;
+
 	case RT_UNKNOWN:
 	default:
 		ctx.Renderer = nullptr;
