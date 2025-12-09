@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "RendererGameOfLife.h"
 
-RendererGameOfLife::RendererGameOfLife(const SimConfig& cfg)
-	: RendererBase(cfg)
+RendererGameOfLife::RendererGameOfLife(ShaderPacker* sp, const SimConfig& cfg)
+	: RendererBase(sp, ShaderType::UnlitPrimitive, cfg)
 {
 
 }

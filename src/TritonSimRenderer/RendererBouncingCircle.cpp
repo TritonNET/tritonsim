@@ -4,8 +4,8 @@
 #include "pch.h"
 #include "RendererTestEdges.h"
 
-RendererBouncingCircle::RendererBouncingCircle(const SimConfig& cfg)
-    : RendererBase(cfg)
+RendererBouncingCircle::RendererBouncingCircle(ShaderPacker* sp, const SimConfig& cfg)
+    : RendererBase(sp, ShaderType::UnlitPrimitive, cfg)
 {
 }
 
@@ -21,12 +21,7 @@ ResponseCode RendererBouncingCircle::Init()
     auto rc = RendererBase::Init();
     if ((rc & RC_FAILED)) return rc;
 
-    // Reuse the exact same shaders as the Line test
-    rc = LoadProgram(
-        "D:\\projects\\tritonnet\\tritonsim\\src\\ShaderBin\\tmp\\unlit_primitive_vs.bin",
-        "D:\\projects\\tritonnet\\tritonsim\\src\\ShaderBin\\tmp\\unlit_primitive_fs.bin",
-        &m_program);
-
+    rc = LoadProgram(&m_program);
     if ((rc & RC_FAILED))
         return rc;
 

@@ -10,7 +10,7 @@ struct CircleVertex
 class RendererBouncingCircle : public RendererBase
 {
 public:
-    RendererBouncingCircle(const SimConfig& cfg);
+    RendererBouncingCircle(ShaderPacker* sp, const SimConfig& cfg);
     ~RendererBouncingCircle();
 
     ResponseCode Init() override;

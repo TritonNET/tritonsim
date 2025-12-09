@@ -1,11 +1,13 @@
 #include "pch.h"
 
-RendererBase::RendererBase(const SimConfig& cfg)
+RendererBase::RendererBase(ShaderPacker* sp, ShaderType st, const SimConfig& cfg)
 	: m_type(cfg.Type)
     , m_width(cfg.width)
     , m_height(cfg.height)
     , m_nwh(cfg.handle)
     , m_backgroundColor(cfg.BackgroundColor)
+    , m_sp(sp)
+    , m_st(st)
 {
 
 }
@@ -14,6 +16,8 @@ RendererBase::~RendererBase()
 {
     Stop();
     Shutdown();
+
+    delete m_sp;
 }
 
 ResponseCode RendererBase::Init()
@@ -111,39 +115,16 @@ ResponseCode RendererBase::Shutdown()
     return RC_SUCCESS;
 }
 
-ResponseCode RendererBase::LoadFile(const char* path, const bgfx::Memory** mem)
+ResponseCode RendererBase::LoadProgram(bgfx::ProgramHandle* handle)
 {
-    std::ifstream f(path, std::ios::binary | std::ios::ate);
-    if (!f.is_open()) 
+    bgfx::ShaderHandle vsh;
+    if (!m_sp->Unpack(m_st, ShaderStage::Vertex, vsh))
         return RC_FAILED_OPEN_FILE;
 
-    size_t size = (size_t)f.tellg();
-    f.seekg(0);
+    bgfx::ShaderHandle fsh;
+    if (!m_sp->Unpack(m_st, ShaderStage::Fragment, fsh))
+        return RC_FAILED_OPEN_FILE;
 
-    const bgfx::Memory* pMem = bgfx::alloc(uint32_t(size));
-
-    f.read((char*)pMem->data, size);
-    f.close();
-
-    *mem = pMem;
-
-    return RC_SUCCESS;
-}
-
-ResponseCode RendererBase::LoadProgram(const char* vs, const char* fs, bgfx::ProgramHandle* handle)
-{
-    const bgfx::Memory* vshMem = nullptr;
-    auto rc = LoadFile(vs, &vshMem);
-    if (rc & RC_FAILED)
-        return rc;
-
-    const bgfx::Memory* fshMem = nullptr;
-    rc = LoadFile(fs, &fshMem);
-    if (rc & RC_FAILED)
-        return rc;
-
-    auto vsh = bgfx::createShader(vshMem);
-    auto fsh = bgfx::createShader(fshMem);
     *handle = bgfx::createProgram(vsh, fsh, true);
 
     if (!bgfx::isValid(*handle))

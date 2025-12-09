@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include <pch.h>
 
 struct ShaderBin
 {
@@ -9,7 +9,21 @@ struct ShaderBin
 class ShaderPacker
 {
 public:
-	ShaderPacker(const std::string& packBin) : m_bin(packBin) {}
+	ShaderPacker(const std::string& packBin) 
+		: m_bin(packBin) 
+		, m_storageType(stFile)
+		, m_data(nullptr)
+		, m_size(0)
+	{ }
+
+	ShaderPacker(const void* data, size_t size)
+		: m_bin()
+		, m_storageType(stResource)
+		, m_data(static_cast<const uint8_t*>(data))
+		, m_size(size)
+	{
+
+	}
 
 	bool Add(const ShaderDefinition& sdef);
 	bool Pack();
@@ -23,7 +37,16 @@ private:
 	bool EnsureHeaderLoaded();
 
 private:
+	enum StorageType { stResource, stFile };
+
+	const StorageType m_storageType;
+
+	/*For File storage type*/
 	std::string m_bin{};
+
+	/*For resource storage type*/
+	const uint8_t* m_data;
+	const size_t m_size;
 
 	struct Entry {
 		ShaderType type;

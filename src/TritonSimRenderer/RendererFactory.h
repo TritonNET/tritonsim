@@ -5,5 +5,7 @@ class RendererFactory
 {
 public:
 	static ResponseCode CreateRenderer(const SimConfig& config, SimContext& ctx);
+
+	static ResponseCode CreateShaderPacker(ShaderPacker** sp);
 };
 

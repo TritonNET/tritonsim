@@ -4,7 +4,7 @@
 class RendererTestColorChanging : public RendererBase
 {
 public:
-	RendererTestColorChanging(const SimConfig& cfg) : RendererBase(cfg) {}
+	RendererTestColorChanging(ShaderPacker* sp, const SimConfig& cfg) : RendererBase(sp, ShaderType::UnlitPrimitive, cfg) {}
 	~RendererTestColorChanging() = default;
 
 	ResponseCode RenderFrame() override;

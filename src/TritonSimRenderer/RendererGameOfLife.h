@@ -4,6 +4,6 @@
 class RendererGameOfLife: public RendererBase
 {
 public:
-	RendererGameOfLife(const SimConfig& cfg);
+	RendererGameOfLife(ShaderPacker* sp, const SimConfig& cfg);
 };
 

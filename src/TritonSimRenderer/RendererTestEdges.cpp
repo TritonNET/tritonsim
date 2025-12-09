@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "RendererTestEdges.h"
 
-RendererTestEdges::RendererTestEdges(const SimConfig& cfg)
-    : RendererBase(cfg)
+RendererTestEdges::RendererTestEdges(ShaderPacker* sp, const SimConfig& cfg)
+    : RendererBase(sp, ShaderType::UnlitPrimitive, cfg)
 {
 }
 
@@ -19,11 +19,7 @@ ResponseCode RendererTestEdges::Init()
     if ((rc & RC_FAILED))
         return rc;
 
-    rc = LoadProgram(
-        "D:\\projects\\tritonnet\\tritonsim\\src\\ShaderBin\\tmp\\unlit_primitive_vs.bin",
-        "D:\\projects\\tritonnet\\tritonsim\\src\\ShaderBin\\tmp\\unlit_primitive_fs.bin",
-        &m_program);
-
+    rc = LoadProgram(&m_program);
     if ((rc & RC_FAILED))
         return rc;
 

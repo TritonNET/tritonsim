@@ -4,7 +4,7 @@
 class RendererBase
 {
 public:
-	RendererBase(const SimConfig& cfg);
+	RendererBase(ShaderPacker* sp/*takes ownership*/, ShaderType st, const SimConfig& cfg);
 	virtual ~RendererBase();
 
 	virtual ResponseCode Init();
@@ -18,11 +18,13 @@ public:
 protected:
 	virtual void WorkerLoop();
 	virtual void OnUpdate() {}
-	virtual ResponseCode LoadFile(const char* path, const bgfx::Memory** mem);
-	virtual ResponseCode LoadProgram(const char* vs, const char* fs, bgfx::ProgramHandle* handle);
+	virtual ResponseCode LoadProgram(bgfx::ProgramHandle* handle);
 
 protected:
 	RendererType m_type;
+	ShaderType m_st;
+
+	ShaderPacker* m_sp;
 
 	UINT32 m_width;
 	UINT32 m_height;

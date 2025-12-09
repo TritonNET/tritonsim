@@ -4,6 +4,12 @@
 #include "RendererTestEdges.h"
 #include "RendererGameOfLife.h"
 #include "RendererBouncingCircle.h"
+#include "resource.h"
+
+#ifdef WINDOWS
+#include <windows.h>
+#endif // WINDOWS
+
 
 ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext& ctx)
 {
@@ -19,25 +25,60 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 	if (config.handle == nullptr)
 		return RC_INVALID_RENDER_SURFACE_HANDLE;
 
+	ShaderPacker* sp{nullptr};
+	const auto rc = CreateShaderPacker(&sp);
+	if (rc & RC_FAILED)
+		return rc;
+
 	switch (config.Type)
 	{
 	case RT_TEST_COLOR_CHANGING:
-		ctx.Renderer = new RendererTestColorChanging(config);
+		ctx.Renderer = new RendererTestColorChanging(sp, config);
 		break;
 	case RT_TEST_EDGES:
-		ctx.Renderer = new RendererTestEdges(config);
+		ctx.Renderer = new RendererTestEdges(sp, config);
 		break;
 	case RT_GAMEOFLIFE2D:
-		ctx.Renderer = new RendererGameOfLife(config);
+		ctx.Renderer = new RendererGameOfLife(sp, config);
 		break;
 	case RT_TEST_BOUNCING_CIRCLE:
-		ctx.Renderer = new RendererBouncingCircle(config);
+		ctx.Renderer = new RendererBouncingCircle(sp, config);
 		break;
 	case RT_UNKNOWN:
 	default:
 		ctx.Renderer = nullptr;
+		delete sp;
 		return RC_UNKNOWN_RENDERER_TYPE;
 	}
+
+	return RC_SUCCESS;
+}
+
+ResponseCode RendererFactory::CreateShaderPacker(ShaderPacker** sp)
+{
+#ifdef WINDOWS
+	HMODULE hDll = NULL;
+	GetModuleHandleEx(
+		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+		(LPCTSTR)&CreateShaderPacker,
+		&hDll
+	);
+
+	if (!hDll)
+		return RC_FAILED_TO_DETERMINE_DLL_MODULE_HANDLE;
+
+	HRSRC hRes = FindResource(hDll, MAKEINTRESOURCE(IDR_SHADER_PACK), RT_RCDATA);
+	if (!hRes)
+		return RC_FAILED_TO_LOAD_RESOURCE_FILE;
+
+	HGLOBAL hData = LoadResource(hDll, hRes);
+	const void* pData = LockResource(hData);
+	DWORD dataSize = SizeofResource(hDll, hRes);
+
+	*sp = new ShaderPacker(pData, dataSize);
+#elif // WINDOWS
+#error Not implemented for other platforms
+#endif 
 
 	return RC_SUCCESS;
 }

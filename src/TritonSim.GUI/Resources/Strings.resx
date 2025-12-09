@@ -121,6 +121,9 @@
     <value>General Failure</value>
     <comment>0x80000000</comment>
   </data>
+  <data name="FailedToLoadResourceFile" xml:space="preserve">
+    <value>Failed to Load Resource File</value>
+  </data>
   <data name="InvalidRenderSurfaceHandle" xml:space="preserve">
     <value>Invalid Render Surface Handle</value>
   </data>

@@ -1,0 +1,6 @@
+#pragma once
+
+#include "resource.h"
+
+// ID               Type      Path to file
+IDR_SHADER_PACK     RCDATA    "..\\ShaderBin\\tritonsim_windows.bin"

@@ -13,7 +13,7 @@ struct Vertex
 class RendererTestEdges : public RendererBase
 {
 public:
-    RendererTestEdges(const SimConfig& cfg);
+    RendererTestEdges(ShaderPacker* sp, const SimConfig& cfg);
     ~RendererTestEdges();
 
     ResponseCode Init() override;

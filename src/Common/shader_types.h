@@ -10,7 +10,7 @@ enum class ShaderStage
     Compute
 };
 
-enum ShaderType : uint32_t
+enum class ShaderType : uint32_t
 {
     // 1. Basic Geometry (Lines, Circles, Debugging)
     // No lighting, no textures. Uses vertex colors.

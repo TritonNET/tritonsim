@@ -25,5 +25,6 @@ namespace TritonSim.GUI.Infrastructure
         InvalidRenderSurfaceHeight = Failed | 0x07,
         InvalidRenderSurfaceWidth = Failed | 0x08,
         InvalidRenderSurfaceHandle = Failed | 0x09,
+        FailedToLoadResourceFile = Failed | 0x10,
     }
 }

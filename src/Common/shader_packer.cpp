@@ -10,6 +10,12 @@ static const uint32_t kPackMagic = 0x5453504B;
 
 bool ShaderPacker::Add(const ShaderDefinition& sdef)
 {
+    if (m_storageType != stFile)
+    {
+        bx::printf("Error: Packer can only add files in file storage mode\n");
+        return false;
+    }
+
     if (!fs::exists(sdef.bin_fragment)) {
         bx::printf("Error: Fragment shader not found: %s\n", sdef.bin_fragment.c_str());
         return false;
@@ -103,11 +109,9 @@ bool ShaderPacker::Pack()
 
 bool ShaderPacker::Unpack(ShaderType type, ShaderStage stage, bgfx::ShaderHandle& handle/*out*/)
 {
-    if (!EnsureHeaderLoaded()) {
+    if (!EnsureHeaderLoaded())
         return false;
-    }
 
-    // 1. Find the location in our lookup map
     auto key = std::make_pair(type, stage);
     auto it = m_lookup.find(key);
 
@@ -118,26 +122,36 @@ bool ShaderPacker::Unpack(ShaderType type, ShaderStage stage, bgfx::ShaderHandle
 
     FileLocation loc = it->second;
 
-    // 2. Open file and seek to offset
-    std::ifstream inFile(m_bin, std::ios::binary);
-    if (!inFile.is_open()) return false;
-
-    inFile.seekg(loc.offset);
-
-    // 3. Allocate BGFX memory
-    // bgfx::alloc allocates memory that BGFX manages. 
-    // It will automatically free this when the shader is destroyed or reference count hits zero.
     const bgfx::Memory* mem = bgfx::alloc(loc.size);
 
-    // 4. Read directly into BGFX memory
-    inFile.read(reinterpret_cast<char*>(mem->data), loc.size);
+    if (m_storageType == stResource)
+    {
+        if (loc.offset + loc.size > m_size) {
+            bx::printf("Error: Shader data offset %u is out of resource bounds.\n", loc.offset);
+            return false;
+        }
 
-    if (!inFile) {
-        bx::printf("Error: Failed to read shader data at offset %u\n", loc.offset);
-        return false;
+        bx::memCopy(mem->data, m_data + loc.offset, loc.size);
+    }
+    else
+    {
+        std::ifstream inFile(m_bin, std::ios::binary);
+        if (!inFile.is_open()) 
+        {
+            bx::printf("Error: Could not open pack file for reading: %s\n", m_bin.c_str());
+            return false;
+        }
+
+        inFile.seekg(loc.offset);
+        inFile.read(reinterpret_cast<char*>(mem->data), loc.size);
+
+        if (!inFile) 
+        {
+            bx::printf("Error: Failed to read shader data from file at offset %u\n", loc.offset);
+            return false;
+        }
     }
 
-    // 5. Create Shader
     handle = bgfx::createShader(mem);
 
     if (!bgfx::isValid(handle))
@@ -146,41 +160,68 @@ bool ShaderPacker::Unpack(ShaderType type, ShaderStage stage, bgfx::ShaderHandle
         return false;
     }
 
-    // Set debug name for convenience
     bgfx::setName(handle, "UnpackedShader");
 
     return true;
 }
+
 #endif // !#ifndef SHADER_PACKER_TOOL
 
 bool ShaderPacker::EnsureHeaderLoaded()
 {
     if (m_headerLoaded) return true;
 
-    std::ifstream inFile(m_bin, std::ios::binary);
-    if (!inFile.is_open()) {
-        bx::printf("Error: Could not open pack file: %s\n", m_bin.c_str());
-        return false;
+    std::ifstream inFile;
+    if (m_storageType == stFile)
+    {
+        inFile.open(m_bin, std::ios::binary);
+        if (!inFile.is_open()) 
+        {
+            bx::printf("Error: Could not open pack file: %s\n", m_bin.c_str());
+            return false;
+        }
     }
+
+    size_t offset = 0;
+
+    auto _read_byte = [&](void* dest, size_t size) -> bool {
+        if (m_storageType == stResource)
+        {
+            if (offset + size > m_size) 
+            {
+                bx::printf("Error: Unexpected end of memory buffer.\n");
+                return false;
+            }
+
+            std::memcpy(dest, m_data + offset, size);
+            offset += size;
+            
+            return true;
+        }
+        else // stFile
+        {
+            inFile.read(reinterpret_cast<char*>(dest), size);
+            return inFile.good();
+        }
+    };
 
     uint32_t magic = 0;
     uint32_t count = 0;
 
-    inFile.read(reinterpret_cast<char*>(&magic), sizeof(magic));
-    inFile.read(reinterpret_cast<char*>(&count), sizeof(count));
+    if (!_read_byte(&magic, sizeof(magic))) return false;
+    if (!_read_byte(&count, sizeof(count))) return false;
 
-    if (magic != kPackMagic) {
+    if (magic != kPackMagic) 
+    {
         bx::printf("Error: Invalid pack file magic number.\n");
         return false;
     }
 
-    // Read all indices
     for (uint32_t i = 0; i < count; ++i)
     {
         PackIndex idx;
-        inFile.read(reinterpret_cast<char*>(&idx), sizeof(PackIndex));
+        if (!_read_byte(&idx, sizeof(PackIndex))) return false;
 
-        // Store in lookup map for fast runtime access
         m_lookup[{idx.type, idx.stage}] = { idx.offset, idx.size };
     }
 

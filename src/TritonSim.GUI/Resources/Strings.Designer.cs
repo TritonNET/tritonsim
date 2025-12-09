@@ -70,6 +70,15 @@ namespace TritonSim.GUI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to Load Resource File.
+        /// </summary>
+        internal static string FailedToLoadResourceFile {
+            get {
+                return ResourceManager.GetString("FailedToLoadResourceFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Render Surface Handle.
         /// </summary>
         internal static string InvalidRenderSurfaceHandle {

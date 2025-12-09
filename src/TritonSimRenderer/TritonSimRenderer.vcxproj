@@ -86,11 +86,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;BX_CONFIG_DEBUG;WIN32;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;NOMINMAX;BX_CONFIG_DEBUG;WIN32;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Common;..\3rdparty\json\include;..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
@@ -109,11 +109,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;WIN32;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;NOMINMAX;WIN32;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Common;..\3rdparty\json\include;..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
@@ -130,11 +130,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;BX_CONFIG_DEBUG;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;NOMINMAX;BX_CONFIG_DEBUG;_DEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Common;..\3rdparty\json\include;..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
@@ -158,11 +158,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;NOMINMAX;NDEBUG;TRITONSIMRENDERER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Common;..\3rdparty\json\include;..\3rdparty\bgfx\include;..\3rdparty\bx\include;..\3rdparty\glm;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
@@ -176,6 +176,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\shader_def.h" />
+    <ClInclude Include="..\Common\shader_packer.h" />
+    <ClInclude Include="..\Common\shader_types.h" />
     <ClInclude Include="defs.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -187,9 +190,11 @@
     <ClInclude Include="RendererTestEdges.h" />
     <ClInclude Include="RendererType.h" />
     <ClInclude Include="renderer_api.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ResponseCode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\shader_packer.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -207,6 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaderc_cmd.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TritonSimRenderer.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
