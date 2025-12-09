@@ -13,6 +13,7 @@ enum class ShaderStage
 enum class ShaderType : uint32_t
 {
     DebugLine,       // Uses unlit_primitive shader
+    GameOfLife2D,
     BouncingCircle,  // Uses circle_soft shader (distinct form DebugLine)
     ProceduralNeonPulse,
 
@@ -24,6 +25,7 @@ inline std::string to_shader_basename(ShaderType type)
     switch (type)
     {
         case ShaderType::DebugLine:             return "debug_line";
+        case ShaderType::GameOfLife2D:          return "gameoflife_2d";
         case ShaderType::BouncingCircle:        return "bouncing_circle";
         case ShaderType::ProceduralNeonPulse:   return "procedural_neon_pulse";
         default:                                return "unknown";
@@ -33,6 +35,7 @@ inline std::string to_shader_basename(ShaderType type)
 inline ShaderType from_shader_basename(const std::string& basename)
 {
     if (basename == "debug_line")                   return ShaderType::DebugLine;
+    if (basename == "gameoflife_2d")                return ShaderType::GameOfLife2D;
     if (basename == "bouncing_circle")              return ShaderType::BouncingCircle;
     if (basename == "procedural_neon_pulse")        return ShaderType::ProceduralNeonPulse;
 

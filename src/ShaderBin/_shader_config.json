@@ -24,6 +24,13 @@
 			"file_vertex": "procedural_neon_pulse_vs.sc",
 			"file_fragment": "procedural_neon_pulse_fs.sc",
 			"file_varying_def": "procedural_neon_pulse_varying.def.sc"
+		},
+
+		{
+			"type": "gameoflife_2d",
+			"file_vertex": "gameoflife_2d_vs.sc",
+			"file_fragment": "gameoflife_2d_fs.sc",
+			"file_varying_def": "gameoflife_2d_varying.def.sc"
 		}
 	]
 }

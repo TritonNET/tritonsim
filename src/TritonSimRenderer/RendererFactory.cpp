@@ -2,7 +2,7 @@
 #include "RendererFactory.h"
 #include "RendererTestColorChanging.h"
 #include "RendererTestEdges.h"
-#include "RendererGameOfLife.h"
+#include "RendererGameOfLife2D.h"
 #include "RendererBouncingCircle.h"
 #include "RendererNeonPulse.h"
 #include "resource.h"
@@ -46,7 +46,7 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 
 	/* 2D Renderes*/
 	case RT_GAMEOFLIFE2D:
-		ctx.Renderer = new RendererGameOfLife(sp, config);
+		ctx.Renderer = new RendererGameOfLife2D(sp, config);
 		break;
 
 	/* 3D Renderes*/

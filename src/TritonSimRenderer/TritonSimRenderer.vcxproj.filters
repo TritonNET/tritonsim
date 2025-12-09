@@ -42,7 +42,7 @@
     <ClInclude Include="RendererTestColorChanging.h">
       <Filter>Renderers</Filter>
     </ClInclude>
-    <ClInclude Include="RendererGameOfLife.h">
+    <ClInclude Include="RendererGameOfLife2D.h">
       <Filter>Renderers</Filter>
     </ClInclude>
     <ClInclude Include="RendererTestEdges.h">
@@ -86,7 +86,7 @@
     <ClCompile Include="RendererTestColorChanging.cpp">
       <Filter>Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="RendererGameOfLife.cpp">
+    <ClCompile Include="RendererGameOfLife2D.cpp">
       <Filter>Renderers</Filter>
     </ClCompile>
     <ClCompile Include="RendererTestEdges.cpp">
