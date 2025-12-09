@@ -13,9 +13,14 @@ struct ShaderDefinition
     std::string file_vertex;
     std::string file_fragment;
     std::string file_varying_def;
+
+    // Following properties to be populated
+    std::string bin_vertex;
+    std::string bin_fragment;
 };
 
-struct ShaderPackerConfig {
+struct ShaderPackerConfig 
+{
     std::string output_file;
     std::string tmp_dir;
     std::string profile;

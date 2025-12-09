@@ -1,28 +1,11 @@
 #pragma once
-#include <filesystem>
-#include <fstream>
-#include <vector>
-#include <iostream>
-
-#include "shader_def.h"
-#include "shaderc.h"
-#include <bx/commandline.h>
-#include <bx/file.h>
-#include <bx/string.h>
+#include "pch.h"
 
 namespace fs = std::filesystem;
+using str = std::string;
 
 bool shader_compile(const ShaderPackerConfig& config);
-
-bool shader_compile_cli(
-    const std::string& sourceFile,
-    const std::string& outputDir,
-    const std::string& varyingPath,
-    const std::string& type, // "vertex", "fragment", "compute"
-    const std::string& platform,
-    const ShaderPackerConfig& config);
-
-bool shader_compile_read_file(const fs::path& filePath, std::vector<char>& outData);
+bool shader_compile_cli(const str& s, const str& of, const str& v, ShaderStage stage, const str& p, const ShaderPackerConfig& c);
 
 namespace bgfx
 {
