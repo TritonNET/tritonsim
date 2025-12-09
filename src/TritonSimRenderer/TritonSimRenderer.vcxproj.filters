@@ -85,15 +85,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vertex.sc">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="frag.sc">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="varying.def.sc">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="shaderc_cmd.bat">
       <Filter>Resource Files</Filter>
     </None>

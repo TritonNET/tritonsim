@@ -206,10 +206,7 @@
     <ClCompile Include="renderer_api.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="frag.sc" />
     <None Include="shaderc_cmd.bat" />
-    <None Include="varying.def.sc" />
-    <None Include="vertex.sc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

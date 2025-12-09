@@ -23,8 +23,8 @@ ResponseCode RendererBouncingCircle::Init()
 
     // Reuse the exact same shaders as the Line test
     rc = LoadProgram(
-        "D:\\projects\\tritonnet\\tritonsim\\src\\TritonSimRenderer\\vertex.bin",
-        "D:\\projects\\tritonnet\\tritonsim\\src\\TritonSimRenderer\\frag.bin",
+        "D:\\projects\\tritonnet\\tritonsim\\src\\ShaderBin\\tmp\\unlit_primitive_vs.bin",
+        "D:\\projects\\tritonnet\\tritonsim\\src\\ShaderBin\\tmp\\unlit_primitive_fs.bin",
         &m_program);
 
     if ((rc & RC_FAILED))
