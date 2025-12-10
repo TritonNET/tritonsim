@@ -38,9 +38,9 @@ if(EMSCRIPTEN)
         __EMSCRIPTEN__ 
         BX_CONFIG_DEBUG=0
     )
-    
+
     # Build options
-    target_compile_options(TritonSimRenderer PRIVATE -O3 -fno-exceptions -fno-rtti)
+    target_compile_options(TritonSimRenderer PRIVATE -O3 -fexceptions -fno-rtti)
 
     # Locate BGFX Wasm Libs (You must build these first!)
     set(BGFX_LIB_PATH "${CMAKE_SOURCE_DIR}/../3rdparty/bgfx/.build/wasm-emscripten/bin")

@@ -26,8 +26,8 @@ protected:
 
 	ShaderPacker* m_sp;
 
-	UINT32 m_width;
-	UINT32 m_height;
+	uint32_t m_width;
+	uint32_t m_height;
 
 	void* m_nwh;
 

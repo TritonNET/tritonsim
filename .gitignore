@@ -19,4 +19,6 @@
 /src/TritonSim.GUI.Test/bin
 /src/TritonSim.GUI.Test/obj
 /src/ShaderBin/tmp
+
 /src/TritonSimRenderer/build_win
+/src/TritonSimRenderer/build_wasm

@@ -11,14 +11,20 @@
 #include <thread>
 #include <fstream>
 #include <vector>
+#include <cstdint>
 
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <bx/commandline.h>
 #include <bx/math.h>
 
-// add headers that you want to pre-compile here
+#ifdef WINDOWS
 #include "framework.h"
+#endif // WINDOWS
+
+#ifdef __EMSCRIPTEN__
+#include "..\ShaderBin\tritonsim_asm.h"
+#endif
 
 #include <shader_types.h>
 #include <shader_def.h>

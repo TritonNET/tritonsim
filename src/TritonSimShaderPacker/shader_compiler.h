@@ -44,7 +44,7 @@ bool shader_compile_pack(const shader_packer_config& config);
 
 bool shader_compute_compile_items(const shader_packer_config& config, scitems& items);
 bool shader_compile_cli(const shader_compile_item& item);
-
+bool shader_generate_webassembly_header(const std::string& out_bin);
 
 namespace bgfx
 {

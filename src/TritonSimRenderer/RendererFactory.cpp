@@ -7,11 +7,6 @@
 #include "RendererNeonPulse.h"
 #include "resource.h"
 
-#ifdef WINDOWS
-#include <windows.h>
-#endif // WINDOWS
-
-
 ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext& ctx)
 {
 	if (config.height <= 0)
@@ -86,7 +81,13 @@ ResponseCode RendererFactory::CreateShaderPacker(ShaderPacker** sp)
 	DWORD dataSize = SizeofResource(hDll, hRes);
 
 	*sp = new ShaderPacker(pData, dataSize);
-#elif // WINDOWS
+
+#elif defined(__EMSCRIPTEN__)
+	// --- WEB IMPLEMENTATION ---
+	// In WASM, the shader pack is statically linked as a global array.
+	// 'kShaderPack' is defined in "tritonsim_asm.h".
+	*sp = new ShaderPacker(kShaderPack, sizeof(kShaderPack));
+#else
 #error Not implemented for other platforms
 #endif 
 
