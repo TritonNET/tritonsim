@@ -13,3 +13,6 @@
 [submodule "src/3rdparty/json"]
 	path = src/3rdparty/json
 	url = https://github.com/nlohmann/json
+[submodule "src/3rdparty/emsdk"]
+	path = src/3rdparty/emsdk
+	url = https://github.com/emscripten-core/emsdk.git
