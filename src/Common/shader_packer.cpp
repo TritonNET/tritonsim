@@ -8,7 +8,7 @@ namespace fs = std::filesystem;
 // Magic number to identify our specific file format (e.g., "TSPK" in hex)
 static const uint32_t kPackMagic = 0x5453504B;
 
-bool ShaderPacker::Add(const ShaderDefinition& sdef)
+bool ShaderPacker::Add(const std::string& typen, const std::string& bin_fragment, const std::string& bin_vertex)
 {
     if (m_storageType != stFile)
     {
@@ -16,17 +16,17 @@ bool ShaderPacker::Add(const ShaderDefinition& sdef)
         return false;
     }
 
-    if (!fs::exists(sdef.bin_fragment)) {
-        bx::printf("Error: Fragment shader not found: %s\n", sdef.bin_fragment.c_str());
+    if (!fs::exists(bin_fragment)) {
+        bx::printf("Error: Fragment shader not found: %s\n", bin_fragment.c_str());
         return false;
     }
 
-    if (!fs::exists(sdef.bin_vertex)) {
-        bx::printf("Error: Vertex shader not found: %s\n", sdef.bin_vertex.c_str());
+    if (!fs::exists(bin_vertex)) {
+        bx::printf("Error: Vertex shader not found: %s\n", bin_vertex.c_str());
         return false;
     }
 
-    m_entries.push_back({from_shader_basename(sdef.type), sdef.bin_fragment, sdef.bin_vertex});
+    m_entries.push_back({ from_shader_basename(typen), bin_fragment, bin_vertex });
     return true;
 }
 
@@ -227,14 +227,4 @@ bool ShaderPacker::EnsureHeaderLoaded()
 
     m_headerLoaded = true;
     return true;
-}
-
-bool shader_pack(const ShaderPackerConfig& config)
-{
-    ShaderPacker packer(config.output_file);
-
-    for (const auto& shader : config.shaders)
-        packer.Add(shader);
-
-    return packer.Pack();
 }

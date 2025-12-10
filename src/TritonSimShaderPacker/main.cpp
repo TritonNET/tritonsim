@@ -1,18 +1,5 @@
 #include "pch.h"
 
-using json = nlohmann::json;
-using fpath = std::filesystem::path;
-
-fpath GetExecutableDir()
-{
-    char buffer[MAX_PATH];
-    GetModuleFileNameA(NULL, buffer, MAX_PATH);
-
-    fpath exePath(buffer);
-
-    return exePath.parent_path();
-}
-
 int main(int _argc, const char* _argv[])
 {
     bx::CommandLine cmdLine(_argc, _argv);
@@ -31,9 +18,7 @@ int main(int _argc, const char* _argv[])
 	}
 
     // All paths are relative to the exe
-    const auto _fs_full = [&](const std::string& f) { return (GetExecutableDir() / fpath(f)).lexically_normal().string(); };
-
-	std::ifstream fstream(_fs_full(cfg_path));
+	std::ifstream fstream(get_full_path(cfg_path));
 	if (!fstream.is_open())
 	{
 		bx::printf("Error: Could not open configuration file at: %s\n", cfg_path);
@@ -50,29 +35,9 @@ int main(int _argc, const char* _argv[])
             return bx::kExitFailure;
         }
 
-        auto config = j.get<ShaderPackerConfig>();
-        config.output_file = _fs_full(config.output_file);
-        config.tmp_dir = _fs_full(config.tmp_dir);
-
-        for (auto& shader : config.shaders)
+        const auto config = j.get<shader_packer_config>();
+        if (!shader_compile_pack(config))
         {
-            shader.file_fragment = _fs_full(shader.file_fragment);
-            shader.file_vertex = _fs_full(shader.file_vertex);
-            shader.file_varying_def = _fs_full(shader.file_varying_def);
-
-            shader.bin_vertex = (fs::path(config.tmp_dir) / fpath(shader.file_vertex).filename().replace_extension(".bin")).string();
-            shader.bin_fragment = (fs::path(config.tmp_dir) / fpath(shader.file_fragment).filename().replace_extension(".bin")).string();
-        }
-
-        if (!shader_compile(config))
-        {
-            bx::printf("Error: Shader compiler failed.\n");
-            return bx::kExitFailure;
-        }
-
-        if (!shader_pack(config))
-        {
-            bx::printf("Error: Shader pack failed.\n");
             return bx::kExitFailure;
         }
 

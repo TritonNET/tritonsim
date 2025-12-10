@@ -263,6 +263,7 @@
     <ClInclude Include="..\Common\shader_types.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="shader_compiler.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdparty\bgfx\tools\shaderc\shaderc.cpp">
@@ -338,6 +339,7 @@
     </ClCompile>
     <ClCompile Include="shader_compiler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\3rdparty\bgfx\.build\projects\vs2022\bx.vcxproj">

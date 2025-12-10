@@ -15,18 +15,18 @@ protected:
     void OnUpdate() override;
 
 private:
-    void randomizeGrid();
+    void setupStartCondition();
     void updateSimulation();
-    void createQuad();
+    void createQuad(); // Now calculates centering logic
 
-    const uint32_t m_gridWidth = 100;
-    const uint32_t m_gridHeight = 100;
+    // --- 1. Increased Grid Size ---
+    const uint32_t m_gridWidth = 200;
+    const uint32_t m_gridHeight = 200;
 
     bgfx::ProgramHandle m_program = BGFX_INVALID_HANDLE;
     bgfx::VertexBufferHandle m_vbh = BGFX_INVALID_HANDLE;
     bgfx::IndexBufferHandle  m_ibh = BGFX_INVALID_HANDLE;
     bgfx::VertexLayout m_layout;
-
     bgfx::TextureHandle m_textureGrid = BGFX_INVALID_HANDLE;
 
     bgfx::UniformHandle u_gridSize = BGFX_INVALID_HANDLE;
@@ -38,6 +38,6 @@ private:
     std::vector<uint8_t> m_dataNext;
 
     float m_updateTimer = 0.0f;
-    float m_updateInterval = 0.1f; // Update every 100ms
+    float m_updateInterval = 0.05f; // Faster updates for 200x200
     bool m_ready = false;
 };

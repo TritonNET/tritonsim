@@ -25,7 +25,7 @@ public:
 
 	}
 
-	bool Add(const ShaderDefinition& sdef);
+	bool Add(const std::string& typen, const std::string& bin_fragment, const std::string& bin_vertex);
 	bool Pack();
 
 #ifndef SHADER_PACKER_TOOL
@@ -69,5 +69,3 @@ private:
 	std::map<std::pair<ShaderType, ShaderStage>, FileLocation> m_lookup;
 	bool m_headerLoaded = false;
 };
-
-bool shader_pack(const ShaderPackerConfig& config);

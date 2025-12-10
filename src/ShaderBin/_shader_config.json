@@ -1,9 +1,24 @@
 {
-	"output_file" :  "tritonsim_windows.bin",
 	"tmp_dir": "./tmp",
-	"profile": "s_5_0",
 	"dependencies" : ["../3rdparty/bgfx/src", "../TritonSimRenderer"],
-	"platforms": ["windows"],
+	"platforms": {
+			"windows": {
+				"profile": "s_5_0",
+				"output_file" :  "tritonsim_windows.bin"
+			},
+			"android":{
+				"profile": "320_es",
+				"output_file" :  "tritonsim_android.bin"
+			},
+			"asm.js": {
+				"profile": "320_es",
+				"output_file" :  "tritonsim_asm.bin"
+			},
+			"linux": {
+				"profile": "440",
+				"output_file" :  "tritonsim_linux.bin"
+			}
+		},
 	"shaders": [
 		{
 			"type": "debug_line",

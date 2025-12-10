@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <vector>
 #include <map>
+#include <regex>
 
 #define NOMINMAX
 #include <windows.h>
@@ -17,6 +18,8 @@
 #include <bx/file.h>
 #include <bx/string.h>
 
+#include "utils.h"
+
 #include "shaderc.h"
 
 #include <shader_def.h>
@@ -25,3 +28,4 @@
 #include <shader_packer.h>
 
 #include "shader_compiler.h"
+
