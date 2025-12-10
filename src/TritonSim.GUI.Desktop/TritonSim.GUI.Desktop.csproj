@@ -26,10 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
-  	<None Include="$(SolutionDir)TritonSimRenderer\x64\$(Configuration)\TritonSimRenderer.dll">
+  	<None Include="$(SolutionDir)TritonSimRenderer\build_win\bin\$(Configuration)\TritonSimRenderer.dll">
   		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
   	</None>
-  	<None Include="$(SolutionDir)TritonSimRenderer\x64\$(Configuration)\TritonSimRenderer.pdb">
+  	<None Include="$(SolutionDir)TritonSimRenderer\build_win\bin\$(Configuration)\TritonSimRenderer.pdb">
   		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
   	</None>
   </ItemGroup>

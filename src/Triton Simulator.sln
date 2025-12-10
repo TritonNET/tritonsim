@@ -48,9 +48,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Android", "TritonSim.GUI.Android\TritonSim.GUI.Android.csproj", "{E364DE76-D1B3-42F2-80EE-4599A7EF92EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Desktop", "TritonSim.GUI.Desktop\TritonSim.GUI.Desktop.csproj", "{D194B90E-F412-423B-BA3C-12FDCB75F1FD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FCC507EF-AEC0-432B-B6E4-27A5F8466205} = {FCC507EF-AEC0-432B-B6E4-27A5F8466205}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.iOS", "TritonSim.GUI.iOS\TritonSim.GUI.iOS.csproj", "{A8F36875-417D-434B-8ADF-0CFB93A5B649}"
 EndProject
@@ -72,9 +69,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{90EA
 		ShaderBin\bouncing_circle_fs.sc = ShaderBin\bouncing_circle_fs.sc
 		ShaderBin\bouncing_circle_varying.def.sc = ShaderBin\bouncing_circle_varying.def.sc
 		ShaderBin\bouncing_circle_vs.sc = ShaderBin\bouncing_circle_vs.sc
+		ShaderBin\debug_line_fs.sc = ShaderBin\debug_line_fs.sc
 		ShaderBin\debug_line_varying.def.sc = ShaderBin\debug_line_varying.def.sc
 		ShaderBin\debug_line_vs.sc = ShaderBin\debug_line_vs.sc
-		ShaderBin\debug_line_fs.sc = ShaderBin\debug_line_fs.sc
 		ShaderBin\gameoflife_2d_fs.sc = ShaderBin\gameoflife_2d_fs.sc
 		ShaderBin\gameoflife_2d_varying.def.sc = ShaderBin\gameoflife_2d_varying.def.sc
 		ShaderBin\gameoflife_2d_vs.sc = ShaderBin\gameoflife_2d_vs.sc
@@ -82,6 +79,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{90EA
 		ShaderBin\procedural_neon_pulse_varying.def.sc = ShaderBin\procedural_neon_pulse_varying.def.sc
 		ShaderBin\procedural_neon_pulse_vs.sc = ShaderBin\procedural_neon_pulse_vs.sc
 		ShaderBin\_shader_config.json = ShaderBin\_shader_config.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cmake", "cmake", "{26A65339-79B5-4918-97A7-5F18AFA90A98}"
+	ProjectSection(SolutionItems) = preProject
+		TritonSimRenderer\CMakeLists.txt = TritonSimRenderer\CMakeLists.txt
+		TritonSimRenderer\CMakePresets.json = TritonSimRenderer\CMakePresets.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E43020E6-63E3-4CCE-AC96-EF18103CEC0F}"
+	ProjectSection(SolutionItems) = preProject
+		build_web.bat = build_web.bat
+		build_win.bat = build_win.bat
 	EndProjectSection
 EndProject
 Global
