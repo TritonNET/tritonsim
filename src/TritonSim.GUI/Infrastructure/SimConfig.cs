@@ -14,6 +14,12 @@ namespace TritonSim.GUI.Infrastructure
 
         public RendererType Type;
 
-        public UInt32 BackgroundColor;
+        public uint BackgroundColor;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SimConfigX
+    {
+        public int x;
     }
 }

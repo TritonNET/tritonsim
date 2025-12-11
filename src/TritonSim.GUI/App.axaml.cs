@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +37,7 @@ namespace TritonSim.GUI
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
-                singleViewPlatform.MainView = Services.GetRequiredService<SimulationWindow>();
+                singleViewPlatform.MainView = Services.GetRequiredService<SimulationView>();
             }
 
             base.OnFrameworkInitializationCompleted();
@@ -62,6 +61,9 @@ namespace TritonSim.GUI
             services.AddSingleton<ITritonSimNativeProvider, NativeProvider>();
 
             services.AddTransient<VmSimulation>();
+            services.AddTransient<VmSimulationWindow>();
+
+            services.AddTransient<SimulationView>();
             services.AddTransient<SimulationWindow>();
         }
     }

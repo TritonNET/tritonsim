@@ -9,6 +9,7 @@ enum ResponseCode : int32_t
 
     // Positive values for "Success with issues" (Warnings)
     RC_PARTIAL_SUCCESS = 1,
+    RC_SUCCESS_NOT_IMPLEMENTED = 2,
 
     // FAILURE FLAGS (negative mask)
     // We static_cast to force the unsigned hex literal into a signed int representation
@@ -16,6 +17,7 @@ enum ResponseCode : int32_t
 
     // Specific Failures
     // These must match the IDs used in your C# Enum exactly
+    RC_FAILED_UNKNOWN = RC_FAILED | 0x03,
     RC_UNKNOWN_RENDERER_TYPE = RC_FAILED | 0x04,
     RC_RENDERER_NOT_INITIALIZED = RC_FAILED | 0x05,
     RC_FAILED_OPEN_FILE = RC_FAILED | 0x06,

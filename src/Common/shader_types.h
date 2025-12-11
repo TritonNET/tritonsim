@@ -5,19 +5,20 @@
 
 enum class ShaderStage
 {
-    Vertex,
-    Fragment,
-    Compute
+    Unknown = 0,
+
+    Vertex = 1,
+    Fragment = 2,
+    Compute = 3
 };
 
 enum class ShaderType : uint32_t
 {
-    DebugLine,       // Uses unlit_primitive shader
-    GameOfLife2D,
-    BouncingCircle,  // Uses circle_soft shader (distinct form DebugLine)
-    ProceduralNeonPulse,
-
-    Unknown = 0xFFFFFFFF
+    Unknown = 0,
+    DebugLine = 1,       // Uses unlit_primitive shader
+    GameOfLife2D = 2,
+    BouncingCircle = 3,  // Uses circle_soft shader (distinct form DebugLine)
+    ProceduralNeonPulse = 4    
 };
 
 inline std::string to_shader_basename(ShaderType type)
@@ -39,7 +40,7 @@ inline ShaderType from_shader_basename(const std::string& basename)
     if (basename == "bouncing_circle")              return ShaderType::BouncingCircle;
     if (basename == "procedural_neon_pulse")        return ShaderType::ProceduralNeonPulse;
 
-    throw std::runtime_error("Invalid shader basename: " + basename);
+    return ShaderType::Unknown;
 }
 
 inline std::string to_stage_str(ShaderStage stage)
@@ -59,6 +60,5 @@ inline ShaderStage from_stage_str(const std::string& str)
     if (str == "fragment") return ShaderStage::Fragment;
     if (str == "compute")  return ShaderStage::Compute;
 
-    // Throwing ensures the packer doesn't silently fail or produce invalid binaries
-    throw std::runtime_error("Invalid ShaderStage string: " + str);
+    return ShaderStage::Unknown;
 }

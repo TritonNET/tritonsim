@@ -40,7 +40,7 @@ namespace TritonSim.GUI.Providers
             return false;
         }
 
-        public bool SetBackgroundColor(UInt32 rgb)
+        public bool SetBackgroundColor(uint rgb)
         {
             m_config.BackgroundColor = rgb;
 

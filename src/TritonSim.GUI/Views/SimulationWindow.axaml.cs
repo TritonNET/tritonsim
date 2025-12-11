@@ -8,27 +8,14 @@ namespace TritonSim.GUI.Views;
 
 public partial class SimulationWindow : Window
 {
-    private readonly VmSimulation m_vm;
+    private readonly VmSimulationWindow m_vm;
 
-    public SimulationWindow(VmSimulation vm)
+    public SimulationWindow(VmSimulationWindow vm)
     {
         InitializeComponent();
 
         DataContext = vm;
         m_vm = vm;
-
-        vm.StartSimulation += StartSimulation;
-        vm.StopSimulation += StopSimulation;
-    }
-
-    private void StopSimulation()
-    {
-        simControl.Stop();
-    }
-
-    private void StartSimulation()
-    {
-        simControl.Start();
     }
 
     private void TitleBar_PointerPressed(object sender, PointerPressedEventArgs e)

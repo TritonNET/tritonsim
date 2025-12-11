@@ -6,7 +6,12 @@
 static float gValue1 = 0.0f;
 static float gValue2 = 0.0f;
 
-ResponseCode init(const SimConfig& config, SimContext& ctx)
+TRITON_EXPORT int tritonsim_test()
+{
+    return 55;
+}
+
+TRITON_EXPORT ResponseCode tritonsim_init(const SimConfig& config, SimContext& ctx)
 {
     ResponseCode result = RendererFactory::CreateRenderer(config, ctx);
     if (result & RC_FAILED)
@@ -15,7 +20,7 @@ ResponseCode init(const SimConfig& config, SimContext& ctx)
     return ctx.Renderer->Init();
 }
 
-ResponseCode update_config(const SimContext& ctx, const SimConfig& config)
+TRITON_EXPORT ResponseCode tritonsim_update_config(const SimContext& ctx, const SimConfig& config)
 {
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
@@ -23,7 +28,7 @@ ResponseCode update_config(const SimContext& ctx, const SimConfig& config)
     return ctx.Renderer->UpdateConfig(config);
 }
 
-ResponseCode render_frame(const SimContext& ctx)
+TRITON_EXPORT ResponseCode tritonsim_render_frame(const SimContext& ctx)
 {
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
@@ -31,7 +36,7 @@ ResponseCode render_frame(const SimContext& ctx)
     return ctx.Renderer->RenderFrame();
 }
 
-ResponseCode start(const SimContext& ctx)
+TRITON_EXPORT ResponseCode tritonsim_start(const SimContext& ctx)
 {
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
@@ -39,7 +44,7 @@ ResponseCode start(const SimContext& ctx)
     return ctx.Renderer->Start();
 }
 
-ResponseCode stop(const SimContext& ctx)
+TRITON_EXPORT ResponseCode tritonsim_stop(const SimContext& ctx)
 {
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
@@ -47,7 +52,7 @@ ResponseCode stop(const SimContext& ctx)
     return ctx.Renderer->Stop();
 }
 
-ResponseCode shutdown(const SimContext& ctx)
+TRITON_EXPORT ResponseCode tritonsim_shutdown(const SimContext& ctx)
 {
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;

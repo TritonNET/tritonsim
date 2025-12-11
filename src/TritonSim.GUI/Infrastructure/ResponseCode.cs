@@ -18,6 +18,7 @@ namespace TritonSim.GUI.Infrastructure
         // Specific Failures (Failed Bit + Unique ID)
         // Note: We intentionally skip 0x01 to avoid confusion with PartialSuccess, 
         // though strictly strictly speaking, the 'Failed' bit makes them distinct values.
+        FailedUnknown = Failed | 0x03,
         UnknownRendererType = Failed | 0x04,
         RendererNotInitialized = Failed | 0x05,
         FailedOpenFile = Failed | 0x06,

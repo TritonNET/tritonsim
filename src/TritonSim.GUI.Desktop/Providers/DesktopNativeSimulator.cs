@@ -26,22 +26,22 @@ namespace TritonSim.GUI.Desktop.Providers
         public ResponseCode Shutdown(ref SimContext ctx)
             => NativeShutdown(ref ctx);
 
-        [LibraryImport(LIB_NAME, EntryPoint = "init")]
+        [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_init")]
         private static partial ResponseCode NativeInit(ref SimConfig config, out SimContext ctx);
 
-        [LibraryImport(LIB_NAME, EntryPoint = "update_config")]
+        [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_update_config")]
         private static partial ResponseCode NativeUpdateConfig(ref SimContext ctx, ref SimConfig config);
 
-        [LibraryImport(LIB_NAME, EntryPoint = "render_frame")]
+        [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_render_frame")]
         private static partial ResponseCode NativeRenderFrame(ref SimContext ctx);
 
-        [LibraryImport(LIB_NAME, EntryPoint = "start")]
+        [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_start")]
         private static partial ResponseCode NativeStart(ref SimContext ctx);
 
-        [LibraryImport(LIB_NAME, EntryPoint = "stop")]
+        [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_stop")]
         private static partial ResponseCode NativeStop(ref SimContext ctx);
 
-        [LibraryImport(LIB_NAME, EntryPoint = "shutdown")]
+        [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_shutdown")]
         private static partial ResponseCode NativeShutdown(ref SimContext ctx);
     }
 }

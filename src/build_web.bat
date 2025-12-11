@@ -10,7 +10,7 @@ set "BGFX_DIR=%THIRDPARTY_DIR%\bgfx"
 set "RENDERER_DIR=%SRC_ROOT%TritonSimRenderer"
 set "GENIE=%THIRDPARTY_DIR%\bx\tools\bin\windows\genie.exe"
 set "EMSDK_DIR=%THIRDPARTY_DIR%\emsdk"
-set "EM_VERSION=3.1.51"
+set "EM_VERSION=3.1.34"
 
 :: ============================================================================
 :: PRE-CHECKS
@@ -126,7 +126,7 @@ mkdir build_wasm
 cd build_wasm
 
 :: 1. Configure CMake
-call emcmake cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+call emcmake cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 if %errorlevel% neq 0 (
     echo [ERROR] CMake Configuration failed.
     pause
@@ -146,6 +146,6 @@ if %errorlevel% neq 0 (
 :: ============================================================================
 echo.
 echo [SUCCESS] Web Build Complete!
-echo           Library: %RENDERER_DIR%\build_wasm\libTritonSimRenderer.a
+echo           Library: %RENDERER_DIR%\build_wasm\lib\libTritonSimRenderer.a
 echo.
 pause

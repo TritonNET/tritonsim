@@ -4,6 +4,11 @@
 
 class RendererBase;  // forward declare
 
+struct SimConfigX
+{
+    int x;
+};
+
 struct SimConfig
 {
     void* handle;
@@ -11,6 +16,11 @@ struct SimConfig
     int height;
     RendererType Type;
     int BackgroundColor;
+};
+
+struct SimContextX
+{
+    int x;
 };
 
 struct SimContext

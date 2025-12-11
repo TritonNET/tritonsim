@@ -10,4 +10,10 @@ namespace TritonSim.GUI.Infrastructure
 
         public bool IsInitialized() => Renderer != IntPtr.Zero;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SimContextX
+    {
+        
+    }
 }

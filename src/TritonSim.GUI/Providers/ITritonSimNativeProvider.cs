@@ -26,6 +26,6 @@ namespace TritonSim.GUI.Providers
 
         string GetLastError();
 
-        bool SetBackgroundColor(UInt32 rgb);
+        bool SetBackgroundColor(uint rgb);
     }
 }

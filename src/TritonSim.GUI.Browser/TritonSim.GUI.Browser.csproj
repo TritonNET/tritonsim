@@ -4,6 +4,11 @@
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
+
+	<WasmBuildNative>true</WasmBuildNative>
+
+	  <!--<EmccFlags>$(EmccFlags) -s EXPORTED_FUNCTIONS="['tritonsim_test','tritonsim_init','tritonsim_update_config','tritonsim_render_frame','tritonsim_start','tritonsim_stop','tritonsim_shutdown']"</EmccFlags>-->
+	  <EmccFlags>$(EmccFlags) -s EXPORT_ALL=1</EmccFlags>	  
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,4 +18,14 @@
   <ItemGroup>
     <ProjectReference Include="..\TritonSim.GUI\TritonSim.GUI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+  	<NativeFileReference Include="$(SolutionDir)TritonSimRenderer\build_wasm\lib\libTritonSimRenderer.a" />
+
+	<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bgfxRelease.a" />
+	<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bxRelease.a" />
+  	<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimgRelease.a" />
+  	<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimg_decodeRelease.a" />
+  </ItemGroup>
+	
 </Project>

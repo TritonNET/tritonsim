@@ -265,7 +265,7 @@ namespace TritonSim.GUI.Controls
             m_renderTimer?.Stop();
         }
 
-        public UInt32 GetBackgroundColor()
+        public uint GetBackgroundColor()
         {
             if (Background is ISolidColorBrush solidBrush)
             {
