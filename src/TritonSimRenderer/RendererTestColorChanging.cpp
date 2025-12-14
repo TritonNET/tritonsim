@@ -7,6 +7,10 @@
 
 ResponseCode RendererTestColorChanging::RenderFrame()
 {
+#ifdef __EMSCRIPTEN__
+    OnUpdate();
+#endif
+
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_color, 1.0f, 0);
     bgfx::touch(0);
     bgfx::frame();

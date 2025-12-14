@@ -1,28 +1,21 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using TritonSim.GUI.Providers; // Assuming ResponseCode is here
+using TritonSim.GUI.Providers;
 using TritonSim.GUI.Infrastructure;
 
 public partial class BrowserNativeSimulator : INativeSimulator
 {
-    private const string LIB_NAME = "__Internal";
+    private const string LIB_NAME = "libTritonSimRenderer";
 
     public ResponseCode Init(ref SimConfig config, out SimContext ctx)
     {
-        int test = 10;
         try
         {
-            test = NativeTest();
-
-            Console.WriteLine($"[BrowserNative] TEST RESULT: {test}");
-
-            ResponseCode rc = (ResponseCode)NativeInit(ref config, out ctx);
-
-            return rc;
+            return NativeInit(ref config, out ctx);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[BrowserNative] FATAL Error in Init: test int: {test} | {ex.Message}\n{ex.StackTrace}");
+            Console.WriteLine($"[BrowserNative] FATAL Error in Init: {ex.Message}\n{ex.StackTrace}");
             ctx = default;
             return ResponseCode.FailedUnknown;
         }
@@ -32,13 +25,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
     {
         try
         {
-            int test = NativeTest();
-
-            Console.WriteLine($"[BrowserNative] TEST RESULT: {test}");
-
-            ResponseCode rc= (ResponseCode)NativeUpdateConfig();
-
-            return rc;
+            return NativeUpdateConfig(ref ctx, ref config);
         }
         catch (Exception ex)
         {
@@ -51,7 +38,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
     {
         try
         {
-            return (ResponseCode)NativeRenderFrame(ref ctx);
+            return NativeRenderFrame(ref ctx);
         }
         catch (Exception ex)
         {
@@ -64,7 +51,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
     {
         try
         {
-            return (ResponseCode)NativeStart(ref ctx);
+            return NativeStart(ref ctx);
         }
         catch (Exception ex)
         {
@@ -77,7 +64,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
     {
         try
         {
-            return (ResponseCode)NativeStop(ref ctx);
+            return NativeStop(ref ctx);
         }
         catch (Exception ex)
         {
@@ -90,7 +77,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
     {
         try
         {
-            return (ResponseCode)NativeShutdown(ref ctx);
+            return NativeShutdown(ref ctx);
         }
         catch (Exception ex)
         {
@@ -100,24 +87,21 @@ public partial class BrowserNativeSimulator : INativeSimulator
     }
 
 
-    [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_test")]
-    private static partial int NativeTest();
-
     [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_init")]
-    private static partial int NativeInit(ref SimConfig config, out SimContext ctx);
+    private static partial ResponseCode NativeInit(ref SimConfig config, out SimContext ctx);
 
     [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_update_config")]
-    private static partial int NativeUpdateConfig();
+    private static partial ResponseCode NativeUpdateConfig(ref SimContext ctx, ref SimConfig config);
 
     [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_render_frame")]
-    private static partial int NativeRenderFrame(ref SimContext ctx);
+    private static partial ResponseCode NativeRenderFrame(ref SimContext ctx);
 
     [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_start")]
-    private static partial int NativeStart(ref SimContext ctx);
+    private static partial ResponseCode NativeStart(ref SimContext ctx);
 
     [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_stop")]
-    private static partial int NativeStop(ref SimContext ctx);
+    private static partial ResponseCode NativeStop(ref SimContext ctx);
 
     [LibraryImport(LIB_NAME, EntryPoint = "tritonsim_shutdown")]
-    private static partial int NativeShutdown(ref SimContext ctx);
+    private static partial ResponseCode NativeShutdown(ref SimContext ctx);
 }

@@ -70,6 +70,24 @@ namespace TritonSim.GUI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Native function call failed..
+        /// </summary>
+        internal static string FailedNativeCall {
+            get {
+                return ResourceManager.GetString("FailedNativeCall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to determine Dll module handle.
+        /// </summary>
+        internal static string FailedToDetermineDllModuleHandle {
+            get {
+                return ResourceManager.GetString("FailedToDetermineDllModuleHandle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to Load Resource File.
         /// </summary>
         internal static string FailedToLoadResourceFile {

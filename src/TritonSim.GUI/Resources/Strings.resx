@@ -121,6 +121,12 @@
     <value>General Failure</value>
     <comment>0x80000000</comment>
   </data>
+  <data name="FailedNativeCall" xml:space="preserve">
+    <value>Native function call failed.</value>
+  </data>
+  <data name="FailedToDetermineDllModuleHandle" xml:space="preserve">
+    <value>Failed to determine Dll module handle</value>
+  </data>
   <data name="FailedToLoadResourceFile" xml:space="preserve">
     <value>Failed to Load Resource File</value>
   </data>

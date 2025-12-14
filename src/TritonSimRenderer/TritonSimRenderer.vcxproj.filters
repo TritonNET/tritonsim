@@ -69,6 +69,12 @@
     <ClInclude Include="RendererNeonPulse.h">
       <Filter>Renderers</Filter>
     </ClInclude>
+    <ClInclude Include="defs_win.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="defs_emscripten.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

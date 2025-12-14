@@ -89,7 +89,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cmake", "cmake", "{26A65339
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E43020E6-63E3-4CCE-AC96-EF18103CEC0F}"
 	ProjectSection(SolutionItems) = preProject
+		build_complete.bat = build_complete.bat
 		build_web.bat = build_web.bat
+		build_web_wasm.bat = build_web_wasm.bat
 		build_win.bat = build_win.bat
 	EndProjectSection
 EndProject

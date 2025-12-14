@@ -3,29 +3,37 @@
 #include "RendererFactory.h"
 #include "RendererBase.h"
 
-static float gValue1 = 0.0f;
-static float gValue2 = 0.0f;
-
-TRITON_EXPORT int tritonsim_test()
-{
-    return 55;
-}
-
 TRITON_EXPORT ResponseCode tritonsim_init(const SimConfig& config, SimContext& ctx)
 {
-    ResponseCode result = RendererFactory::CreateRenderer(config, ctx);
-    if (result & RC_FAILED)
-        return result;
+    LOG_DEBUG_CONFIG(config);
 
-    return ctx.Renderer->Init();
+    ResponseCode rc = RendererFactory::CreateRenderer(config, ctx);
+
+    LOG_DEBUG("CreateRenderer response: %d", rc);
+
+    if (rc & RC_FAILED)
+        return rc;
+
+    rc = ctx.Renderer->Init();
+
+    LOG_DEBUG("Init response: %d", rc);
+
+    return rc;
 }
 
 TRITON_EXPORT ResponseCode tritonsim_update_config(const SimContext& ctx, const SimConfig& config)
-{
+{   
+    LOG_DEBUG_CONTEXT(ctx);
+    LOG_DEBUG_CONFIG(config);
+
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
 
-    return ctx.Renderer->UpdateConfig(config);
+    auto rc = ctx.Renderer->UpdateConfig(config);
+
+    LOG_DEBUG("UpdateConfig response: %d", rc);
+
+    return rc;
 }
 
 TRITON_EXPORT ResponseCode tritonsim_render_frame(const SimContext& ctx)
@@ -38,26 +46,41 @@ TRITON_EXPORT ResponseCode tritonsim_render_frame(const SimContext& ctx)
 
 TRITON_EXPORT ResponseCode tritonsim_start(const SimContext& ctx)
 {
+    LOG_DEBUG_CONTEXT(ctx);
+
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
 
-    return ctx.Renderer->Start();
+    auto rc = ctx.Renderer->Start();
+
+    LOG_DEBUG("Start response: %d", rc);
+
+    return rc;
 }
 
 TRITON_EXPORT ResponseCode tritonsim_stop(const SimContext& ctx)
 {
+    LOG_DEBUG_CONTEXT(ctx);
+
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
 
-    return ctx.Renderer->Stop();
+    auto rc = ctx.Renderer->Stop();
+
+    LOG_DEBUG("Stop response: %d", rc);
+
+    return rc;
 }
 
 TRITON_EXPORT ResponseCode tritonsim_shutdown(const SimContext& ctx)
 {
+    LOG_DEBUG_CONTEXT(ctx);
+
     if (ctx.Renderer == nullptr)
         return RC_RENDERER_NOT_INITIALIZED;
 
     delete ctx.Renderer;
 
     return RC_SUCCESS;
+
 }

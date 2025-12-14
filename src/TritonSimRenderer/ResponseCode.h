@@ -28,6 +28,8 @@ enum ResponseCode : int32_t
     RC_FAILED_TO_LOAD_RESOURCE_FILE = RC_FAILED | 0x10,
 
     RC_FAILED_TO_DETERMINE_DLL_MODULE_HANDLE = RC_FAILED | 0x11,
+
+    RC_FAILED_NATIVE_CALL = RC_FAILED | 0x12,
 };
 
 // Optional: Helper macros or inline functions for C++ logic

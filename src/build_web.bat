@@ -16,136 +16,89 @@ set "EM_VERSION=3.1.34"
 :: PRE-CHECKS
 :: ============================================================================
 echo [INFO] Checking environment...
+where nmake >nul 2>nul
+if %errorlevel% neq 0 (
+    echo [ERROR] nmake not found.
+    pause
+    exit /b 1
+)
 
-:: 1. Check for Make
+set MAKE_CMD=make
 where make >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [ERROR] 'make' not found.
-    echo         BGFX requires 'make' to build for Web. 
-    echo         Install it via Chocolatey: 'choco install make'
-    pause
-    exit /b 1
+    where mingw32-make >nul 2>nul
+    if !errorlevel! equ 0 (
+        set MAKE_CMD=mingw32-make
+    ) else (
+        echo [ERROR] GNU make not found.
+        pause
+        exit /b 1
+    )
 )
 
 :: ============================================================================
-:: STEP 1: SETUP EMSCRIPTEN 3.1.51
+:: STEP 1: SETUP EMSCRIPTEN
 :: ============================================================================
-echo.
-echo [INFO] Setting up Emscripten %EM_VERSION%...
-echo --------------------------------------------------------------------------
-
-if not exist "%EMSDK_DIR%\emsdk.bat" (
-    echo [ERROR] Emscripten submodule missing. Run: git submodule update --init --recursive
-    pause
-    exit /b 1
-)
-
+echo [INFO] Setting up Emscripten...
 pushd "%EMSDK_DIR%"
-
-:: 1. Install specific version
-echo [INFO] Installing Emscripten %EM_VERSION%...
 call emsdk.bat install %EM_VERSION%
-if %errorlevel% neq 0 (
-    echo [ERROR] Failed to install Emscripten %EM_VERSION%.
-    popd
-    pause
-    exit /b 1
-)
-
-:: 2. Activate specific version
-echo [INFO] Activating Emscripten %EM_VERSION%...
 call emsdk.bat activate %EM_VERSION%
-if %errorlevel% neq 0 (
-    echo [ERROR] Failed to activate Emscripten %EM_VERSION%.
-    popd
-    pause
-    exit /b 1
-)
-
-:: 3. Set Environment Variables for this session
 call emsdk_env.bat
 popd
 
-:: Verify 'emcc' is now available
-where emcc >nul 2>nul
-if %errorlevel% neq 0 (
-    echo [ERROR] 'emcc' not found after activation. Setup failed.
-    pause
-    exit /b 1
-)
-
-echo [INFO] Emscripten %EM_VERSION% is active.
-
 :: ============================================================================
-:: STEP 2: COMPILE BGFX (WASM)
+:: STEP 2: COMPILE BGFX (WASM) - MODERN EXCEPTIONS
 :: ============================================================================
 echo.
-echo [INFO] Building BGFX for WebAssembly...
-echo --------------------------------------------------------------------------
+echo [INFO] Building BGFX (Native Wasm Exceptions)...
 
 cd /d "%BGFX_DIR%"
-
-:: 1. Generate Makefiles
 "%GENIE%" --gcc=wasm gmake
-if %errorlevel% neq 0 (
-    echo [ERROR] GENie failed to generate WebMakefiles.
-    pause
-    exit /b 1
-)
-
-:: 2. Enter directory
 cd .build/projects/gmake-wasm
-if %errorlevel% neq 0 (
-    echo [ERROR] Project directory not found: .build/projects/gmake-wasm
-    pause
-    exit /b 1
-)
 
-:: 3. Build Release
-call emmake make config=release
+:: FIX: Use -fwasm-exceptions to match .NET 8
+set "CXXFLAGS=-fwasm-exceptions"
+set "CFLAGS=-fwasm-exceptions"
+
+call emmake %MAKE_CMD% config=release
 if %errorlevel% neq 0 (
     echo [ERROR] BGFX Web build failed.
     pause
     exit /b 1
 )
 
+set "CXXFLAGS="
+set "CFLAGS="
+
 :: ============================================================================
-:: STEP 3: COMPILE TRITONSIM RENDERER (WASM)
+:: STEP 3: COMPILE TRITONSIM RENDERER (WASM) - MODERN EXCEPTIONS
 :: ============================================================================
 echo.
-echo [INFO] Building TritonSimRenderer for WebAssembly...
-echo --------------------------------------------------------------------------
+echo [INFO] Building TritonSimRenderer...
 
 cd /d "%RENDERER_DIR%"
-
-if exist build_wasm (
-    echo [INFO] Cleaning old Web build...
-    rmdir /s /q build_wasm
-)
+if exist build_wasm rmdir /s /q build_wasm
 mkdir build_wasm
 cd build_wasm
 
-:: 1. Configure CMake
-call emcmake cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+:: FIX: Pass -fwasm-exceptions to CMake
+call emcmake cmake .. -G "NMake Makefiles" ^
+    -DCMAKE_BUILD_TYPE=Debug ^
+    -DCMAKE_CXX_FLAGS="-fwasm-exceptions"
+
 if %errorlevel% neq 0 (
     echo [ERROR] CMake Configuration failed.
     pause
     exit /b 1
 )
 
-:: 2. Build
-call emmake make
+call emmake nmake
 if %errorlevel% neq 0 (
     echo [ERROR] TritonSimRenderer Web build failed.
     pause
     exit /b 1
 )
 
-:: ============================================================================
-:: SUCCESS
-:: ============================================================================
 echo.
-echo [SUCCESS] Web Build Complete!
-echo           Library: %RENDERER_DIR%\build_wasm\lib\libTritonSimRenderer.a
-echo.
+echo [SUCCESS] Build Complete.
 pause

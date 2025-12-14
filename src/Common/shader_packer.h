@@ -10,15 +10,15 @@ class ShaderPacker
 {
 public:
 	ShaderPacker(const std::string& packBin) 
-		: m_bin(packBin) 
-		, m_storageType(stFile)
+		: m_storageType(stFile)
+		, m_bin(packBin)
 		, m_data(nullptr)
 		, m_size(0)
 	{ }
 
 	ShaderPacker(const void* data, size_t size)
-		: m_bin()
-		, m_storageType(stResource)
+		: m_storageType(stResource)		
+		, m_bin()
 		, m_data(static_cast<const uint8_t*>(data))
 		, m_size(size)
 	{

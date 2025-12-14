@@ -28,24 +28,27 @@ set(INCLUDE_DIRS
 
 if(EMSCRIPTEN)
     # --- WEB (WebAssembly) ---
-    message(STATUS "Configuring for WebAssembly (Emscripten)")
+    message(STATUS "Configuring TritonSimRenderer for WebAssembly")
     
     # Web usually prefers Static libraries to link into the final .wasm
     add_library(TritonSimRenderer STATIC ${SOURCES})
-    
+
     # Emscripten specific defines
     target_compile_definitions(TritonSimRenderer PRIVATE 
         __EMSCRIPTEN__ 
         BX_CONFIG_DEBUG=0
     )
 
-    # Build options
-    # target_compile_options(TritonSimRenderer PRIVATE -O3 -fexceptions -fno-rtti)
-    target_compile_options(TritonSimRenderer PRIVATE -O3 -fno-exceptions -fno-rtti)
+    # B. Compile Options
+    target_compile_options(TritonSimRenderer PRIVATE 
+        -fwasm-exceptions
+        -gsource-map
+        -Os 
+        -Wall 
+        -Wextra 
+        -Werror=return-type
+    )
 
-    # Locate BGFX Wasm Libs (You must build these first!)
-    set(BGFX_LIB_PATH "${CMAKE_SOURCE_DIR}/../3rdparty/bgfx/.build/wasm-emscripten/bin")
-    
     # Libraries to link
     set(PLATFORM_LIBS 
         "${BGFX_LIB_PATH}/libbgfxRelease.a"

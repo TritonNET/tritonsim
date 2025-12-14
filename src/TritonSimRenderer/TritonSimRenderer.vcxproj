@@ -180,6 +180,8 @@
     <ClInclude Include="..\Common\shader_packer.h" />
     <ClInclude Include="..\Common\shader_types.h" />
     <ClInclude Include="defs.h" />
+    <ClInclude Include="defs_emscripten.h" />
+    <ClInclude Include="defs_win.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RendererBase.h" />

@@ -1,13 +1,17 @@
 #pragma once
 #include "ResponseCode.h"
 #include "RendererType.h"
+#include <cstdio>
 
-class RendererBase;  // forward declare
+#if defined(_WIN32)
+#include "defs_win.h"
+#elif defined(__EMSCRIPTEN__)
+#include "defs_emscripten.h"
+#else
+#error Unknown compile variation. Please include the environment specific defs here.
+#endif
 
-struct SimConfigX
-{
-    int x;
-};
+class RendererBase; // Forward declaration. Full in RenderBase.h
 
 struct SimConfig
 {
@@ -16,11 +20,6 @@ struct SimConfig
     int height;
     RendererType Type;
     int BackgroundColor;
-};
-
-struct SimContextX
-{
-    int x;
 };
 
 struct SimContext
@@ -50,3 +49,19 @@ enum COLOR : uint32_t
     // ABGR: 0xFF(Alpha) 00(Blue) A5(Green) FF(Red)
     COLOR_ORANGE = 0xFF00A5FF,
 };
+
+#define LOG_DEBUG(fmt, ...) printf("[%s] " fmt "\n", __func__, ##__VA_ARGS__)
+
+#define LOG_DEBUG_CONFIG(config) LOG_DEBUG("Config:\n" \
+    "  - Handle: %p\n"                                  \
+    "  - Size:   %d x %d\n"                             \
+    "  - Type:   %d\n"                                  \
+    "  - BG Col: 0x%08X",                               \
+    config.handle,                                      \
+    config.width,                                       \
+    config.height,                                      \
+    (int)config.Type,                                   \
+    config.BackgroundColor                              \
+)
+
+#define LOG_DEBUG_CONTEXT(ctx) LOG_DEBUG("context ptr: %p", (void*)ctx.Renderer);

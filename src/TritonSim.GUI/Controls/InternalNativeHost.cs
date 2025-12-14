@@ -16,6 +16,21 @@ namespace TritonSim.GUI.Controls
 
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
         {
+            if (OperatingSystem.IsBrowser())
+            {
+                // IN THE BROWSER:
+                // You cannot return a C++ pointer here. 
+                // You usually return a handle to a DIV or CANVAS created in JavaScript.
+
+                // If you are just rendering to the main Avalonia canvas via Skia,
+                // you might NOT need a NativeControlHost at all.
+
+                // If you are trying to use a separate WebGL canvas, you need to create it in JS
+                // and return its ID string wrapped in a handle.
+                m_parent.OnNativeHandleCreated(parent.Handle);
+                return base.CreateNativeControlCore(parent);
+            }
+
             if (m_parent.WindowProvider == null)
                 throw new InvalidOperationException("WindowProvider is null.");
 
