@@ -215,6 +215,13 @@
     <ClCompile Include="renderer_api.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\Common\enums.json">
+      <FileType>Document</FileType>
+      <Command>cd /d "$(ProjectDir)..\Common" &amp;&amp; call enum_compile.bat</Command>
+      <Message>Auto-generating Response Codes from JSON...</Message>
+      <Outputs>$(ProjectDir)ResponseCode.h</Outputs>
+      <AdditionalInputs>$(ProjectDir)..\Common\enum_compile.py</AdditionalInputs>
+    </CustomBuild>
     <None Include="shaderc_cmd.bat" />
   </ItemGroup>
   <ItemGroup>

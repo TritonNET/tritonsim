@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PythonCommand Condition="'$(OS)' == 'Windows_NT'">python</PythonCommand>
+	<PythonCommand Condition="'$(OS)' != 'Windows_NT'">python3</PythonCommand>
+	<CommonDir>$(MSBuildProjectDirectory)\..\Common</CommonDir>
+
+	<PyScriptGenEnums>$(CommonDir)\enum_compile.py</PyScriptGenEnums>
+	<EnumJsonDef>$(CommonDir)\enums.json</EnumJsonDef>
+	<EnumGeneratedFileCs>$(MSBuildProjectDirectory)\Infrastructure\ResponseCode.cs</EnumGeneratedFileCs>
+  </PropertyGroup>
+</Project>

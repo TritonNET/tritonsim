@@ -1,33 +1,49 @@
-﻿using System;
+using System.ComponentModel;
 
-namespace TritonSim.GUI.Infrastructure
+namespace TritonSim.GUI.Infrastructure;
+
+// AUTO-GENERATED FROM enums.json at 2025-12-15 15:48:11
+public enum ResponseCode : int
 {
-    [Flags]
-    public enum ResponseCode : int
-    {
-        // Standard: 0 is Success (S_OK)
-        Success = 0,
+    [Description("Operation successful.")]
+    Success = 0x00000000,
 
-        // Positive values for "Success with issues" (Warnings)
-        PartialSuccess = 1,
+    [Description("Operation successful, but with some issues.")]
+    PartialSuccess = 0x00000001,
 
-        // Negative values for Failures (Bit 31 set)
-        // unchecked is required because 0x80000000 overflows signed int
-        Failed = unchecked((int)0x80000000),
+    [Description("Success, but the requested functionality is not fully implemented.")]
+    SuccessNotImplemented = 0x00000002,
 
-        // Specific Failures (Failed Bit + Unique ID)
-        // Note: We intentionally skip 0x01 to avoid confusion with PartialSuccess, 
-        // though strictly strictly speaking, the 'Failed' bit makes them distinct values.
-        FailedUnknown = Failed | 0x03,
-        UnknownRendererType = Failed | 0x04,
-        RendererNotInitialized = Failed | 0x05,
-        FailedOpenFile = Failed | 0x06,
+    [Description("General or unspecified failure.")]
+    Failed = unchecked((int)0x80000000),
 
-        InvalidRenderSurfaceHeight = Failed | 0x07,
-        InvalidRenderSurfaceWidth = Failed | 0x08,
-        InvalidRenderSurfaceHandle = Failed | 0x09,
-        FailedToLoadResourceFile = Failed | 0x10,
-        FailedToDetermineDllModuleHandle = Failed | 0x11,
-        FailedNativeCall = Failed | 0x12,
-    }
+    [Description("An unknown error occurred.")]
+    FailedUnknown = unchecked((int)0x80000001),
+
+    [Description("The native function call failed.")]
+    FailedNativeCall = unchecked((int)0x80000002),
+
+    [Description("The specified renderer type is not recognized.")]
+    UnknownRendererType = unchecked((int)0x80010000),
+
+    [Description("The renderer has not been initialized.")]
+    RendererNotInitialized = unchecked((int)0x80010001),
+
+    [Description("The render surface height is invalid.")]
+    InvalidRenderSurfaceHeight = unchecked((int)0x80010002),
+
+    [Description("The render surface width is invalid.")]
+    InvalidRenderSurfaceWidth = unchecked((int)0x80010003),
+
+    [Description("The handle provided for the render surface is invalid.")]
+    InvalidRenderSurfaceHandle = unchecked((int)0x80010004),
+
+    [Description("Failed to open the specified file.")]
+    FailedOpenFile = unchecked((int)0x80020000),
+
+    [Description("Failed to load the requested resource file.")]
+    FailedToLoadResourceFile = unchecked((int)0x80020001),
+
+    [Description("Could not determine the handle for the DLL module.")]
+    FailedToDetermineDllModuleHandle = unchecked((int)0x80030000),
 }

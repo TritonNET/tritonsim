@@ -95,6 +95,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E43020E6
 		build_win.bat = build_win.bat
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{28F30983-25C5-41F2-81DD-2C6FB9C21F2C}"
+	ProjectSection(SolutionItems) = preProject
+		Common\common.props = Common\common.props
+		Common\enums.json = Common\enums.json
+		Common\enum_compile.bat = Common\enum_compile.bat
+		Common\enum_compile.py = Common\enum_compile.py
+		Common\enum_compile.sh = Common\enum_compile.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

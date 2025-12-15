@@ -115,6 +115,9 @@
     <None Include="shaderc_cmd.bat">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\Common\enums.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TritonSimRenderer.rc">

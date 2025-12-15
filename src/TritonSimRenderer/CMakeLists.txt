@@ -1,17 +1,39 @@
 ﻿cmake_minimum_required(VERSION 3.15)
 project(TritonSimRenderer)
 
+# --- 0. PRE-CONFIGURATION (Find Python) ---------------------------------------
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
 # --- 1. CONFIGURATION ---------------------------------------------------------
 
 # Set C++ Standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Define Source Files (Globbing used for simplicity matching your VS setup)
+# --- CODE GENERATION STEP ---
+# Define paths
+set(COMMON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../Common")
+set(GEN_SCRIPT "${COMMON_DIR}/enum_compile.py")
+set(ENUMS_JSON "${COMMON_DIR}/enums.json")
+set(GENERATED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/ResponseCode.h")
+
+# Create the command that runs BEFORE the build if inputs change
+add_custom_command(
+    OUTPUT "${GENERATED_HEADER}"
+    COMMAND "${Python3_EXECUTABLE}" "enum_compile.py"
+    WORKING_DIRECTORY "${COMMON_DIR}"
+    DEPENDS "${GEN_SCRIPT}" "${ENUMS_JSON}"
+    COMMENT "Auto-generating Response Codes from JSON..."
+    VERBATIM
+)
+
+# Define Source Files 
+# NOTE: We explicitly ADD the generated header to sources so CMake knows to build it
 file(GLOB SOURCES 
     "*.cpp" "*.h" 
     "../Common/*.cpp" "../Common/*.h"
 )
+list(APPEND SOURCES "${GENERATED_HEADER}")
 
 # Define Include Directories
 set(INCLUDE_DIRS

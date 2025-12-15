@@ -1,0 +1,32 @@
+{
+  "output_cpp": "../TritonSimRenderer/ResponseCode.h",
+  "output_cs": "../TritonSim.GUI/Infrastructure/ResponseCode.cs",
+
+  "facilities": {
+    "General": 0,
+    "Renderer": 1,
+    "IO": 2,
+    "System": 3
+  },
+
+  "enums": [
+    { "name": "RC_SUCCESS", "type": "General_Success", "desc": "Operation successful." },
+    { "name": "RC_PARTIAL_SUCCESS", "type": "General_Success", "desc": "Operation successful, but with some issues." },
+    { "name": "RC_SUCCESS_NOT_IMPLEMENTED", "type": "General_Success", "desc": "Success, but the requested functionality is not fully implemented." },
+
+    { "name": "RC_FAILED", "type": "General_Fail", "desc": "General or unspecified failure." },
+    { "name": "RC_FAILED_UNKNOWN", "type": "General_Fail", "desc": "An unknown error occurred." },
+    { "name": "RC_FAILED_NATIVE_CALL", "type": "General_Fail", "desc": "The native function call failed." },
+
+    { "name": "RC_UNKNOWN_RENDERER_TYPE", "type": "Renderer_Fail", "desc": "The specified renderer type is not recognized." },
+    { "name": "RC_RENDERER_NOT_INITIALIZED", "type": "Renderer_Fail", "desc": "The renderer has not been initialized." },
+    { "name": "RC_INVALID_RENDER_SURFACE_HEIGHT", "type": "Renderer_Fail", "desc": "The render surface height is invalid." },
+    { "name": "RC_INVALID_RENDER_SURFACE_WIDTH", "type": "Renderer_Fail", "desc": "The render surface width is invalid." },
+    { "name": "RC_INVALID_RENDER_SURFACE_HANDLE", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is invalid." },
+
+    { "name": "RC_FAILED_OPEN_FILE", "type": "IO_Fail", "desc": "Failed to open the specified file." },
+    { "name": "RC_FAILED_TO_LOAD_RESOURCE_FILE", "type": "IO_Fail", "desc": "Failed to load the requested resource file." },
+
+    { "name": "RC_FAILED_TO_DETERMINE_DLL_MODULE_HANDLE", "type": "System_Fail", "desc": "Could not determine the handle for the DLL module." }
+  ]
+}

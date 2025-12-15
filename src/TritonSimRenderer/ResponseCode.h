@@ -1,37 +1,25 @@
 #pragma once
 #include <cstdint>
 
-// Enforce int32_t to match C# 'int' (System.Int32)
+// AUTO-GENERATED FROM enums.json at 2025-12-15 15:48:11
+// HRESULT: [Sev:1][Res:5][Fac:11][Code:15]
 enum ResponseCode : int32_t
 {
-    // Standard: 0 is Success
-    RC_SUCCESS = 0,
-
-    // Positive values for "Success with issues" (Warnings)
-    RC_PARTIAL_SUCCESS = 1,
-    RC_SUCCESS_NOT_IMPLEMENTED = 2,
-
-    // FAILURE FLAGS (negative mask)
-    // We static_cast to force the unsigned hex literal into a signed int representation
-    RC_FAILED = static_cast<int32_t>(0x80000000),
-
-    // Specific Failures
-    // These must match the IDs used in your C# Enum exactly
-    RC_FAILED_UNKNOWN = RC_FAILED | 0x03,
-    RC_UNKNOWN_RENDERER_TYPE = RC_FAILED | 0x04,
-    RC_RENDERER_NOT_INITIALIZED = RC_FAILED | 0x05,
-    RC_FAILED_OPEN_FILE = RC_FAILED | 0x06,
-
-    RC_INVALID_RENDER_SURFACE_HEIGHT = RC_FAILED | 0x07,
-    RC_INVALID_RENDER_SURFACE_WIDTH = RC_FAILED | 0x08,
-    RC_INVALID_RENDER_SURFACE_HANDLE = RC_FAILED | 0x09,
-    RC_FAILED_TO_LOAD_RESOURCE_FILE = RC_FAILED | 0x10,
-
-    RC_FAILED_TO_DETERMINE_DLL_MODULE_HANDLE = RC_FAILED | 0x11,
-
-    RC_FAILED_NATIVE_CALL = RC_FAILED | 0x12,
+    RC_SUCCESS = 0x00000000, // Code: 0
+    RC_PARTIAL_SUCCESS = 0x00000001, // Code: 1
+    RC_SUCCESS_NOT_IMPLEMENTED = 0x00000002, // Code: 2
+    RC_FAILED = static_cast<int32_t>(0x80000000), // Code: 0
+    RC_FAILED_UNKNOWN = static_cast<int32_t>(0x80000001), // Code: 1
+    RC_FAILED_NATIVE_CALL = static_cast<int32_t>(0x80000002), // Code: 2
+    RC_UNKNOWN_RENDERER_TYPE = static_cast<int32_t>(0x80010000), // Code: 0
+    RC_RENDERER_NOT_INITIALIZED = static_cast<int32_t>(0x80010001), // Code: 1
+    RC_INVALID_RENDER_SURFACE_HEIGHT = static_cast<int32_t>(0x80010002), // Code: 2
+    RC_INVALID_RENDER_SURFACE_WIDTH = static_cast<int32_t>(0x80010003), // Code: 3
+    RC_INVALID_RENDER_SURFACE_HANDLE = static_cast<int32_t>(0x80010004), // Code: 4
+    RC_FAILED_OPEN_FILE = static_cast<int32_t>(0x80020000), // Code: 0
+    RC_FAILED_TO_LOAD_RESOURCE_FILE = static_cast<int32_t>(0x80020001), // Code: 1
+    RC_FAILED_TO_DETERMINE_DLL_MODULE_HANDLE = static_cast<int32_t>(0x80030000), // Code: 0
 };
 
-// Optional: Helper macros or inline functions for C++ logic
-inline bool RC_IS_SUCCESS(ResponseCode rc) { return rc >= 0; }
-inline bool RC_IS_FAILURE(ResponseCode rc) { return rc < 0; }
+#define RC_IS_SUCCESS(x) ((x) >= 0)
+#define RC_IS_FAILURE(x) ((x) < 0)
