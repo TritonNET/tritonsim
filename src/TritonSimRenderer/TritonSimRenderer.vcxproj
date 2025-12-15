@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(SolutionDir)Common\common.props" />
+  
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -82,6 +84,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)TritonSimRenderer\build_win\bin\$(Configuration)\</OutDir>
   </PropertyGroup>
+  
+  <Target Name="CheckBgfxLib" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(Configuration)' == 'Release' and !Exists('$(BgfxWinBinDir)bgfxRelease.lib')" 
+           Text="[Build Error] 'bgfxRelease.lib' is missing from '$(BgfxWinBinDir)'." />
+
+    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('$(BgfxWinBinDir)bgfxDebug.lib')" 
+           Text="[Build Error] 'bgfxDebug.lib' is missing from '$(BgfxWinBinDir)'." />
+  </Target>
+  
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -99,7 +110,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win32_vs2022\bin\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BgfxWinBinDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxDebug.lib;bxDebug.lib;bimgDebug.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -122,7 +133,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win64_vs2022\bin\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BgfxWinBinDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxRelease.lib;bxRelease.lib;bimgRelease.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -144,7 +155,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win64_vs2022\bin\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BgfxWinBinDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxDebug.lib;bxDebug.lib;bimgDebug.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>true</MapExports>
@@ -171,7 +182,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdparty\bgfx\.build\win64_vs2022\bin\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BgfxWinBinDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;WindowsApp.lib;bgfxRelease.lib;bxRelease.lib;bimgRelease.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -215,12 +226,12 @@
     <ClCompile Include="renderer_api.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\Common\enums.json">
+    <CustomBuild Include="$(EnumJsonDef)">
       <FileType>Document</FileType>
-      <Command>cd /d "$(ProjectDir)..\Common" &amp;&amp; call enum_compile.bat</Command>
+      <Command>call $(BatScriptGenEnums)</Command>
       <Message>Auto-generating Response Codes from JSON...</Message>
       <Outputs>$(ProjectDir)ResponseCode.h</Outputs>
-      <AdditionalInputs>$(ProjectDir)..\Common\enum_compile.py</AdditionalInputs>
+      <AdditionalInputs>$(PyScriptGenEnums)</AdditionalInputs>
     </CustomBuild>
     <None Include="shaderc_cmd.bat" />
   </ItemGroup>

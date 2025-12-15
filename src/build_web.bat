@@ -6,34 +6,35 @@ setlocal enabledelayedexpansion
 :: ============================================================================
 set "SRC_ROOT=%~dp0"
 set "THIRDPARTY_DIR=%SRC_ROOT%3rdparty"
-set "BGFX_DIR=%THIRDPARTY_DIR%\bgfx"
-set "RENDERER_DIR=%SRC_ROOT%TritonSimRenderer"
+set "BGFX_DIR=%THIRDPARTY_DIR%\bgfx\"
+set "RENDERER_DIR=%SRC_ROOT%TritonSimRenderer\"
+set "RENDERER_DIR_WASM_BUILD_DIR=%RENDERER_DIR%build_wasm"
 set "GENIE=%THIRDPARTY_DIR%\bx\tools\bin\windows\genie.exe"
 set "EMSDK_DIR=%THIRDPARTY_DIR%\emsdk"
 set "EM_VERSION=3.1.34"
+set "VS_VARS=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+
+set "MAKE_PATH=C:\ProgramData\chocolatey\bin\make.exe"
+set "CMAKE_PATH=C:\Program Files\CMake\bin\cmake.exe"
+set "WASM_PROJECT_DIR=%BGFX_DIR%.build/projects/gmake-wasm"
 
 :: ============================================================================
 :: PRE-CHECKS
 :: ============================================================================
+call "%VS_VARS%"
+
 echo [INFO] Checking environment...
 where nmake >nul 2>nul
 if %errorlevel% neq 0 (
     echo [ERROR] nmake not found.
-    pause
     exit /b 1
 )
 
 set MAKE_CMD=make
 where make >nul 2>nul
 if %errorlevel% neq 0 (
-    where mingw32-make >nul 2>nul
-    if !errorlevel! equ 0 (
-        set MAKE_CMD=mingw32-make
-    ) else (
-        echo [ERROR] GNU make not found.
-        pause
-        exit /b 1
-    )
+    echo [ERROR] GNU make not found.
+    exit /b 1
 )
 
 :: ============================================================================
@@ -52,23 +53,25 @@ popd
 echo.
 echo [INFO] Building BGFX (Native Wasm Exceptions)...
 
-cd /d "%BGFX_DIR%"
+pushd "%BGFX_DIR%"
 "%GENIE%" --gcc=wasm gmake
-cd .build/projects/gmake-wasm
+popd
+
+pushd "%WASM_PROJECT_DIR%"
 
 :: FIX: Use -fwasm-exceptions to match .NET 8
 set "CXXFLAGS=-fwasm-exceptions"
 set "CFLAGS=-fwasm-exceptions"
 
-call emmake %MAKE_CMD% config=release
+call emmake make config=release
 if %errorlevel% neq 0 (
     echo [ERROR] BGFX Web build failed.
-    pause
     exit /b 1
 )
 
 set "CXXFLAGS="
 set "CFLAGS="
+popd
 
 :: ============================================================================
 :: STEP 3: COMPILE TRITONSIM RENDERER (WASM) - MODERN EXCEPTIONS
@@ -76,29 +79,23 @@ set "CFLAGS="
 echo.
 echo [INFO] Building TritonSimRenderer...
 
-cd /d "%RENDERER_DIR%"
-if exist build_wasm rmdir /s /q build_wasm
-mkdir build_wasm
-cd build_wasm
+if exist "%RENDERER_DIR_WASM_BUILD_DIR%" rmdir /s /q "%RENDERER_DIR_WASM_BUILD_DIR%"
+mkdir "%RENDERER_DIR_WASM_BUILD_DIR%"
+cd "%RENDERER_DIR_WASM_BUILD_DIR%"
 
-:: FIX: Pass -fwasm-exceptions to CMake
-call emcmake cmake .. -G "NMake Makefiles" ^
-    -DCMAKE_BUILD_TYPE=Debug ^
-    -DCMAKE_CXX_FLAGS="-fwasm-exceptions"
-
+call emcmake cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fwasm-exceptions"
 if %errorlevel% neq 0 (
     echo [ERROR] CMake Configuration failed.
-    pause
     exit /b 1
 )
 
 call emmake nmake
 if %errorlevel% neq 0 (
     echo [ERROR] TritonSimRenderer Web build failed.
-    pause
     exit /b 1
 )
 
+popd
+
 echo.
 echo [SUCCESS] Build Complete.
-pause

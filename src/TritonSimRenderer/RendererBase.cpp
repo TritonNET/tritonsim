@@ -9,7 +9,7 @@ RendererBase::RendererBase(ShaderPacker* sp, ShaderType st, const SimConfig& cfg
     , m_st(st)
     , m_sp(sp)
 {
-
+    
 }
 
 RendererBase::~RendererBase()
@@ -24,7 +24,6 @@ ResponseCode RendererBase::Init()
 {
     // Setup the Init struct
     bgfx::Init init;
-    //init.type = bgfx::RendererType::Direct3D11; // Force D3D11 for WinUI 3
     init.type = bgfx::RendererType::OpenGL;
     init.vendorId = BGFX_PCI_ID_NONE;
     init.resolution.width = m_width;
@@ -32,15 +31,13 @@ ResponseCode RendererBase::Init()
     init.resolution.reset = m_resetFlags;
 
 #ifdef __EMSCRIPTEN__
-    // WASM Specifics
     init.type = bgfx::RendererType::OpenGL; // WebGL uses OpenGL backend
-    init.platformData.nwh = (void*)"#canvas"; // Bind to the HTML5 canvas
 #else
     // Windows/Desktop Specifics
-     init.type = bgfx::RendererType::Direct3D11;
-    init.platformData.nwh = m_nwh;
+    init.type = bgfx::RendererType::Direct3D11;
 #endif
 
+    init.platformData.nwh = m_nwh;
     init.platformData.ndt = NULL;
     init.platformData.context = NULL;
     init.platformData.backBuffer = NULL;
@@ -69,38 +66,23 @@ ResponseCode RendererBase::UpdateConfig(const SimConfig& cfg)
 
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
 
-#ifdef __EMSCRIPTEN__
     bgfx::touch(0);
     bgfx::frame();
-#endif
 
     return RC_SUCCESS;
 }
 
 ResponseCode RendererBase::RenderFrame()
 {
-#ifdef __EMSCRIPTEN__
-    // WASM: This function acts as the "Body" of the loop
     if (!m_running.load()) return RC_SUCCESS;
 
-    // 1. Run Simulation/Logic (Submits Draw Calls)
+#ifdef __EMSCRIPTEN__
     OnUpdate();
+#endif
 
-    // 2. Prepare View (Clear, Rect)
-    // Note: You can move this into OnUpdate if you prefer
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
-    bgfx::touch(0); // Ensure clear happens even if OnUpdate draws nothing
-
-    // 3. Render/Swap Buffers
-    bgfx::frame();
-
-#else
-    // Windows: This might just be a debug helper or manual refresh.
-    // The real work happens in WorkerLoop thread.
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
     bgfx::touch(0);
     bgfx::frame();
-#endif
 
     return RC_SUCCESS;
 }
@@ -111,6 +93,7 @@ ResponseCode RendererBase::Start()
         return RC_SUCCESS;
 
     m_running.store(true);
+
 #ifndef __EMSCRIPTEN__
     // Windows: Spawn the background thread as usual
     m_thread = std::thread(&RendererBase::WorkerLoop, this);
@@ -142,16 +125,9 @@ ResponseCode RendererBase::Stop()
 void RendererBase::WorkerLoop()
 {
 #ifndef __EMSCRIPTEN__
-    // This entire function is excluded from Wasm builds
     while (m_running.load())
     {
         OnUpdate();
-
-        // On Windows, we also need to call frame() somewhere. 
-        // Assuming OnUpdate does NOT call frame(), we do it here:
-        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
-        bgfx::touch(0);
-        bgfx::frame();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Platform;
+using System;
 using System.Runtime.InteropServices;
 using TritonSim.GUI.Desktop.Infrastructure;
 using TritonSim.GUI.Providers;
@@ -16,9 +17,7 @@ namespace TritonSim.GUI.Desktop.Providers
 
     public class WindowsWindowProvider : INativeWindowProvider
     {
-        private IntPtr m_windowHandle = IntPtr.Zero;
-
-        public IntPtr CreateChildWindow(IntPtr parentWindowHandle, double width, double height)
+        public IPlatformHandle CreateNativeControl(nint parentHandle, double width, double height)
         {
             WindowStyles style = WindowStyles.WS_CHILD |
                                  WindowStyles.WS_VISIBLE |
@@ -27,27 +26,25 @@ namespace TritonSim.GUI.Desktop.Providers
 
             IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsWindowProvider).Module);
 
-            m_windowHandle = User32Native.CreateWindowEx(
+            IntPtr handle = User32Native.CreateWindowEx(
                 0,
                 "STATIC",
                 "",
                 (uint)style, // 3. Cast the enum back to uint for the P/Invoke call
                 0, 0,
                 (int)width, (int)height,
-                parentWindowHandle,
+                parentHandle,
                 IntPtr.Zero,
                 hInstance,
                 IntPtr.Zero);
 
-            return m_windowHandle;
+            return new PlatformHandle(handle, "HWND");
         }
 
-        public void DestroyWindow()
+        public void DestroyNativeControl(IPlatformHandle phandle)
         {
-            if (m_windowHandle != IntPtr.Zero)
-            {
-                User32Native.DestroyWindow(m_windowHandle);
-            }
+            if(phandle.Handle != IntPtr.Zero)
+                User32Native.DestroyWindow(phandle.Handle);
         }
     }
 }

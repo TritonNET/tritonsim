@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
+using System.Runtime.InteropServices;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 
@@ -78,6 +79,8 @@ namespace TritonSim.GUI.Controls
 
         public void OnNativeHandleCreated(IntPtr handle)
         {
+            handle = Marshal.StringToHGlobalAnsi("#canvas");
+
             PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
 
             SetInitState(RendererInitState.HandleSet);

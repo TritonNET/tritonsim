@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace TritonSim.GUI.Infrastructure;
 
-// AUTO-GENERATED FROM enums.json at 2025-12-15 15:48:11
+// AUTO-GENERATED FROM enums.json at 2025-12-16 01:19:13
 public enum ResponseCode : int
 {
     [Description("Operation successful.")]

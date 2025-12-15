@@ -16,6 +16,8 @@ namespace TritonSim.GUI.Controls
 
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
         {
+            var ctrlx = m_parent.WindowProvider.CreateNativeControl(parent.Handle, Bounds.Width, Bounds.Height);
+
             if (OperatingSystem.IsBrowser())
             {
                 // IN THE BROWSER:
@@ -34,12 +36,11 @@ namespace TritonSim.GUI.Controls
             if (m_parent.WindowProvider == null)
                 throw new InvalidOperationException("WindowProvider is null.");
 
-            // Create window via the parent's provider
-            IntPtr rawHandle = m_parent.WindowProvider.CreateChildWindow(parent.Handle, this.Bounds.Width, this.Bounds.Height);
+            var ctrl = m_parent.WindowProvider.CreateNativeControl(parent.Handle, Bounds.Width, Bounds.Height);
 
-            m_parent.OnNativeHandleCreated(rawHandle);
+            m_parent.OnNativeHandleCreated(ctrl.Handle);
 
-            return new PlatformHandle(rawHandle, "HWND");
+            return ctrl;
         }
 
         protected override void DestroyNativeControlCore(IPlatformHandle control)
@@ -47,11 +48,9 @@ namespace TritonSim.GUI.Controls
             m_parent.OnNativeHandleDestroyed();
 
             if (m_parent.WindowProvider != null)
-            {
-                m_parent.WindowProvider.DestroyWindow();
-            }
-
-            base.DestroyNativeControlCore(control);
+                m_parent.WindowProvider.DestroyNativeControl(control);
+            else
+                base.DestroyNativeControlCore(control);
         }
     }
 }

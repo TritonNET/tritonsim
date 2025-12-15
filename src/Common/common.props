@@ -3,10 +3,17 @@
   <PropertyGroup>
     <PythonCommand Condition="'$(OS)' == 'Windows_NT'">python</PythonCommand>
 	<PythonCommand Condition="'$(OS)' != 'Windows_NT'">python3</PythonCommand>
-	<CommonDir>$(MSBuildProjectDirectory)\..\Common</CommonDir>
+	<CommonDir>$(SolutionDir)Common\</CommonDir>
+	<ThirdpartyLibDir>$(SolutionDir)3rdparty\</ThirdpartyLibDir>
 
 	<PyScriptGenEnums>$(CommonDir)\enum_compile.py</PyScriptGenEnums>
+	<BatScriptGenEnums>$(CommonDir)\enum_compile.bat</BatScriptGenEnums>
 	<EnumJsonDef>$(CommonDir)\enums.json</EnumJsonDef>
-	<EnumGeneratedFileCs>$(MSBuildProjectDirectory)\Infrastructure\ResponseCode.cs</EnumGeneratedFileCs>
+	<EnumGeneratedFileCs>$(SolutionDir)TritonSim.GUI\Infrastructure\ResponseCode.cs</EnumGeneratedFileCs>
+
+	<BgfxWinBinDir Condition="'$(Platform)'=='Win32'">$(ThirdpartyLibDir)bgfx\.build\win32_vs2022\bin\</BgfxWinBinDir>
+	<BgfxWinBinDir Condition="'$(Platform)'=='x64'">$(ThirdpartyLibDir)\bgfx\.build\win64_vs2022\bin\</BgfxWinBinDir>
+	
+	<BgfxWasmBinDir>$(ThirdpartyLibDir)\bgfx\.build\wasm\bin\</BgfxWasmBinDir>
   </PropertyGroup>
 </Project>

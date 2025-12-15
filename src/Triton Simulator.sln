@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bgfx", "bgfx", "{02EA681E-C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgfx", "3rdparty\bgfx\.build\projects\vs2022\bgfx.vcxproj", "{6C90947C-58C7-950D-01B4-7B10EDC9110F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgfx-shared-lib", "3rdparty\bgfx\.build\projects\vs2022\bgfx-shared-lib.vcxproj", "{14C304D7-804E-729B-895F-F58FF569CE9B}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg", "3rdparty\bgfx\.build\projects\vs2022\bimg.vcxproj", "{C499947C-B0D0-950D-59BD-7B1045D3110F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg_decode", "3rdparty\bgfx\.build\projects\vs2022\bimg_decode.vcxproj", "{A7B931CA-136F-AABF-9C63-A4960818A1C3}"
@@ -48,6 +46,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Android", "TritonSim.GUI.Android\TritonSim.GUI.Android.csproj", "{E364DE76-D1B3-42F2-80EE-4599A7EF92EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Desktop", "TritonSim.GUI.Desktop\TritonSim.GUI.Desktop.csproj", "{D194B90E-F412-423B-BA3C-12FDCB75F1FD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FCC507EF-AEC0-432B-B6E4-27A5F8466205} = {FCC507EF-AEC0-432B-B6E4-27A5F8466205}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.iOS", "TritonSim.GUI.iOS\TritonSim.GUI.iOS.csproj", "{A8F36875-417D-434B-8ADF-0CFB93A5B649}"
 EndProject
@@ -89,6 +90,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cmake", "cmake", "{26A65339
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E43020E6-63E3-4CCE-AC96-EF18103CEC0F}"
 	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
 		build_complete.bat = build_complete.bat
 		build_web.bat = build_web.bat
 		build_web_wasm.bat = build_web_wasm.bat
@@ -138,18 +140,6 @@ Global
 		{6C90947C-58C7-950D-01B4-7B10EDC9110F}.Release|x64.Build.0 = Release|x64
 		{6C90947C-58C7-950D-01B4-7B10EDC9110F}.Release|x86.ActiveCfg = Release|Win32
 		{6C90947C-58C7-950D-01B4-7B10EDC9110F}.Release|x86.Build.0 = Release|Win32
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Debug|Any CPU.Build.0 = Debug|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Debug|x64.ActiveCfg = Debug|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Debug|x64.Build.0 = Debug|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Debug|x86.ActiveCfg = Debug|Win32
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Debug|x86.Build.0 = Debug|Win32
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Release|Any CPU.ActiveCfg = Release|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Release|Any CPU.Build.0 = Release|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Release|x64.ActiveCfg = Release|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Release|x64.Build.0 = Release|x64
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Release|x86.ActiveCfg = Release|Win32
-		{14C304D7-804E-729B-895F-F58FF569CE9B}.Release|x86.Build.0 = Release|Win32
 		{C499947C-B0D0-950D-59BD-7B1045D3110F}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{C499947C-B0D0-950D-59BD-7B1045D3110F}.Debug|Any CPU.Build.0 = Debug|x64
 		{C499947C-B0D0-950D-59BD-7B1045D3110F}.Debug|x64.ActiveCfg = Debug|x64
@@ -444,7 +434,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6C90947C-58C7-950D-01B4-7B10EDC9110F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{14C304D7-804E-729B-895F-F58FF569CE9B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C499947C-B0D0-950D-59BD-7B1045D3110F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A7B931CA-136F-AABF-9C63-A4960818A1C3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D1BE29CD-3D74-A2C2-C668-9C99321D99C6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}

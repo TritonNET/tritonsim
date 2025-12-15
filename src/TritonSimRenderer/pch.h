@@ -12,6 +12,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdint>
+#include <algorithm>
 
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>

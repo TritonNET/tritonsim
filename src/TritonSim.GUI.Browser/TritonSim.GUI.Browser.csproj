@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
-
+	<Import Project="..\Common\common.props" />
+	
 	<PropertyGroup>
 		<TargetFramework>net8.0-browser</TargetFramework>
 		<OutputType>Exe</OutputType>
@@ -15,10 +16,10 @@
 	<ItemGroup>
 		<NativeFileReference Include="$(SolutionDir)TritonSimRenderer\build_wasm\lib\libTritonSimRenderer.a" />
 		
-		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bgfxRelease.a" />
-		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bxRelease.a" />
-		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimgRelease.a" />
-		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimg_decodeRelease.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bgfxDebug.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bxDebug.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimgDebug.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimg_decodeDebug.a" />
 	</ItemGroup>
 
 </Project>

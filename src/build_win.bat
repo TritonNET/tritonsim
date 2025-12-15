@@ -43,8 +43,8 @@ echo --------------------------------------------------------------------------
 
 cd /d "%BGFX_DIR%"
 
-:: --with-tools: Builds shaderc.exe, geometryc.exe, texturec.exe
-"%GENIE%" vs2022
+:: --with-tools: Builds shaderc.exe, geometryc.exe, texturec.exe, etc. tools are needed for TritonSimShaderPacker
+"%GENIE%" --with-tools vs2022
 
 if %errorlevel% neq 0 (
     echo [ERROR] GENie failed to generate project files.
