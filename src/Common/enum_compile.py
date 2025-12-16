@@ -4,7 +4,8 @@ import datetime
 from types import SimpleNamespace
 from collections import defaultdict
 
-JSON_FILE = 'enums.json'
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+JSON_FILE = os.path.join(SCRIPT_DIR, 'enums.json')
 
 def to_pascal_case(screaming_snake):
     clean = screaming_snake[3:] if screaming_snake.startswith("RC_") else screaming_snake

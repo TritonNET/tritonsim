@@ -1,8 +1,9 @@
 @echo off
 echo Generating Enums...
 
-:: Run Python
-python enum_compile.py
+:: Run Python using the script's directory
+:: %~dp0 ensures it looks in the same folder as this .bat file
+python "%~dp0enum_compile.py"
 
 :: Check if Python failed
 if %ERRORLEVEL% NEQ 0 (
