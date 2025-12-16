@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
-using System.Runtime.InteropServices;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 
@@ -17,8 +16,8 @@ namespace TritonSim.GUI.Controls
         public static readonly StyledProperty<ITritonSimNativeProvider?> SimProviderProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, ITritonSimNativeProvider?>(nameof(SimProvider));
 
-        public static readonly StyledProperty<INativeWindowProvider?> WindowProviderProperty =
-            AvaloniaProperty.Register<TritonSimRenderControl, INativeWindowProvider?>(nameof(WindowProvider));
+        public static readonly StyledProperty<INativeCanvasProvider?> WindowProviderProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, INativeCanvasProvider?>(nameof(WindowProvider));
 
         public static readonly StyledProperty<RendererType> RendererProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, RendererType>(nameof(Renderer), RendererType.RT_UNKNOWN);
@@ -35,7 +34,7 @@ namespace TritonSim.GUI.Controls
             set => SetValue(SimProviderProperty, value);
         }
 
-        public INativeWindowProvider? WindowProvider
+        public INativeCanvasProvider? WindowProvider
         {
             get => GetValue(WindowProviderProperty);
             set => SetValue(WindowProviderProperty, value);
@@ -47,17 +46,12 @@ namespace TritonSim.GUI.Controls
             set => SetValue(RendererProperty, value);
         }
 
-        private readonly InternalNativeHost m_nativeHost;
         private readonly DispatcherTimer? m_renderTimer;
-        
         private RendererInitState m_initState = RendererInitState.None;
 
         public TritonSimRenderControl()
         {
             InitializeComponent();
-
-            m_nativeHost = new InternalNativeHost(this);
-            NativeContainer.Child = m_nativeHost;
 
             m_renderTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
             m_renderTimer.Tick += RenderTimer_Tick;
@@ -68,7 +62,6 @@ namespace TritonSim.GUI.Controls
 
         private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            StopRenderLoop();
             SetInitState(RendererInitState.AttachedToVisualTree, set: false);
         }
 
@@ -77,30 +70,14 @@ namespace TritonSim.GUI.Controls
             SetInitState(RendererInitState.AttachedToVisualTree);
         }
 
-        public void OnNativeHandleCreated(IntPtr handle)
-        {
-            handle = Marshal.StringToHGlobalAnsi("#canvas");
-
-            PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
-
-            SetInitState(RendererInitState.HandleSet);
-        }
-
-        public void OnNativeHandleDestroyed()
-        {
-            ShutdownRenderer();
-
-            SetInitState(RendererInitState.HandleSet, set: false);
-        }
-
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
-            
+
             if (change.Property == RendererProperty)
             {
                 var newType = change.GetNewValue<RendererType>();
-                
+
                 if (m_initState.IsInitCompleted())
                 {
                     HandleRendererChange(newType);
@@ -132,10 +109,14 @@ namespace TritonSim.GUI.Controls
                 return;
             }
 
+            bool wasAttachedToVisualTree = m_initState.HasFlag(RendererInitState.AttachedToVisualTree);
+
             m_initState |= state;
 
             if (m_initState.IsReadyToInit() && !m_initState.IsInitCompleted())
                 InitializeRenderer();
+            else if (!m_initState.HasFlag(RendererInitState.AttachedToVisualTree) && wasAttachedToVisualTree)
+                StopRenderLoop();
         }
 
         private void UpdateSize()
@@ -143,10 +124,10 @@ namespace TritonSim.GUI.Controls
             if (SimProvider == null) return;
 
             var size = Bounds.Size;
-            
+
             if (size.Width <= 0 || size.Height <= 0)
                 return;
-            
+
             var topLevel = TopLevel.GetTopLevel(this);
             var scale = topLevel?.RenderScaling ?? 1.0;
 
@@ -278,6 +259,13 @@ namespace TritonSim.GUI.Controls
             }
 
             return 0;
+        }
+
+        private void NativeContainer_NativeHandleCreated(nint handle)
+        {
+            PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
+
+            SetInitState(RendererInitState.HandleSet);
         }
     }
 }

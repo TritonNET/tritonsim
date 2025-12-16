@@ -1,4 +1,5 @@
 import { dotnet } from './_framework/dotnet.js'
+import { canvasProviderModule } from './tritonsim.js';
 
 const is_browser = typeof window != "undefined";
 if (!is_browser) throw new Error(`Expected to be running in a browser`);
@@ -9,5 +10,7 @@ const dotnetRuntime = await dotnet
     .create();
 
 const config = dotnetRuntime.getConfig();
+
+dotnetRuntime.setModuleImports('canvasProviderModule', canvasProviderModule);
 
 await dotnetRuntime.runMain(config.mainAssemblyName, [globalThis.location.href]);

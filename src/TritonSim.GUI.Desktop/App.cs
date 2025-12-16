@@ -9,7 +9,7 @@ namespace TritonSim.GUI.Desktop
         protected override void RegisterServices(IServiceCollection services)
         {
             services.AddSingleton<INativeSimulator, DesktopNativeSimulator>();
-            services.AddSingleton<INativeWindowProvider, WindowsWindowProvider>();
+            services.AddSingleton<INativeCanvasProvider, WindowsCanvasProvider>();
 
             base.RegisterServices(services);
         }

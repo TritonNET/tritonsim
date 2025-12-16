@@ -1,11 +1,15 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="TritonSim.GUI.Controls.TritonSimRenderControl">
+			 xmlns:ctrl="using:TritonSim.GUI.Controls"
+             x:Class="TritonSim.GUI.Controls.TritonSimRenderControl"
+			 x:Name="Root">
 	<Grid>
-		<Border 
+		<ctrl:SimulationNativeControlHost 
 			x:Name="NativeContainer"
 			HorizontalAlignment="Stretch" 
-			VerticalAlignment="Stretch" />
+			VerticalAlignment="Stretch" 
+			WindowProvider="{Binding WindowProvider, ElementName=Root}"
+			NativeHandleCreated="NativeContainer_NativeHandleCreated"/>
 
 		<StackPanel 
 			x:Name="OverlayBorder"

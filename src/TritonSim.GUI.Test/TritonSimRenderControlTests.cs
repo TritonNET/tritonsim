@@ -15,7 +15,7 @@ namespace TritonSim.GUI.Test
     public class TritonSimRenderControlTests : IDisposable
     {
         private readonly Mock<ITritonSimNativeProvider> m_mockSimProvider;
-        private readonly Mock<INativeWindowProvider> m_mockWindowProvider;
+        private readonly Mock<INativeCanvasProvider> m_mockWindowProvider;
         private readonly TritonSimRenderControl m_control;
 
         public TritonSimRenderControlTests()
@@ -30,7 +30,7 @@ namespace TritonSim.GUI.Test
             }
 
             m_mockSimProvider = new Mock<ITritonSimNativeProvider>();
-            m_mockWindowProvider = new Mock<INativeWindowProvider>();
+            m_mockWindowProvider = new Mock<INativeCanvasProvider>();
 
             m_mockSimProvider.Setup(x => x.Init()).Returns(true);
             m_mockSimProvider.Setup(x => x.Start()).Returns(true);

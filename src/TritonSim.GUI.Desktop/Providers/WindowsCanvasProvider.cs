@@ -15,36 +15,43 @@ namespace TritonSim.GUI.Desktop.Providers
         WS_CLIPSIBLINGS = 0x04000000
     }
 
-    public class WindowsWindowProvider : INativeWindowProvider
+    public class WindowsCanvasProvider : INativeCanvasProvider
     {
-        public IPlatformHandle CreateNativeControl(nint parentHandle, double width, double height)
+        public bool Create(IntPtr parent, double width, double height, out IPlatformHandle handle)
         {
             WindowStyles style = WindowStyles.WS_CHILD |
                                  WindowStyles.WS_VISIBLE |
                                  WindowStyles.WS_CLIPCHILDREN |
                                  WindowStyles.WS_CLIPSIBLINGS;
 
-            IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsWindowProvider).Module);
+            IntPtr hInstance = Marshal.GetHINSTANCE(typeof(WindowsCanvasProvider).Module);
 
-            IntPtr handle = User32Native.CreateWindowEx(
+            var ptr = User32Native.CreateWindowEx(
                 0,
                 "STATIC",
                 "",
-                (uint)style, // 3. Cast the enum back to uint for the P/Invoke call
+                (uint)style,
                 0, 0,
                 (int)width, (int)height,
-                parentHandle,
+                parent,
                 IntPtr.Zero,
                 hInstance,
                 IntPtr.Zero);
 
-            return new PlatformHandle(handle, "HWND");
+            handle = new PlatformHandle(ptr, "WindowsCanvasHandle");
+
+            return true;
         }
 
-        public void DestroyNativeControl(IPlatformHandle phandle)
+        public bool Destroy(IPlatformHandle handle)
         {
-            if(phandle.Handle != IntPtr.Zero)
-                User32Native.DestroyWindow(phandle.Handle);
+            return User32Native.DestroyWindow(handle.Handle);
+        }
+
+        public bool UpdatePosition(double x, double y, double width, double height)
+        {
+            // TODO
+            return true;
         }
     }
 }

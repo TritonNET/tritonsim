@@ -1,12 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Browser;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Runtime.Versioning;
 using System.Threading.Tasks;
-using TritonSim.GUI;
-using TritonSim.GUI.Browser.Providers;
-using TritonSim.GUI.Providers;
+
+using BrowserApp = TritonSim.GUI.Browser.App;
 
 internal sealed partial class Program
 {
@@ -16,7 +13,7 @@ internal sealed partial class Program
         {
             await BuildAvaloniaApp()
                 .WithInterFont()
-                .StartBrowserAppAsync("app");
+                .StartBrowserAppAsync(BrowserApp.AppClientID);
         }
         catch (Exception ex)
         {
@@ -26,6 +23,5 @@ internal sealed partial class Program
     }
 
     public static AppBuilder BuildAvaloniaApp()
-        // This now refers to TritonSim.GUI.Browser.App, which has the RegisterServices override
-        => AppBuilder.Configure<TritonSim.GUI.Browser.App>();
+        => AppBuilder.Configure<BrowserApp>();
 }

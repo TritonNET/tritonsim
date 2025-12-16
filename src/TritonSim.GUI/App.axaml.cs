@@ -58,6 +58,8 @@ namespace TritonSim.GUI
 
         protected virtual void RegisterServices(IServiceCollection services)
         {
+            services.AddSingleton<ILogger, ConsoleLogger>();
+
             services.AddSingleton<ITritonSimNativeProvider, NativeProvider>();
 
             services.AddTransient<VmSimulation>();
