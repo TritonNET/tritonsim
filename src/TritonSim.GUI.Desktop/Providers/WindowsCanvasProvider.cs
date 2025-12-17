@@ -15,9 +15,18 @@ namespace TritonSim.GUI.Desktop.Providers
         WS_CLIPSIBLINGS = 0x04000000
     }
 
+    public class WindowsCanvasHandle : PlatformHandle, IPlatformCanvasHandle
+    {
+        private const string m_descriptor = "WindowsCanvasHandle";
+
+        public WindowsCanvasHandle(IntPtr ptr) : base(ptr, m_descriptor) { }
+
+        public nint GetCanvasHandle() => Handle;
+    }
+
     public class WindowsCanvasProvider : INativeCanvasProvider
     {
-        public bool Create(IntPtr parent, double width, double height, out IPlatformHandle handle)
+        public bool Create(IntPtr parent, double width, double height, out IPlatformCanvasHandle handle)
         {
             WindowStyles style = WindowStyles.WS_CHILD |
                                  WindowStyles.WS_VISIBLE |
@@ -38,7 +47,7 @@ namespace TritonSim.GUI.Desktop.Providers
                 hInstance,
                 IntPtr.Zero);
 
-            handle = new PlatformHandle(ptr, "WindowsCanvasHandle");
+            handle = new WindowsCanvasHandle(ptr);
 
             return true;
         }

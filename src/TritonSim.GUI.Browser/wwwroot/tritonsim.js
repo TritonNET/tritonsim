@@ -5,27 +5,25 @@ export const canvasProviderModule = {
         const parent = document.getElementById(parentId);
         if (!parent) {
             console.error(`Parent element ${parentId} not found`);
-            return false;
+            return null;
         }
 
-        // CHANGE: Create a 'canvas' element, not a 'div'
         const canvas = document.createElement('canvas');
         canvas.id = canvasId;
 
-        // Style setup
         canvas.style.position = 'absolute';
-        canvas.style.backgroundColor = '#1a1a1a';
-        canvas.style.border = '3px solid lime'; // Visual indicator
+        canvas.style.backgroundColor = 'transparent';
+        canvas.style.border = '0px';
         canvas.style.pointerEvents = 'auto';
         canvas.style.zIndex = '1';
 
-        // OPTIONAL: Disable right-click menu (helpful for games/sims)
+        // Disable right-click menu
         canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
         parent.appendChild(canvas);
 
         console.log(`Created render canvas: ${canvasId}`);
-        return true;
+        return canvas;
     },
 
     updatePosition: (canvasId, x, y, width, height) => {
@@ -40,11 +38,6 @@ export const canvasProviderModule = {
         canvas.style.top = `${y}px`;
         canvas.style.width = `${width}px`;
         canvas.style.height = `${height}px`;
-
-        // NOTE: If your simulation looks blurry, you may also need to set 
-        // the internal resolution attributes to match the CSS size:
-        // canvas.width = width;
-        // canvas.height = height;
 
         console.log(`Updated canvas position: ${x}, ${y}, ${width}x${height}`);
         return true;

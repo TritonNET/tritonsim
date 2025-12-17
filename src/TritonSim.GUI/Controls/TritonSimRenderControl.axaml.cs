@@ -267,5 +267,10 @@ namespace TritonSim.GUI.Controls
 
             SetInitState(RendererInitState.HandleSet);
         }
+
+        private void NativeContainer_NativeHandleFailed(string errorMsg)
+        {
+            ShowOverlayText(errorMsg);
+        }
     }
 }

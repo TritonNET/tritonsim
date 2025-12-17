@@ -9,7 +9,8 @@
 			HorizontalAlignment="Stretch" 
 			VerticalAlignment="Stretch" 
 			WindowProvider="{Binding WindowProvider, ElementName=Root}"
-			NativeHandleCreated="NativeContainer_NativeHandleCreated"/>
+			NativeHandleCreated="NativeContainer_NativeHandleCreated"
+			NativeHandleFailed="NativeContainer_NativeHandleFailed"/>
 
 		<StackPanel 
 			x:Name="OverlayBorder"

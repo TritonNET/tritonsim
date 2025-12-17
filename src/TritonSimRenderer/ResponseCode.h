@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-// AUTO-GENERATED FROM enums.json at 2025-12-16 19:27:11
+// AUTO-GENERATED FROM enums.json at 2025-12-17 14:06:37
 // HRESULT: [Sev:1][Res:5][Fac:11][Code:15]
 enum ResponseCode : int32_t
 {

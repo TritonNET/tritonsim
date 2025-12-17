@@ -7,8 +7,13 @@ namespace TritonSim.GUI.Browser.Infrastructure
     public static partial class BrowserInterop
     {
         [JSImport("createCanvas", "canvasProviderModule")]
-        [return: JSMarshalAs<JSType.Boolean>]
-        public static partial bool CreateCanvas(string parentId, string divId);
+        private static partial JSObject? CreateCanvasInternal(string parentId, string divId);
+
+        public static bool CreateCanvas(string parentId, string divId, out JSObject? canvas)
+        {
+            canvas = CreateCanvasInternal(parentId, divId);
+            return canvas != null;
+        }
 
         [JSImport("updatePosition", "canvasProviderModule")]
         [return: JSMarshalAs<JSType.Boolean>]
