@@ -7,7 +7,7 @@ namespace TritonSim.GUI.Browser
 {
     public class App : GUI.App
     {
-        public const string AppClientID = "app";
+        public const string AppClientID = "tritonsim-app";
 
         protected override void RegisterServices(IServiceCollection services)
         {

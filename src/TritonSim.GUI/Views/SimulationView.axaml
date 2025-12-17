@@ -7,7 +7,8 @@
     x:Class="TritonSim.GUI.Views.SimulationView"
 	xmlns:vm="using:TritonSim.GUI.ViewModels"
 	xmlns:ctrl="using:TritonSim.GUI.Controls"
-	x:DataType="vm:VmSimulation">
+	x:DataType="vm:VmSimulation"
+	Background="{StaticResource StdBackground}">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="10"/>
@@ -18,12 +19,14 @@
 		</Grid.ColumnDefinitions>
 
 		<Grid.RowDefinitions>
+			<RowDefinition Height="10"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="10"/>
 		</Grid.RowDefinitions>
 
 		<Border
 			Grid.Column="1"
+			Grid.Row="1"
 			BorderThickness="1"
 			BorderBrush="{StaticResource StdBorder}"
 			Background="Transparent">
@@ -67,6 +70,7 @@
 
 		<Border
 			Grid.Column="3"
+			Grid.Row="1"
 			BorderThickness="1"
 			BorderBrush="{StaticResource StdBorder}">
 			<ctrl:TritonSimRenderControl

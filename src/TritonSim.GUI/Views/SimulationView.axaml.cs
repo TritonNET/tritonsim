@@ -7,7 +7,7 @@ namespace TritonSim.GUI.Views;
 public partial class SimulationView : UserControl
 {
     private VmSimulation? m_vm;
-    
+
     public SimulationView()
     {
         InitializeComponent();

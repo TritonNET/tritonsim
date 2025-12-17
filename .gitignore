@@ -23,3 +23,5 @@
 /src/TritonSimRenderer/build_win
 /src/TritonSimRenderer/build_wasm
 /src/TritonSim.GUI.Browser/native_refs
+/src/TritonSim.GUI/Infrastructure/ResponseCode.cs
+/src/TritonSimRenderer/ResponseCode.h
