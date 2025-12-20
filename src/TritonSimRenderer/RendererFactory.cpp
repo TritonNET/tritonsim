@@ -61,7 +61,7 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 
 ResponseCode RendererFactory::CreateShaderPacker(ShaderPacker** sp)
 {
-#ifdef WINDOWS
+#if defined(WINDOWS)
 	HMODULE hDll = NULL;
 	GetModuleHandleEx(
 		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
@@ -83,9 +83,6 @@ ResponseCode RendererFactory::CreateShaderPacker(ShaderPacker** sp)
 	*sp = new ShaderPacker(pData, dataSize);
 
 #elif defined(__EMSCRIPTEN__)
-	// --- WEB IMPLEMENTATION ---
-	// In WASM, the shader pack is statically linked as a global array.
-	// 'kShaderPack' is defined in "tritonsim_asm.h".
 	*sp = new ShaderPacker(kShaderPack, sizeof(kShaderPack));
 #else
 #error Not implemented for other platforms

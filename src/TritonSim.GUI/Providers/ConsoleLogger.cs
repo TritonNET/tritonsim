@@ -4,26 +4,16 @@ namespace TritonSim.GUI.Providers
 {
     public class ConsoleLogger : ILogger
     {
-        private readonly object _lock = new object();
-
         public void Log(LogLevel level, string message, Exception? ex = null)
         {
-            lock (_lock)
+            string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+
+            Console.WriteLine($"[{timestamp}] [{level.ToString().ToUpper()}] {message}");
+
+            if (ex != null)
             {
-                var originalColor = Console.ForegroundColor;
-                Console.ForegroundColor = GetColorForLevel(level);
-
-                string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
-
-                Console.WriteLine($"[{timestamp}] [{level.ToString().ToUpper()}] {message}");
-
-                if (ex != null)
-                {
-                    Console.WriteLine($"\tException: {ex.Message}");
-                    Console.WriteLine($"\tStack Trace: {ex.StackTrace}");
-                }
-
-                Console.ForegroundColor = originalColor;
+                Console.WriteLine($"\tException: {ex.Message}");
+                Console.WriteLine($"\tStack Trace: {ex.StackTrace}");
             }
         }
 

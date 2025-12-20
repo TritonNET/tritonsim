@@ -19,6 +19,9 @@ namespace TritonSim.GUI.Controls
         public static readonly StyledProperty<INativeCanvasProvider?> WindowProviderProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, INativeCanvasProvider?>(nameof(WindowProvider));
 
+        public static readonly StyledProperty<ILogger?> LogHandlerProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, ILogger?>(nameof(LogHandler));
+
         public static readonly StyledProperty<RendererType> RendererProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, RendererType>(nameof(Renderer), RendererType.RT_UNKNOWN);
 
@@ -40,6 +43,12 @@ namespace TritonSim.GUI.Controls
             set => SetValue(WindowProviderProperty, value);
         }
 
+        public ILogger? LogHandler
+        {
+            get => GetValue(LogHandlerProperty);
+            set => SetValue(LogHandlerProperty, value);
+        }
+
         public RendererType Renderer
         {
             get => GetValue(RendererProperty);
@@ -51,6 +60,8 @@ namespace TritonSim.GUI.Controls
 
         public TritonSimRenderControl()
         {
+            LogHandler?.Debug("TritonSimRenderControl creating.");
+
             InitializeComponent();
 
             m_renderTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
@@ -58,20 +69,26 @@ namespace TritonSim.GUI.Controls
 
             AttachedToVisualTree += OnAttachedToVisualTree;
             DetachedFromVisualTree += OnDetachedFromVisualTree;
+
+            LogHandler?.Debug("TritonSimRenderControl created.");
         }
 
         private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
+            LogHandler?.Debug("TritonSimRenderControl detached from visual tree.");
             SetInitState(RendererInitState.AttachedToVisualTree, set: false);
         }
 
         private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
+            LogHandler?.Debug("TritonSimRenderControl attached to visual tree.");
             SetInitState(RendererInitState.AttachedToVisualTree);
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
+            LogHandler?.Debug($"TritonSimRenderControl property changed: {change.Property.Name}");
+
             base.OnPropertyChanged(change);
 
             if (change.Property == RendererProperty)
@@ -263,6 +280,8 @@ namespace TritonSim.GUI.Controls
 
         private void NativeContainer_NativeHandleCreated(nint handle)
         {
+            LogHandler?.Debug($"Native handle created: {handle}");
+
             PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
 
             SetInitState(RendererInitState.HandleSet);
@@ -270,6 +289,8 @@ namespace TritonSim.GUI.Controls
 
         private void NativeContainer_NativeHandleFailed(string errorMsg)
         {
+            LogHandler?.Error($"Native handle creation failed: {errorMsg}");
+
             ShowOverlayText(errorMsg);
         }
     }

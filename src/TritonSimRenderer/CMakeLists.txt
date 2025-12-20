@@ -11,13 +11,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- CODE GENERATION STEP ---
-# Define paths
 set(COMMON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../Common")
 set(GEN_SCRIPT "${COMMON_DIR}/enum_compile.py")
 set(ENUMS_JSON "${COMMON_DIR}/enums.json")
 set(GENERATED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/ResponseCode.h")
 
-# Create the command that runs BEFORE the build if inputs change
 add_custom_command(
     OUTPUT "${GENERATED_HEADER}"
     COMMAND "${Python3_EXECUTABLE}" "enum_compile.py"
@@ -28,7 +26,6 @@ add_custom_command(
 )
 
 # Define Source Files 
-# NOTE: We explicitly ADD the generated header to sources so CMake knows to build it
 file(GLOB SOURCES 
     "*.cpp" "*.h" 
     "../Common/*.cpp" "../Common/*.h"
@@ -50,7 +47,7 @@ set(INCLUDE_DIRS
 
 if(EMSCRIPTEN)
     # --- WEB (WebAssembly) ---
-    message(STATUS "Configuring TritonSimRenderer for WebAssembly")
+    message(STATUS "Configuring TritonSimRenderer for WebAssembly (Threading & Exceptions Enabled)")
     
     # Web usually prefers Static libraries to link into the final .wasm
     add_library(TritonSimRenderer STATIC ${SOURCES})
@@ -62,13 +59,43 @@ if(EMSCRIPTEN)
     )
 
     # B. Compile Options
+    # FIX: Added -fwasm-exceptions and ensured -pthread is present
     target_compile_options(TritonSimRenderer PRIVATE 
-        -fwasm-exceptions
         -gsource-map
         -Os 
         -Wall 
         -Wextra 
         -Werror=return-type
+        -pthread
+        -fwasm-exceptions
+    )
+
+    # C. Link Options
+    # Ensure static library objects are created with these flags too
+    target_link_options(TritonSimRenderer PUBLIC
+                -pthread
+        -fwasm-exceptions
+        
+        # Canvas and display settings
+        "SHELL:-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0"
+        "SHELL:-s USE_WEBGL2=1"
+        "SHELL:-s FULL_ES3=1"
+        "SHELL:-s MIN_WEBGL_VERSION=2"
+        
+        # Allow BGFX to find canvas
+        "SHELL:-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=['$Browser','$HTML5']"
+        
+        # Export functions for testing
+        "SHELL:-s EXPORTED_FUNCTIONS=['_main','_test_webgl_availability','_get_canvas_width']"
+        "SHELL:-s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','UTF8ToString']"
+        
+        # Memory settings
+        "SHELL:-s ALLOW_MEMORY_GROWTH=1"
+        "SHELL:-s INITIAL_MEMORY=67108864"  # 64MB initial
+        
+        # Debugging
+        "SHELL:-s GL_DEBUG=1"
+        "SHELL:-s ASSERTIONS=2"
     )
 
     # Libraries to link
@@ -89,7 +116,6 @@ elseif(ANDROID)
         __ANDROID__
     )
     
-    # Locate BGFX Android Libs (e.g., arm64-v8a)
     set(BGFX_LIB_PATH "${CMAKE_SOURCE_DIR}/../3rdparty/bgfx/.build/android-arm64/bin")
 
     set(PLATFORM_LIBS
@@ -118,7 +144,6 @@ elseif(WIN32)
 
     set_property(TARGET TritonSimRenderer PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-    # Locate BGFX Windows Libs
     set(BGFX_LIB_PATH "${CMAKE_SOURCE_DIR}/../3rdparty/bgfx/.build/win64_vs2022/bin")
     
     set(PLATFORM_LIBS
@@ -131,7 +156,6 @@ elseif(WIN32)
         debug "${BGFX_LIB_PATH}/bimgDebug.lib"
         optimized "${BGFX_LIB_PATH}/bimgRelease.lib"
         
-        # System libraries (always the same)
         d3d11.lib dxgi.lib user32.lib gdi32.lib psapi.lib
     )
 
@@ -143,7 +167,6 @@ elseif(UNIX AND NOT APPLE)
     
     target_compile_definitions(TritonSimRenderer PRIVATE LINUX __LINUX__)
     
-    # Locate BGFX Linux Libs
     set(BGFX_LIB_PATH "${CMAKE_SOURCE_DIR}/../3rdparty/bgfx/.build/linux64_gcc/bin")
     
     set(PLATFORM_LIBS
@@ -154,12 +177,10 @@ elseif(UNIX AND NOT APPLE)
     )
 endif()
 
-# --- 3. FINAL TARGET SETUP ----------------------------------------------------
-
 target_include_directories(TritonSimRenderer PRIVATE ${INCLUDE_DIRS})
 target_link_libraries(TritonSimRenderer PRIVATE ${PLATFORM_LIBS})
 
-# Output directory settings (Optional: keeps output clean)
+# Output directory settings
 set_target_properties(TritonSimRenderer PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"

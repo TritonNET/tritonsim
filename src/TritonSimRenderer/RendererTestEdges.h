@@ -36,7 +36,5 @@ private:
     std::vector<Vertex>  m_vertices;
     std::vector<uint16_t> m_indices;
 
-    bgfx::UniformHandle u_mvp;
-
     bool m_ready = false;
 };

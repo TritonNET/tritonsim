@@ -5,10 +5,18 @@ using TritonSim.GUI.Infrastructure;
 
 public partial class BrowserNativeSimulator : INativeSimulator
 {
+    private readonly ILogger m_logger;
+
     private const string LIB_NAME = "libTritonSimRenderer";
+
+    public BrowserNativeSimulator(ILogger logger)
+    {
+        m_logger = logger;
+    }
 
     public ResponseCode Init(ref SimConfig config, out SimContext ctx)
     {
+        m_logger.Debug("[BrowserNative] Initializing Native Simulator...");
         try
         {
             return NativeInit(ref config, out ctx);
@@ -23,6 +31,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
 
     public ResponseCode UpdateConfig(ref SimContext ctx, ref SimConfig config)
     {
+        m_logger.Debug("[BrowserNative] Updating Native Simulator Config...");
         try
         {
             return NativeUpdateConfig(ref ctx, ref config);
@@ -49,6 +58,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
 
     public ResponseCode Start(ref SimContext ctx)
     {
+        m_logger.Debug("[BrowserNative] Starting Native Simulator...");
         try
         {
             return NativeStart(ref ctx);
@@ -62,6 +72,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
 
     public ResponseCode Stop(ref SimContext ctx)
     {
+        m_logger.Debug("[BrowserNative] Stopping Native Simulator...");
         try
         {
             return NativeStop(ref ctx);
@@ -75,6 +86,7 @@ public partial class BrowserNativeSimulator : INativeSimulator
 
     public ResponseCode Shutdown(ref SimContext ctx)
     {
+        m_logger.Debug("[BrowserNative] Shutting down Native Simulator...");
         try
         {
             return NativeShutdown(ref ctx);

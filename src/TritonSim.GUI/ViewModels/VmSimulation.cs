@@ -33,10 +33,18 @@ namespace TritonSim.GUI.ViewModels
         public ITritonSimNativeProvider SimProvider { get; }
         public INativeCanvasProvider WindowProvider { get; }
 
-        public VmSimulation(ITritonSimNativeProvider simProvider, INativeCanvasProvider windowProvider)
+        public ILogger Logger { get; }
+
+        public VmSimulation(
+            ILogger logger,
+            ITritonSimNativeProvider simProvider, 
+            INativeCanvasProvider windowProvider)
         {
             SimProvider = simProvider;
             WindowProvider = windowProvider;
+            Logger = logger;
+
+            logger.Debug("VmSimulation creating.");
 
             RendererTypes = new ObservableCollection<VmRendererType>();
 
@@ -52,7 +60,9 @@ namespace TritonSim.GUI.ViewModels
                 });
             }
 
-            SelectedRenderer = RendererTypes.Where(e=> e.Type == RendererType.RT_TEST_COLOR_CHANGING).FirstOrDefault();
+            SelectedRenderer = RendererTypes.Where(e=> e.Type == RendererType.RT_TEST_EDGES).FirstOrDefault();
+
+            logger.Debug("VmSimulation created.");
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)

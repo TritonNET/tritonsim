@@ -1,25 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
-	<Import Project="..\Common\common.props" />
-	
+	<Import Project="$(SolutionDir)Common\common.props" />
+
 	<PropertyGroup>
-		<TargetFramework>net8.0-browser</TargetFramework>
+		<TargetFramework>net10.0-browser</TargetFramework>
 		<OutputType>Exe</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Nullable>enable</Nullable>
+
+		<WasmEnableThreads>true</WasmEnableThreads>
+		<EmccLinkFlags>
+			-fwasm-exceptions
+			-s DISABLE_EXCEPTION_CATCHING=0
+
+			-s ALLOW_MEMORY_GROWTH=1
+
+			-s OFFSCREENCANVAS_SUPPORT=1
+
+			-s USE_WEBGL2=1
+			-s FULL_ES3=1
+			-s MIN_WEBGL_VERSION=2
+			-s MAX_WEBGL_VERSION=2
+		</EmccLinkFlags>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Browser" />
-		<ProjectReference Include="..\TritonSim.GUI\TritonSim.GUI.csproj" />
+		<ProjectReference Include="$(SolutionDir)TritonSim.GUI\TritonSim.GUI.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
 		<NativeFileReference Include="$(SolutionDir)TritonSimRenderer\build_wasm\lib\libTritonSimRenderer.a" />
-		
 		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bgfxDebug.a" />
 		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bxDebug.a" />
 		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimgDebug.a" />
 		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimg_decodeDebug.a" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<NativeFileReference Include="$(SolutionDir)TritonSimRenderer\build_wasm\lib\libTritonSimRenderer.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bgfxRelease.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bxRelease.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimgRelease.a" />
+		<NativeFileReference Include="$(SolutionDir)3rdparty\bgfx\.build\wasm\bin\bimg_decodeRelease.a" />
+	</ItemGroup>
 </Project>

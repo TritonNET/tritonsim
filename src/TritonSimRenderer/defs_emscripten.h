@@ -1,5 +1,6 @@
 #pragma once
 #include <emscripten.h>
+#include <emscripten/html5.h>
 
 #ifndef EMSCRIPTEN_KEEPALIVE
 #error EMSCRIPTEN_KEEPALIVE macro isnt defined. 

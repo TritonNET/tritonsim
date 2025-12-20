@@ -24,34 +24,50 @@ ResponseCode RendererBase::Init()
 {
     // Setup the Init struct
     bgfx::Init init;
-    init.type = bgfx::RendererType::OpenGL;
-    init.vendorId = BGFX_PCI_ID_NONE;
+
     init.resolution.width = m_width;
     init.resolution.height = m_height;
     init.resolution.reset = m_resetFlags;
 
 #ifdef __EMSCRIPTEN__
-    init.type = bgfx::RendererType::OpenGL; // WebGL uses OpenGL backend
+    // For WebAssembly, we need special handling
+    init.type = bgfx::RendererType::OpenGLES;
+
+    // CRITICAL: In WebAssembly, BGFX needs to find the canvas through Emscripten
+    // The canvas should be set as Module.canvas in JavaScript
+
+    // We don't pass the native window handle here for WebGL
+    init.platformData.nwh = nullptr;
+
+    // For WebGL, BGFX uses the default canvas from Module.canvas
+    // or we need to explicitly set it using emscripten_set_canvas_element_size
+    std::string canvasId = "tbgfxcs";
+    emscripten_set_canvas_element_size(canvasId.c_str(), m_width, m_height);
+
+    LOG_DEBUG("WebGL initialization - using canvas: %s", canvasId.c_str());
 #else
     // Windows/Desktop Specifics
     init.type = bgfx::RendererType::Direct3D11;
+    init.platformData.nwh = m_nwh;
 #endif
 
-    init.platformData.nwh = m_nwh;
     init.platformData.ndt = NULL;
     init.platformData.context = NULL;
     init.platformData.backBuffer = NULL;
     init.platformData.backBufferDS = NULL;
-    
+
     if (!bgfx::init(init))
+    {
         return RC_FAILED;
+    }
 
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
     bgfx::setViewRect(0, 0, 0, m_width, m_height);
     bgfx::touch(0);
     bgfx::frame();
 
-	return RC_SUCCESS;
+    LOG_DEBUG("RendererBase initialized successfully");
+    return RC_SUCCESS;
 }
 
 ResponseCode RendererBase::UpdateConfig(const SimConfig& cfg)

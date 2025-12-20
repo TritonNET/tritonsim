@@ -11,7 +11,7 @@
 				"output_file" :  "tritonsim_android.bin"
 			},
 			"asm.js": {
-				"profile": "320_es",
+				"profile": "300_es",
 				"output_file" :  "tritonsim_asm.bin"
 			},
 			"linux": {

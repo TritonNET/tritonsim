@@ -81,6 +81,7 @@
 				WindowProvider="{Binding WindowProvider}"
 				Renderer="{Binding SelectedRenderer.Type, Mode=OneWay}"
 				Mode="{Binding CurrentMode, Mode=TwoWay}"
+				LogHandler="{Binding Logger}"
 				Background="{StaticResource StdBackground}"/>
 		</Border>
 	</Grid>

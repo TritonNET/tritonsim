@@ -17,9 +17,9 @@ set "BUILD_PLATFORM=win_x64"
 
 :: Paths for Web Build Tools
 set "EMSDK_DIR=%THIRDPARTY_DIR%\emsdk"
-set "EM_VERSION=3.1.34"
+set "EM_VERSION=3.1.56"
 
-:: VS Environment Path (Adjust if using Professional/Community)
+:: VS Environment Path
 set "VS_VARS_PATH=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 
 :: ============================================================================
@@ -59,7 +59,6 @@ if not exist "%GENIE%" (
     exit /b 1
 )
 
-:: Auto-load Visual Studio Environment if tools are missing
 where nmake >nul 2>nul
 if %errorlevel% neq 0 (
     echo [INFO] MSVC tools not found in PATH. Attempting to load vcvars64.bat...
@@ -68,12 +67,10 @@ if %errorlevel% neq 0 (
         echo [INFO] VS Environment loaded.
     ) else (
         echo [ERROR] Could not find vcvars64.bat and tools are not in PATH.
-        echo         Please run from VS Developer Command Prompt or check VS_VARS_PATH.
         exit /b 1
     )
 )
 
-:: Branch to specific platform build
 if /i "%BUILD_PLATFORM%"=="web_wasm" goto :build_web
 if /i "%BUILD_PLATFORM%"=="win_x64"  goto :build_win
 if /i "%BUILD_PLATFORM%"=="win_x86"  goto :build_win
@@ -91,12 +88,10 @@ echo --------------------------------------------------------------------------
 
 cd /d "%BGFX_DIR%"
 
-:: 1. Generate Projects
 echo [INFO] Generating Visual Studio 2022 Solution...
 "%GENIE%" --with-tools vs2022
 if %errorlevel% neq 0 exit /b 1
 
-:: 2. Build via MSBuild
 set "SLN_FILE=%BGFX_DIR%\.build\projects\vs2022\bgfx.sln"
 set "MSBUILD_PLATFORM=x64"
 if /i "%BUILD_PLATFORM%"=="win_x86" set "MSBUILD_PLATFORM=x86"
@@ -119,10 +114,9 @@ goto :eof
 :: ============================================================================
 :build_web
 echo.
-echo [INFO] Starting Web Assembly Build...
+echo [INFO] Starting Web Assembly Build (Threaded)...
 echo --------------------------------------------------------------------------
 
-:: Check for Make (required for bgfx gmake)
 where make >nul 2>nul
 if %errorlevel% neq 0 (
     echo [ERROR] GNU 'make' not found in PATH.
@@ -137,15 +131,18 @@ call emsdk.bat activate %EM_VERSION% >nul
 call emsdk_env.bat
 popd
 
-:: FIX: GENie requires 'EMSCRIPTEN' env var to be set explicitly
 if not defined EMSCRIPTEN (
     set "EMSCRIPTEN=%EMSDK_DIR%\upstream\emscripten"
     echo [INFO] Force-setting EMSCRIPTEN=!EMSCRIPTEN!
 )
 
 :: 2. Build BGFX
-echo [INFO] Building BGFX (Native Wasm Exceptions)...
+echo [INFO] Generating BGFX Projects...
 pushd "%BGFX_DIR%"
+:: Clean old build to ensure flags are applied
+if exist ".build\projects\gmake-wasm" rmdir /s /q ".build\projects\gmake-wasm"
+if exist ".build\wasm" rmdir /s /q ".build\wasm"
+
 "%GENIE%" --gcc=wasm gmake
 if %errorlevel% neq 0 (
     echo [ERROR] GENie generation failed.
@@ -155,8 +152,6 @@ if %errorlevel% neq 0 (
 popd
 
 set "WASM_PROJECT_DIR=%BGFX_DIR%\.build\projects\gmake-wasm"
-
-:: Verify directory was created
 if not exist "%WASM_PROJECT_DIR%" (
     echo [ERROR] Project directory not found: %WASM_PROJECT_DIR%
     exit /b 1
@@ -164,15 +159,23 @@ if not exist "%WASM_PROJECT_DIR%" (
 
 pushd "%WASM_PROJECT_DIR%"
 
-:: Convert Configuration to lowercase for gmake (Debug -> debug)
+:: --- CRITICAL FIX: Patch Makefiles to enable Exceptions ---
+echo [INFO] Patching BGFX Makefiles to enable exceptions...
+powershell -Command "Get-ChildItem -Path '*.make' -Recurse | ForEach-Object { (Get-Content $_) -replace '-fno-exceptions', '-fexceptions' | Set-Content $_ }"
+:: ----------------------------------------------------------
+
 set "GMAKE_CONFIG=%BUILD_CONFIG%"
 if /i "%GMAKE_CONFIG%"=="Release" set "GMAKE_CONFIG=release"
 if /i "%GMAKE_CONFIG%"=="Debug"   set "GMAKE_CONFIG=debug"
 
-set "CXXFLAGS=-fwasm-exceptions"
-set "CFLAGS=-fwasm-exceptions"
+echo [INFO] Compiling BGFX with Threading Support...
 
-call emmake make config=%GMAKE_CONFIG%
+:: Standard Emulated Exceptions for .NET Compatibility
+set "CXXFLAGS=-pthread -s DISABLE_EXCEPTION_CATCHING=0"
+set "CFLAGS=-pthread -s DISABLE_EXCEPTION_CATCHING=0"
+set "LDFLAGS=-pthread -s PTHREAD_POOL_SIZE=4"
+
+call emmake make config=%GMAKE_CONFIG% -j%NUMBER_OF_PROCESSORS%
 if %errorlevel% neq 0 (
     echo [ERROR] BGFX Web build failed.
     popd
@@ -180,6 +183,7 @@ if %errorlevel% neq 0 (
 )
 set "CXXFLAGS="
 set "CFLAGS="
+set "LDFLAGS="
 popd
 
 :: 3. Build TritonSimRenderer
@@ -190,7 +194,13 @@ if exist "%RENDERER_DIR_WASM_BUILD_DIR%" rmdir /s /q "%RENDERER_DIR_WASM_BUILD_D
 mkdir "%RENDERER_DIR_WASM_BUILD_DIR%"
 cd /d "%RENDERER_DIR_WASM_BUILD_DIR%"
 
-call emcmake cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILD_CONFIG% -DCMAKE_CXX_FLAGS="-fwasm-exceptions"
+:: Pass flags to CMake
+call emcmake cmake .. -G "NMake Makefiles" ^
+    -DCMAKE_BUILD_TYPE=%BUILD_CONFIG% ^
+    -DCMAKE_CXX_FLAGS="-pthread -s DISABLE_EXCEPTION_CATCHING=0 -fexceptions" ^
+    -DCMAKE_C_FLAGS="-pthread -s DISABLE_EXCEPTION_CATCHING=0 -fexceptions" ^
+    -DCMAKE_EXE_LINKER_FLAGS="-pthread -s PTHREAD_POOL_SIZE=4"
+
 if %errorlevel% neq 0 (
     echo [ERROR] CMake Configuration failed.
     exit /b 1
