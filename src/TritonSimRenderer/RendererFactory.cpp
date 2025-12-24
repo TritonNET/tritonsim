@@ -23,8 +23,8 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 
 #ifdef TRITONSIM_EMSCRIPTEN
 	const char* handleStr = static_cast<const char*>(config.handle);
-	//if (*handleStr != '#')
-	//	return RC_INVALID_RENDER_SURFACE_NOTADOMID;
+	if (*handleStr != '#')
+		return RC_INVALID_RENDER_SURFACE_NOTADOMID;
 
 	if (strnlen(handleStr, MAX_CANVAS_ID_LENGTH + 1) > MAX_CANVAS_ID_LENGTH)
 		return RC_INVALID_RENDER_SURFACE_TOOLONGDOMID;
@@ -91,7 +91,7 @@ ResponseCode RendererFactory::CreateShaderPacker(ShaderPacker** sp)
 
 	*sp = new ShaderPacker(pData, dataSize);
 
-#elif defined(__EMSCRIPTEN__)
+#elif defined(TRITONSIM_EMSCRIPTEN)
 	*sp = new ShaderPacker(kShaderPack, sizeof(kShaderPack));
 #else
 #error Not implemented for other platforms

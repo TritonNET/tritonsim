@@ -12,9 +12,6 @@
             const canvas = document.createElement('canvas');
             canvas.id = canvasId;
 
-            // Disable right-click menu
-            //canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-
             parent.appendChild(canvas);
 
             console.log(`Created render canvas: ${canvasId}`);

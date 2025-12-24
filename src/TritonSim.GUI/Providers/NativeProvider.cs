@@ -102,16 +102,19 @@ namespace TritonSim.GUI.Providers
 
                 m_lastResponse = m_native.Init(ref m_config, out m_context);
 
-                if (m_lastResponse.IsSuccess())
+                if (!m_lastResponse.IsSuccess())
                 {
-                    m_flags = SimulationFlags.Initialized;
-                    m_mode = SimulationMode.Ready;
-                    return true;
+                    m_flags = SimulationFlags.Error;
+                    m_mode = SimulationMode.NotReady;
+                    return false;                    
                 }
 
-                m_flags = SimulationFlags.Error;
-                m_mode = SimulationMode.NotReady;
-                return false;
+                if(m_context.Renderer == IntPtr.Zero)
+                    throw new ContextMarshalException("Native simulator returned an invalid renderer context.");
+
+                m_flags = SimulationFlags.Initialized;
+                m_mode = SimulationMode.Ready;
+                return true;
             }
         }
 

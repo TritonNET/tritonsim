@@ -14,7 +14,7 @@ namespace TritonSim.GUI.Browser.Providers
 
         public BrowserCanvasHandle(JSObject obj, string canvasID) : base(obj)
         {
-            m_canvasHandle = Marshal.StringToHGlobalAnsi($"{canvasID}");
+            m_canvasHandle = Marshal.StringToHGlobalAnsi($"#{canvasID}");
         }
 
         public nint GetCanvasHandle()

@@ -17,6 +17,7 @@
     { "name": "RC_FAILED", "type": "General_Fail", "desc": "General or unspecified failure." },
     { "name": "RC_FAILED_UNKNOWN", "type": "General_Fail", "desc": "An unknown error occurred." },
     { "name": "RC_FAILED_NATIVE_CALL", "type": "General_Fail", "desc": "The native function call failed." },
+    { "name": "RC_FAILED_INITIALIZE_RENDERER_INVALID_HANDLE", "type": "General_Fail", "desc": "Failed to initialize renderer. Invalid handle received."},
 
     { "name": "RC_UNKNOWN_RENDERER_TYPE", "type": "Renderer_Fail", "desc": "The specified renderer type is not recognized." },
     { "name": "RC_RENDERER_NOT_INITIALIZED", "type": "Renderer_Fail", "desc": "The renderer has not been initialized." },
@@ -25,6 +26,7 @@
     { "name": "RC_INVALID_RENDER_SURFACE_HANDLE", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is invalid." },
     { "name": "RC_INVALID_RENDER_SURFACE_NOTADOMID", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is not a valid DOM Id." },
     { "name": "RC_INVALID_RENDER_SURFACE_TOOLONGDOMID", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is too long DOM Id." },
+    { "name": "RC_INVALID_RENDER_CONTEXT", "type": "Renderer_Fail", "desc": "Invalid renderer context." },
 
     { "name": "RC_FAILED_OPEN_FILE", "type": "IO_Fail", "desc": "Failed to open the specified file." },
     { "name": "RC_FAILED_TO_LOAD_RESOURCE_FILE", "type": "IO_Fail", "desc": "Failed to load the requested resource file." },

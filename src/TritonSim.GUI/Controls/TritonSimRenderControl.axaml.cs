@@ -253,7 +253,17 @@ namespace TritonSim.GUI.Controls
         {
             if (SimProvider == null) return;
 
-            bool success = action();
+            var success = false;
+            try
+            {
+                 success = action();
+            }
+            catch (Exception ex)
+            {
+                ShowOverlayText(ex.Message);
+                return;
+            }
+
             SetCurrentValue(ModeProperty, SimProvider.GetMode());
 
             if (!success)
