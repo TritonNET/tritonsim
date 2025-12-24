@@ -31,11 +31,12 @@ protected:
 
 	void* m_nwh;
 
-#ifdef TRITONSIM_EMSCRIPTEN
-	std::string m_canvasid;
-#endif // TRITONSIM_EMSCRIPTEN
-
 	std::atomic<bool> m_running{ false };
+
+	std::mutex m_dataMutex;
+	std::atomic<bool> m_dataDirty{ false }; // Flags that CPU data has changed
+	std::atomic<bool> m_ready{ false }; // Flags that GPU buffers are valid
+
 	std::thread m_thread;
 
 	const uint32_t m_resetFlags = BGFX_RESET_VSYNC | BGFX_RESET_MSAA_X16;

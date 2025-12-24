@@ -32,6 +32,9 @@
 			-s ASSERTIONS=1
 			-s EXIT_RUNTIME=1
 		</EmccLinkFlags>
+
+		<!--IL2104: false positive due to runtime reflection; required members are accessed dynamically.-->
+		<NoWarn>$(NoWarn);IL2104</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

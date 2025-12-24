@@ -22,6 +22,7 @@ protected:
 
 private:
     void createFullscreenQuad();
+    void syncUniforms();
 
     bgfx::ProgramHandle m_program = BGFX_INVALID_HANDLE;
     bgfx::VertexBufferHandle m_vbh = BGFX_INVALID_HANDLE;
@@ -32,6 +33,7 @@ private:
     bgfx::UniformHandle u_time = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle u_screenParams = BGFX_INVALID_HANDLE;
 
+    float m_renderTime = 0.0f;
     float m_timeAccumulator = 0.0f;
     bool m_ready = false;
 };

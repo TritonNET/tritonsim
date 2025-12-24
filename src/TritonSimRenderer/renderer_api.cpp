@@ -5,7 +5,7 @@
 
 ResponseCode tritonsim_init_internal(const SimConfig* config, SimContext* ctx)
 {
-    LOG_DEBUG("Running on pthread: %s", emscripten_is_main_browser_thread() ? "MAIN" : "WORKER");
+    ASSERT_MAIN_THREAD();
 
     ResponseCode rc = RendererFactory::CreateRenderer(*config, *ctx);
     if (rc & RC_FAILED)
@@ -36,23 +36,36 @@ TRITON_EXPORT ResponseCode tritonsim_init(const SimConfig& config, SimContext& c
     return static_cast<ResponseCode>(rc);
 }
 
+ResponseCode tritonsim_update_config_internal(const SimContext* ctx, const SimConfig* config)
+{
+    ASSERT_MAIN_THREAD();
+
+    if (ctx->Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
+
+    auto rc = ctx->Renderer->UpdateConfig(*config);
+}
+
 TRITON_EXPORT ResponseCode tritonsim_update_config(const SimContext& ctx, const SimConfig& config)
 {   
     LOG_DEBUG_CONTEXT(ctx);
     LOG_DEBUG_CONFIG(config);
 
-    if (ctx.Renderer == nullptr)
-        return RC_RENDERER_NOT_INITIALIZED;
-
-    auto rc = ctx.Renderer->UpdateConfig(config);
+#ifdef TRITONSIM_EMSCRIPTEN
+    const int rc = emscripten_sync_run_in_main_runtime_thread(EM_FUNC_SIG_III, tritonsim_update_config_internal, &ctx, &config);
+#else
+    const int rc = tritonsim_update_config_internal(&ctx, &config);
+#endif // TRITONSIM_EMSCRIPTEN
 
     LOG_DEBUG("UpdateConfig response: %d", rc);
 
-    return rc;
+    return static_cast<ResponseCode>(rc);
 }
 
 ResponseCode tritonsim_render_frame_internal(const SimContext* ctx)
 {
+    ASSERT_MAIN_THREAD();
+
     if (ctx == nullptr)
         return RC_INVALID_RENDER_CONTEXT;
 
@@ -101,15 +114,27 @@ TRITON_EXPORT ResponseCode tritonsim_stop(const SimContext& ctx)
     return rc;
 }
 
+ResponseCode tritonsim_shutdown_internal(const SimContext* ctx)
+{
+    ASSERT_MAIN_THREAD();
+
+    if (ctx->Renderer == nullptr)
+        return RC_RENDERER_NOT_INITIALIZED;
+
+    delete ctx->Renderer;
+
+    return RC_SUCCESS;
+}
+
 TRITON_EXPORT ResponseCode tritonsim_shutdown(const SimContext& ctx)
 {
     LOG_DEBUG_CONTEXT(ctx);
 
-    if (ctx.Renderer == nullptr)
-        return RC_RENDERER_NOT_INITIALIZED;
+#ifdef TRITONSIM_EMSCRIPTEN
+    const int rc = emscripten_sync_run_in_main_runtime_thread(EM_FUNC_SIG_II, tritonsim_shutdown_internal, &ctx);
+#else
+    const int rc = tritonsim_shutdown_internal(&ctx);
+#endif // TRITONSIM_EMSCRIPTEN
 
-    delete ctx.Renderer;
-
-    return RC_SUCCESS;
-
+    return static_cast<ResponseCode>(rc);
 }

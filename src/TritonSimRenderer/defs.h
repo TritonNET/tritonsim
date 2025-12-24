@@ -65,3 +65,4 @@ enum COLOR : uint32_t
 )
 
 #define LOG_DEBUG_CONTEXT(ctx) LOG_DEBUG("context ptr: %p", (void*)ctx.Renderer);
+

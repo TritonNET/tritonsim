@@ -8,6 +8,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 
+	<!--IL2104: false positive due to runtime reflection; required members are accessed dynamically.-->
 	<NoWarn>$(NoWarn);IL2104</NoWarn>
   </PropertyGroup>
   

@@ -43,11 +43,9 @@ ResponseCode RendererNeonPulse::Init()
 
 void RendererNeonPulse::createFullscreenQuad()
 {
-    // Define a Quad covering the screen size defined in m_config/m_width
     float w = (float)m_width;
     float h = (float)m_height;
 
-    // 4 Vertices
     QuadVertex vertices[] = {
         { 0.0f, 0.0f, 0.0f,  0.0f, 0.0f }, // Top-Left
         { w,    0.0f, 0.0f,  1.0f, 0.0f }, // Top-Right
@@ -55,13 +53,11 @@ void RendererNeonPulse::createFullscreenQuad()
         { w,    h,    0.0f,  1.0f, 1.0f }  // Bottom-Right
     };
 
-    // 6 Indices (Two Triangles)
     uint16_t indices[] = {
         0, 1, 2, // First Tri
         1, 3, 2  // Second Tri
     };
 
-    // Create Buffers
     m_vbh = bgfx::createVertexBuffer(
         bgfx::copy(vertices, sizeof(vertices)),
         m_layout
@@ -74,16 +70,26 @@ void RendererNeonPulse::createFullscreenQuad()
 
 void RendererNeonPulse::OnUpdate()
 {
-    // Update logic (increase time)
-    // Assuming 60fps roughly, or pass delta time from main loop if available
-    m_timeAccumulator += 0.016f;
+    std::lock_guard<std::mutex> lock(m_dataMutex);
+
+    m_timeAccumulator += 0.016f; // Simulate time passing (approx 60fps delta)
+}
+
+void RendererNeonPulse::syncUniforms()
+{
+    std::lock_guard<std::mutex> lock(m_dataMutex);
+    // Snap the calculated time from the worker to the render variable
+    m_renderTime = m_timeAccumulator;
 }
 
 ResponseCode RendererNeonPulse::RenderFrame()
 {
     if (!m_ready) return RC_SUCCESS;
 
-    // 1. Setup View/Proj (Standard Ortho)
+    // 1. Sync data (Time)
+    syncUniforms();
+
+    // 2. Setup View/Proj
     float view[16];
     bx::mtxIdentity(view);
 
@@ -93,20 +99,17 @@ ResponseCode RendererNeonPulse::RenderFrame()
     bgfx::setViewTransform(0, view, proj);
     bgfx::setViewRect(0, 0, 0, m_width, m_height);
 
-    // 2. Update Uniforms
-    // Time
-    float timeData[4] = { m_timeAccumulator, 0.0f, 0.0f, 0.0f };
+    // 3. Update Uniforms (BGFX calls must happen here)
+    float timeData[4] = { m_renderTime, 0.0f, 0.0f, 0.0f };
     bgfx::setUniform(u_time, timeData);
 
-    // Resolution
     float screenData[4] = { (float)m_width, (float)m_height, 0.0f, 0.0f };
     bgfx::setUniform(u_screenParams, screenData);
 
-    // 3. Submit
+    // 4. Submit
     bgfx::setVertexBuffer(0, m_vbh);
     bgfx::setIndexBuffer(m_ibh);
 
-    // Write RGB, no Depth check needed for fullscreen effects usually
     bgfx::setState(BGFX_STATE_WRITE_RGB);
 
     bgfx::submit(0, m_program);

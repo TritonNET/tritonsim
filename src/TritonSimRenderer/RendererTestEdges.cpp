@@ -34,35 +34,14 @@ ResponseCode RendererTestEdges::Init()
 
 void RendererTestEdges::OnUpdate()
 {
-    m_ready = false;
+    std::lock_guard<std::mutex> lock(m_dataMutex);
 
     m_vertices.clear();
     m_indices.clear();
 
-    createGeometry();
+    createGeometry(); // Fills m_vertices and m_indices
 
-    if (bgfx::isValid(m_vbh))
-    {
-        bgfx::destroy(m_vbh);
-        m_vbh = BGFX_INVALID_HANDLE;
-    }
-
-    if (bgfx::isValid(m_ibh))
-    {
-        bgfx::destroy(m_ibh);
-        m_ibh = BGFX_INVALID_HANDLE;
-    }
-
-    m_vbh = bgfx::createVertexBuffer(
-        bgfx::copy(m_vertices.data(), uint32_t(m_vertices.size() * sizeof(Vertex))),
-        m_layout
-    );
-
-    m_ibh = bgfx::createIndexBuffer(
-        bgfx::copy(m_indices.data(), uint32_t(m_indices.size() * sizeof(uint16_t)))
-    );
-
-    m_ready = true;
+    m_dataDirty = true; // Signal main thread to upload
 }
 
 void RendererTestEdges::addLine(float x0, float y0, float x1, float y1, COLOR color)
@@ -84,6 +63,38 @@ void RendererTestEdges::addLine(float x0, float y0, float x1, float y1, COLOR co
     m_indices.push_back(baseIndex + 1); // Connects 'v1'
 }
 
+void RendererTestEdges::uploadResources()
+{
+    std::lock_guard<std::mutex> lock(m_dataMutex);
+
+    if (!m_dataDirty) return;
+
+    // Destroy old buffers
+    if (bgfx::isValid(m_vbh)) bgfx::destroy(m_vbh);
+    if (bgfx::isValid(m_ibh)) bgfx::destroy(m_ibh);
+
+    // Create new buffers (BGFX copies the data internally immediately)
+    if (!m_vertices.empty())
+    {
+        m_vbh = bgfx::createVertexBuffer(
+            bgfx::copy(m_vertices.data(), uint32_t(m_vertices.size() * sizeof(Vertex))),
+            m_layout
+        );
+
+        m_ibh = bgfx::createIndexBuffer(
+            bgfx::copy(m_indices.data(), uint32_t(m_indices.size() * sizeof(uint16_t)))
+        );
+
+        m_ready = true;
+    }
+    else
+    {
+        m_ready = false;
+    }
+
+    m_dataDirty = false;
+}
+
 void RendererTestEdges::createGeometry()
 {
     // Now you can just call this function repeatedly
@@ -95,13 +106,14 @@ void RendererTestEdges::createGeometry()
 
 ResponseCode RendererTestEdges::RenderFrame()
 {
-    if (!m_ready) return RC_SUCCESS;
+    uploadResources(); // 1. Sync data from worker to GPU
 
-    // 1. Setup View Matrix (Identity means camera is at 0,0)
+    if (!m_ready || !bgfx::isValid(m_vbh)) return RC_SUCCESS;
+
+    // 2. Setup Matrices
     float view[16];
     bx::mtxIdentity(view);
 
-    // 2. Setup Projection Matrix (Ortho maps pixels to -1..1 space)
     float proj[16];
     bx::mtxOrtho(
         proj,
@@ -111,21 +123,18 @@ ResponseCode RendererTestEdges::RenderFrame()
         0.0f,
         bgfx::getCaps()->homogeneousDepth);
 
-    // 3. APPLY MATRICES HERE
-    // bgfx will calculate u_modelViewProj = Proj * View * Model
     bgfx::setViewTransform(0, view, proj);
-
-    // REMOVED: bgfx::setUniform(u_mvp, proj); 
-    // Reason: setViewTransform handles this data path now.
-
     bgfx::setViewRect(0, 0, 0, m_width, m_height);
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030FF);
 
+    // 3. Set buffers and State
     bgfx::setVertexBuffer(0, m_vbh);
     bgfx::setIndexBuffer(m_ibh);
 
+    // Ensure state matches your primitive (Lines)
     bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_PT_LINES | BGFX_STATE_MSAA);
 
+    // 4. Submit
     bgfx::submit(0, m_program);
     bgfx::frame();
 

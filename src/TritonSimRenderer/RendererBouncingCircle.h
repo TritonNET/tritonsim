@@ -21,6 +21,7 @@ protected:
 
 private:
     void createCircleGeometry(float centerX, float centerY, float radius, uint32_t color);
+    void uploadResources();
 
     bgfx::ProgramHandle m_program = BGFX_INVALID_HANDLE;
     bgfx::VertexBufferHandle m_vbh = BGFX_INVALID_HANDLE;

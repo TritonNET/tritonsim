@@ -9,20 +9,6 @@ RendererBase::RendererBase(ShaderPacker* sp, ShaderType st, const SimConfig& cfg
     , m_st(st)
     , m_sp(sp)
 {
-    std::string rawId = "";
-    if (cfg.handle != nullptr) {
-        rawId = static_cast<const char*>(cfg.handle);
-    }
-
-    // 2. Formatting: Ensure it starts with '#' for CSS selector compatibility
-    if (!rawId.empty() && rawId[0] != '#') {
-        m_canvasid = "#" + rawId;
-    }
-    else {
-        m_canvasid = rawId;
-    }
-
-    LOG_DEBUG("[C++] Parsed Canvas Selector: '%s' (Length: %zu)\n", m_canvasid.c_str(), m_canvasid.length());
 }
 
 RendererBase::~RendererBase()
@@ -38,12 +24,11 @@ ResponseCode RendererBase::Init()
     bgfx::Init init;
     init.type = bgfx::RendererType::Count; // Forces WebGL
     
-    init.platformData.nwh = (void*)m_canvasid.c_str();
+    init.platformData.nwh = m_nwh;
     init.platformData.context = nullptr;
     init.platformData.backBuffer = nullptr;
     init.platformData.backBufferDS = nullptr;
 
-    // Common Settings
     init.resolution.width = m_width;
     init.resolution.height = m_height;
     init.resolution.reset = BGFX_RESET_VSYNC;

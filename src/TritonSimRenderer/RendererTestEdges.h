@@ -25,6 +25,7 @@ protected:
 private:
     void createGeometry();
     void addLine(float x0, float y0, float x1, float y1, COLOR color);
+    void uploadResources();
 
     bgfx::ProgramHandle m_program = BGFX_INVALID_HANDLE;
 

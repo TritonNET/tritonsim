@@ -13,6 +13,7 @@
 #include <vector>
 #include <cstdint>
 #include <algorithm>
+#include <mutex>
 
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>

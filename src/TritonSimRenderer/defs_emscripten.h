@@ -14,3 +14,9 @@
 #define TRITONSIM_EMSCRIPTEN
 
 #define MAX_CANVAS_ID_LENGTH 20
+
+#define ASSERT_MAIN_THREAD() \
+	if (!emscripten_is_main_browser_thread()) { \
+		LOG_DEBUG("Function must be called from the main browser thread!"); \
+		return RC_INVALID_CALLER_THREAD_NOTMAIN; \
+	}

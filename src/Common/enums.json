@@ -27,6 +27,7 @@
     { "name": "RC_INVALID_RENDER_SURFACE_NOTADOMID", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is not a valid DOM Id." },
     { "name": "RC_INVALID_RENDER_SURFACE_TOOLONGDOMID", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is too long DOM Id." },
     { "name": "RC_INVALID_RENDER_CONTEXT", "type": "Renderer_Fail", "desc": "Invalid renderer context." },
+    { "name": "RC_INVALID_CALLER_THREAD_NOTMAIN", "type": "Renderer_Fail", "desc": "Invalid caller thread. The function must be called from the main thread." },
 
     { "name": "RC_FAILED_OPEN_FILE", "type": "IO_Fail", "desc": "Failed to open the specified file." },
     { "name": "RC_FAILED_TO_LOAD_RESOURCE_FILE", "type": "IO_Fail", "desc": "Failed to load the requested resource file." },

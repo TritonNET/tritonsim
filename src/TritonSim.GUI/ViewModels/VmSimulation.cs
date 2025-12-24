@@ -67,7 +67,7 @@ namespace TritonSim.GUI.ViewModels
                 });
             }
 
-            SelectedRenderer = RendererTypes.Where(e => e.Type == RendererType.RT_TEST_EDGES).FirstOrDefault();
+            SelectedRenderer = RendererTypes.Where(e => e.Type == RendererType.RT_NEONPULSE3D).FirstOrDefault();
 
             Logger.Debug("VmSimulation initialized.");
         }
