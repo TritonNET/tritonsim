@@ -13,9 +13,9 @@ namespace TritonSim.GUI.ViewModels
 
     public partial class VmSimulation : ObservableObject
     {
-        public event SimulationModeEventHandler StartSimulation;
+        public event SimulationModeEventHandler? StartSimulation;
 
-        public event SimulationModeEventHandler StopSimulation;
+        public event SimulationModeEventHandler? StopSimulation;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(StartCommand), nameof(StopCommand))]
@@ -26,7 +26,7 @@ namespace TritonSim.GUI.ViewModels
         public bool CanStop => CurrentMode == SimulationMode.Running;
 
         [ObservableProperty]
-        private VmRendererType m_selectedRenderer;
+        private VmRendererType? m_selectedRenderer;
 
         public ObservableCollection<VmRendererType> RendererTypes { get; }
 
@@ -67,7 +67,7 @@ namespace TritonSim.GUI.ViewModels
                 });
             }
 
-            SelectedRenderer = RendererTypes.Where(e => e.Type == RendererType.RT_TEST_COLOR_CHANGING).FirstOrDefault();
+            SelectedRenderer = RendererTypes.Where(e => e.Type == RendererType.RT_TEST_EDGES).FirstOrDefault();
 
             Logger.Debug("VmSimulation initialized.");
         }

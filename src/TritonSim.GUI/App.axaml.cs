@@ -4,6 +4,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using TritonSim.GUI.Providers;
 using TritonSim.GUI.ViewModels;
@@ -15,13 +16,19 @@ namespace TritonSim.GUI
     {
         protected readonly ILogger m_logger;
 
-        public App(ILogger logger)
+        private IServiceProvider? m_services;
+
+        protected App(ILogger logger)
         {
             m_logger = logger;
             m_logger.Info("App created.");
         }
 
-        public IServiceProvider Services { get; private set; }
+        public App()
+        {
+            m_logger = new PreviewLogger();
+            m_logger.Info("App created with PreviewLogger.");
+        }
 
         public override void Initialize()
         {
@@ -40,7 +47,7 @@ namespace TritonSim.GUI
 
             RegisterServices(collection);
 
-            Services = collection.BuildServiceProvider();
+            m_services = collection.BuildServiceProvider();
 
             m_logger.Info("Services registered.");
 
@@ -51,7 +58,7 @@ namespace TritonSim.GUI
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = Services.GetRequiredService<SimulationWindow>();
+                desktop.MainWindow = m_services.GetRequiredService<SimulationWindow>();
 
                 m_logger.Info("MainWindow set for Desktop application lifetime.");
             }
@@ -59,7 +66,7 @@ namespace TritonSim.GUI
             {
                 m_logger.Info("Setting up MainView for Single View application lifetime.");
 
-                singleViewPlatform.MainView = Services.GetRequiredService<SimulationView>();
+                singleViewPlatform.MainView = m_services.GetRequiredService<SimulationView>();
 
                 m_logger.Info("MainView set for Single View application lifetime.");
             }
@@ -69,6 +76,7 @@ namespace TritonSim.GUI
             m_logger.Info("App framework initialization process completed.");
         }
 
+        [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming", Justification = "We are removing a plugin, which is safe for trimming.")]
         private void DisableAvaloniaDataAnnotationValidation()
         {
             m_logger.Info("Disabling Avalonia DataAnnotationsValidationPlugin to prevent duplicate validations.");

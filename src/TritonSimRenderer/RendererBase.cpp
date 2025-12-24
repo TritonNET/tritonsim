@@ -128,6 +128,13 @@ void RendererBase::WorkerLoop()
 
 ResponseCode RendererBase::Shutdown()
 {
+    if (m_running.load())
+    {
+        auto rc = Stop();
+        if (rc & RC_FAILED)
+			return rc;
+    }
+
     bgfx::shutdown();
 
     return RC_SUCCESS;

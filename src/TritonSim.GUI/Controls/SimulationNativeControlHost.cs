@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.VisualTree;
 using System;
+using System.Diagnostics;
 using TritonSim.GUI.Providers;
 
 namespace TritonSim.GUI.Controls
@@ -70,12 +71,18 @@ namespace TritonSim.GUI.Controls
             var h = double.IsNaN(Height) ? 100 : Height;
 
             var success = WindowProvider.Create(parent.Handle, w, h, out m_canvasHandle);
-            if (success)
-                NativeHandleCreated?.Invoke(m_canvasHandle.GetCanvasHandle());
-            else
+            if(!success || (success && m_canvasHandle == null))
+            {
+                Logger?.Error("SimulationNativeControlHost CreateNativeControlCore failed to create native canvas handle.");
                 NativeHandleFailed?.Invoke("Native window creation failed.");
+                return null!;
+            }
+            
+            Debug.Assert(m_canvasHandle != null, "Canvas handle cannot be null here");
 
-            return m_canvasHandle;
+            NativeHandleCreated?.Invoke(m_canvasHandle!.GetCanvasHandle());
+
+            return m_canvasHandle!;
         }
 
         protected override void DestroyNativeControlCore(IPlatformHandle control)

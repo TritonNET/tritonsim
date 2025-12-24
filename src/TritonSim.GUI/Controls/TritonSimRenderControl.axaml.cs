@@ -58,7 +58,7 @@ namespace TritonSim.GUI.Controls
 
         private readonly DispatcherTimer? m_renderTimer;
         private RendererInitState m_initState = RendererInitState.None;
-        private ILogger m_logger => LogHandler;
+        private ILogger? m_logger => LogHandler;
 
         public TritonSimRenderControl()
         {
@@ -103,7 +103,7 @@ namespace TritonSim.GUI.Controls
                 }
                 else
                 {
-                    PerformProviderAction(() => SimProvider.SetType(newType));
+                    PerformProviderAction(() => SimProvider?.SetType(newType));
 
                     SetInitState(RendererInitState.TypeSet);
                 }
@@ -121,7 +121,7 @@ namespace TritonSim.GUI.Controls
 
         private void SetInitState(RendererInitState state, bool set = true)
         {
-            m_logger.Debug($"Setting init state: {state}, set: {set}");
+            m_logger?.Debug($"Setting init state: {state}, set: {set}");
 
             if (!set)
             {
@@ -133,7 +133,7 @@ namespace TritonSim.GUI.Controls
 
             m_initState |= state;
 
-            m_logger.Debug($"Current init state: {m_initState}");
+            m_logger?.Debug($"Current init state: {m_initState}");
 
             if (m_initState.IsReadyToInit() && !m_initState.IsInitCompleted())
                 InitializeRenderer();
@@ -153,7 +153,7 @@ namespace TritonSim.GUI.Controls
             var topLevel = TopLevel.GetTopLevel(this);
             var scale = topLevel?.RenderScaling ?? 1.0;
 
-            PerformProviderAction(() => SimProvider.SetSize(new Avalonia.Size(size.Width * scale, size.Height * scale)));
+            PerformProviderAction(() => SimProvider?.SetSize(new Avalonia.Size(size.Width * scale, size.Height * scale)));
 
             return true;
         }
@@ -162,7 +162,7 @@ namespace TritonSim.GUI.Controls
         {
             var rgb = GetBackgroundColor();
 
-            PerformProviderAction(() => SimProvider.SetBackgroundColor(rgb));
+            PerformProviderAction(() => SimProvider?.SetBackgroundColor(rgb));
         }
 
         private void ShowOverlayText(string text)
@@ -185,12 +185,13 @@ namespace TritonSim.GUI.Controls
 
             PerformProviderAction(() =>
             {
-                var success = SimProvider.Start();
-                if (success)
+                var success = SimProvider?.Start();
+                if (success ?? false)
                 {
                     StartRenderLoop();
                     HideOverlayText();
                 }
+
                 return success;
             });
         }
@@ -202,9 +203,7 @@ namespace TritonSim.GUI.Controls
             PerformProviderAction(() =>
             {
                 StopRenderLoop();
-                var res = SimProvider.Stop();
-
-                return res;
+                return SimProvider?.Stop();
             });
         }
 
@@ -244,19 +243,22 @@ namespace TritonSim.GUI.Controls
             StopRenderLoop();
             ShutdownRenderer();
 
-            PerformProviderAction(() => SimProvider.SetType(newType));
+            PerformProviderAction(() => SimProvider?.SetType(newType));
 
             SetInitState(RendererInitState.TypeSet);
         }
 
-        private void PerformProviderAction(Func<bool> action)
+        private void PerformProviderAction(Func<bool?> action)
         {
             if (SimProvider == null) return;
 
-            var success = false;
+            bool? success = false;
             try
             {
-                 success = action();
+                success = action();
+
+                if (!success.HasValue)
+                    throw new Exception($"Provider action returned null. action: {action}");
             }
             catch (Exception ex)
             {
@@ -266,7 +268,7 @@ namespace TritonSim.GUI.Controls
 
             SetCurrentValue(ModeProperty, SimProvider.GetMode());
 
-            if (!success)
+            if (!success ?? true)
                 ShowOverlayText(SimProvider.GetLastError());
         }
 
@@ -302,7 +304,7 @@ namespace TritonSim.GUI.Controls
         {
             m_logger?.Debug($"Native handle created: {handle}");
 
-            PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
+            PerformProviderAction(() => SimProvider?.SetWindowHandle(handle));
 
             SetInitState(RendererInitState.HandleSet);
         }

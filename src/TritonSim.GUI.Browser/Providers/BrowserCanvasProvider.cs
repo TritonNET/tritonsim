@@ -1,6 +1,7 @@
 ﻿using Avalonia.Browser;
 using Avalonia.Platform;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.JavaScript;
 using TritonSim.GUI.Browser.Infrastructure;
@@ -56,7 +57,9 @@ namespace TritonSim.GUI.Browser.Providers
                 return false;
             }
 
-            handle = new BrowserCanvasHandle(canvasObj, m_canvasID);
+            Debug.Assert(canvasObj != null, "Canvas JSObject cannot be null here.");
+
+            handle = new BrowserCanvasHandle(canvasObj!, m_canvasID);
 
             m_logger.Debug($"Browser canvas created successfully. (Canvas ID: {m_canvasID})");
 
