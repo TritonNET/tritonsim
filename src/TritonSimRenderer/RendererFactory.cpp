@@ -21,6 +21,15 @@ ResponseCode RendererFactory::CreateRenderer(const SimConfig& config, SimContext
 	if (config.handle == nullptr)
 		return RC_INVALID_RENDER_SURFACE_HANDLE;
 
+#ifdef TRITONSIM_EMSCRIPTEN
+	const char* handleStr = static_cast<const char*>(config.handle);
+	//if (*handleStr != '#')
+	//	return RC_INVALID_RENDER_SURFACE_NOTADOMID;
+
+	if (strnlen(handleStr, MAX_CANVAS_ID_LENGTH + 1) > MAX_CANVAS_ID_LENGTH)
+		return RC_INVALID_RENDER_SURFACE_TOOLONGDOMID;
+#endif // TRITONSIM_EMSCRIPTEN
+
 	ShaderPacker* sp{nullptr};
 	const auto rc = CreateShaderPacker(&sp);
 	if (rc & RC_FAILED)

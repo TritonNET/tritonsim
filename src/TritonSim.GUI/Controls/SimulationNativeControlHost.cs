@@ -1,10 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Platform;
 using Avalonia.Platform;
 using Avalonia.VisualTree;
 using System;
-using System.Runtime.InteropServices;
 using TritonSim.GUI.Providers;
 
 namespace TritonSim.GUI.Controls
@@ -21,6 +19,9 @@ namespace TritonSim.GUI.Controls
         public static readonly StyledProperty<INativeCanvasProvider?> WindowProviderProperty =
             AvaloniaProperty.Register<TritonSimRenderControl, INativeCanvasProvider?>(nameof(WindowProvider));
 
+        public static readonly StyledProperty<ILogger?> LoggerProperty =
+            AvaloniaProperty.Register<TritonSimRenderControl, ILogger?>(nameof(Logger));
+
         private IPlatformCanvasHandle? m_canvasHandle;
 
         public INativeCanvasProvider? WindowProvider
@@ -29,8 +30,23 @@ namespace TritonSim.GUI.Controls
             set => SetValue(WindowProviderProperty, value);
         }
 
+        public ILogger? Logger
+        {
+            get => GetValue(LoggerProperty);
+            set => SetValue(LoggerProperty, value);
+        }
+
+        public void SetSize(int width, int height)
+        {
+            Logger?.Debug($"SimulationNativeControlHost SetSize called. Width: {width}, Height: {height}");
+            Width = width;
+            Height = height;
+        }
+
         protected override void OnSizeChanged(SizeChangedEventArgs e)
         {
+            Logger?.Debug($"SimulationNativeControlHost OnSizeChanged: New Size = {e.NewSize}");
+
             base.OnSizeChanged(e);
 
             var visualRoot = this.GetVisualRoot() as Visual;
@@ -39,16 +55,21 @@ namespace TritonSim.GUI.Controls
                 var position = this.TranslatePoint(new Point(0, 0), visualRoot);
 
                 if (position.HasValue && WindowProvider != null)
-                    WindowProvider.UpdatePosition(position.Value.X, position.Value.Y, Bounds.Width, Bounds.Height);
+                    WindowProvider.UpdatePosition(position.Value.X, position.Value.Y, e.NewSize.Width, e.NewSize.Height);
             }
         }
 
         protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
         {
-            if(WindowProvider == null)
+            Logger?.Debug($"SimulationNativeControlHost CreateNativeControlCore called. Name: {Name}");
+
+            if (WindowProvider == null)
                 return base.CreateNativeControlCore(parent);
 
-            var success = WindowProvider.Create(parent.Handle, Bounds.Width, Bounds.Height, out m_canvasHandle);
+            var w = double.IsNaN(Width) ? 100 : Width;
+            var h = double.IsNaN(Height) ? 100 : Height;
+
+            var success = WindowProvider.Create(parent.Handle, w, h, out m_canvasHandle);
             if (success)
                 NativeHandleCreated?.Invoke(m_canvasHandle.GetCanvasHandle());
             else

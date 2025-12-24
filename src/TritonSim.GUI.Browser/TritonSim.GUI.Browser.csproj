@@ -9,17 +9,28 @@
 
 		<WasmEnableThreads>true</WasmEnableThreads>
 		<EmccLinkFlags>
+			-pthread
+
 			-fwasm-exceptions
-			-s DISABLE_EXCEPTION_CATCHING=0
+			-s DISABLE_EXCEPTION_CATCHING=1
 
 			-s ALLOW_MEMORY_GROWTH=1
+			--no-heap-copy
 
-			-s OFFSCREENCANVAS_SUPPORT=1
+			--bind
+			--use-preload-plugins
+
+			-s USE_GLFW=3
+			-s GL_ENABLE_GET_PROC_ADDRESS
+			-s MIN_WEBGL_VERSION=2
+			-s MAX_WEBGL_VERSION=2
 
 			-s USE_WEBGL2=1
 			-s FULL_ES3=1
-			-s MIN_WEBGL_VERSION=2
-			-s MAX_WEBGL_VERSION=2
+			-s OFFSCREENCANVAS_SUPPORT=1
+
+			-s ASSERTIONS=1
+			-s EXIT_RUNTIME=1
 		</EmccLinkFlags>
 	</PropertyGroup>
 

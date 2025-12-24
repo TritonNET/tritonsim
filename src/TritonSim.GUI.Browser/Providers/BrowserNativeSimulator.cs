@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.Runtime.InteropServices;
-using TritonSim.GUI.Providers;
 using TritonSim.GUI.Infrastructure;
+using TritonSim.GUI.Providers;
 
 public partial class BrowserNativeSimulator : INativeSimulator
 {

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
+using System.Drawing;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 
@@ -57,10 +58,11 @@ namespace TritonSim.GUI.Controls
 
         private readonly DispatcherTimer? m_renderTimer;
         private RendererInitState m_initState = RendererInitState.None;
+        private ILogger m_logger => LogHandler;
 
         public TritonSimRenderControl()
         {
-            LogHandler?.Debug("TritonSimRenderControl creating.");
+            m_logger?.Debug("TritonSimRenderControl creating.");
 
             InitializeComponent();
 
@@ -70,24 +72,24 @@ namespace TritonSim.GUI.Controls
             AttachedToVisualTree += OnAttachedToVisualTree;
             DetachedFromVisualTree += OnDetachedFromVisualTree;
 
-            LogHandler?.Debug("TritonSimRenderControl created.");
+            m_logger?.Debug("TritonSimRenderControl created.");
         }
 
         private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            LogHandler?.Debug("TritonSimRenderControl detached from visual tree.");
+            m_logger?.Debug("TritonSimRenderControl detached from visual tree.");
             SetInitState(RendererInitState.AttachedToVisualTree, set: false);
         }
 
         private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            LogHandler?.Debug("TritonSimRenderControl attached to visual tree.");
+            m_logger?.Debug("TritonSimRenderControl attached to visual tree.");
             SetInitState(RendererInitState.AttachedToVisualTree);
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
-            LogHandler?.Debug($"TritonSimRenderControl property changed: {change.Property.Name}");
+            m_logger?.Debug($"TritonSimRenderControl property changed: {change.Property.Name}");
 
             base.OnPropertyChanged(change);
 
@@ -108,9 +110,8 @@ namespace TritonSim.GUI.Controls
             }
             else if (change.Property == BoundsProperty)
             {
-                UpdateSize();
-
-                SetInitState(RendererInitState.SizeSet);
+                if (UpdateSize())
+                    SetInitState(RendererInitState.SizeSet);
             }
             else if (change.Property == BackgroundProperty)
             {
@@ -120,6 +121,8 @@ namespace TritonSim.GUI.Controls
 
         private void SetInitState(RendererInitState state, bool set = true)
         {
+            m_logger.Debug($"Setting init state: {state}, set: {set}");
+
             if (!set)
             {
                 m_initState ^= state;
@@ -130,25 +133,29 @@ namespace TritonSim.GUI.Controls
 
             m_initState |= state;
 
+            m_logger.Debug($"Current init state: {m_initState}");
+
             if (m_initState.IsReadyToInit() && !m_initState.IsInitCompleted())
                 InitializeRenderer();
             else if (!m_initState.HasFlag(RendererInitState.AttachedToVisualTree) && wasAttachedToVisualTree)
                 StopRenderLoop();
         }
 
-        private void UpdateSize()
+        private bool UpdateSize()
         {
-            if (SimProvider == null) return;
+            if (SimProvider == null) return false;
 
             var size = Bounds.Size;
 
             if (size.Width <= 0 || size.Height <= 0)
-                return;
+                return false;
 
             var topLevel = TopLevel.GetTopLevel(this);
             var scale = topLevel?.RenderScaling ?? 1.0;
 
-            PerformProviderAction(() => SimProvider.SetSize(new Size(size.Width * scale, size.Height * scale)));
+            PerformProviderAction(() => SimProvider.SetSize(new Avalonia.Size(size.Width * scale, size.Height * scale)));
+
+            return true;
         }
 
         private void UpdateBackgroundColor()
@@ -203,19 +210,22 @@ namespace TritonSim.GUI.Controls
 
         private void InitializeRenderer()
         {
+            m_logger?.Debug("Initializing renderer.");
+
             PerformProviderAction(() =>
             {
                 HideOverlayText();
 
-                UpdateSize();
                 UpdateBackgroundColor();
 
-                var success = SimProvider.Init();
+                var success = SimProvider!.Init();
 
-                SetInitState(RendererInitState.NativeInitialized);
+                SetInitState(success ? RendererInitState.NativeInitSuccess : RendererInitState.NativeInitFailed);
 
                 return success;
             });
+
+            m_logger?.Debug("Renderer initialized.");
         }
 
         private void ShutdownRenderer()
@@ -226,7 +236,7 @@ namespace TritonSim.GUI.Controls
 
             SetCurrentValue(ModeProperty, SimProvider.GetMode());
 
-            SetInitState(RendererInitState.NativeInitialized, set: false);
+            SetInitState(RendererInitState.NativeInitCompleted, set: false);
         }
 
         private void HandleRendererChange(RendererType newType)
@@ -280,7 +290,7 @@ namespace TritonSim.GUI.Controls
 
         private void NativeContainer_NativeHandleCreated(nint handle)
         {
-            LogHandler?.Debug($"Native handle created: {handle}");
+            m_logger?.Debug($"Native handle created: {handle}");
 
             PerformProviderAction(() => SimProvider.SetWindowHandle(handle));
 
@@ -289,7 +299,7 @@ namespace TritonSim.GUI.Controls
 
         private void NativeContainer_NativeHandleFailed(string errorMsg)
         {
-            LogHandler?.Error($"Native handle creation failed: {errorMsg}");
+            m_logger?.Error($"Native handle creation failed: {errorMsg}");
 
             ShowOverlayText(errorMsg);
         }

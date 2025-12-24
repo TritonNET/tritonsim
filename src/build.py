@@ -63,8 +63,9 @@ def create_build_context():
     parser = argparse.ArgumentParser(description="Build Script")
     parser.add_argument("-Config", default="build.config", help="Path to JSON configuration file")
     parser.add_argument("-Configuration", default="Release", help="Build Configuration (Debug/Release)")
-    parser.add_argument("-Platform", default="win_x64", help="Target Platform (win_x64/web/web_bgfx/web_sim/web_gui)")
-    
+    parser.add_argument("-Platform", default="win_x64", help="Target Platform (win_x64/web)")
+    parser.add_argument("-Target", default="all", help="Build Targets (all/bgfx/sim/gui/bgfx_sim/bgfx_sim_gui/sim_gui)")
+
     args = parser.parse_args()
     
     # 2. Determine Root Paths
@@ -94,6 +95,7 @@ def create_build_context():
         
         ctx = {
             "platform": args.Platform,
+            "target": args.Target,
             "configuration": args.Configuration,
             "src_root": src_root,
             "paths": {
@@ -116,7 +118,8 @@ def create_build_context():
         log(f"Missing key in configuration file: {e}", "ERROR")
         sys.exit(1)
 
-    log(f"Target Platform: {ctx['platform']}")
+    log(f"Platform: {ctx['platform']}")
+    log(f"Target:       {ctx['target']}")
     log(f"Configuration:   {ctx['configuration']}")
     log(f"Loaded Config:   {config_file_path}")
 
@@ -205,31 +208,35 @@ def build_web_bgfx(ctx):
         sys.exit(1)
 
     # 2. Patch Makefiles
-    log("Patching BGFX Makefiles to enable WASM exceptions...")
-    for root, dirs, files in os.walk(gmake_wasm_dir):
-        for filename in files:
-            if filename.endswith(".make"):
-                filepath = os.path.join(root, filename)
-                try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                    
-                    if '-fno-exceptions' in content:
-                        # FIX: Replace no-exceptions with wasm-exceptions
-                        content = content.replace('-fno-exceptions', '-fwasm-exceptions')
-                        with open(filepath, 'w', encoding='utf-8') as f:
-                            f.write(content)
-                except Exception as e:
-                    log(f"Error patching {filepath}: {e}", "WARNING")
+    # log("Patching BGFX Makefiles to enable WASM exceptions...")
+    # for root, dirs, files in os.walk(gmake_wasm_dir):
+    #     for filename in files:
+    #         if filename.endswith(".make"):
+    #             filepath = os.path.join(root, filename)
+    #             try:
+    #                 with open(filepath, 'r', encoding='utf-8') as f:
+    #                     content = f.read()
+    #                 
+    #                 if '-fno-exceptions' in content:
+    #                     # FIX: Replace no-exceptions with wasm-exceptions
+    #                     content = content.replace('-fno-exceptions', '-fwasm-exceptions')
+    #                     with open(filepath, 'w', encoding='utf-8') as f:
+    #                         f.write(content)
+    #             except Exception as e:
+    #                 log(f"Error patching {filepath}: {e}", "WARNING")
 
     # 3. Compile
     gmake_config = config.lower()
     log("Compiling BGFX with Threading & WASM Exceptions...")
     
     # Ensure -fwasm-exceptions is passed to both compiler and linker
-    os.environ["CXXFLAGS"] = "-pthread -fwasm-exceptions"
-    os.environ["CFLAGS"] = "-pthread -fwasm-exceptions"
-    os.environ["LDFLAGS"] = "-pthread -fwasm-exceptions"
+    #os.environ["CXXFLAGS"] = "-pthread -fwasm-exceptions -msimd128"
+    #os.environ["CFLAGS"] = "-pthread -fwasm-exceptions -msimd128"
+    #os.environ["LDFLAGS"] = "-pthread -fwasm-exceptions -msimd128"
+
+    os.environ["CXXFLAGS"] = "-pthread"
+    os.environ["CFLAGS"] = "-pthread"
+    os.environ["LDFLAGS"] = "-pthread"
 
     num_cpus = multiprocessing.cpu_count()
     run_command(f"emmake make config={gmake_config} -j{num_cpus}", cwd=gmake_wasm_dir)
@@ -256,12 +263,20 @@ def build_web_tritonsim(ctx):
 
     # Configure CMake
     # FIX: Explicitly passing -fwasm-exceptions to CMake
+    #cmake_flags = (
+    #    f'-DCMAKE_BUILD_TYPE={config} '
+    #    '-DCMAKE_CXX_FLAGS="-pthread -fwasm-exceptions -msimd128" '
+    #    '-DCMAKE_C_FLAGS="-pthread -fwasm-exceptions -msimd128" '
+    #    # For libraries, EXE_LINKER_FLAGS might be ignored, but good to have for consistency
+    #    '-DCMAKE_EXE_LINKER_FLAGS="-pthread -fwasm-exceptions -msimd128"'
+    #)
+
     cmake_flags = (
         f'-DCMAKE_BUILD_TYPE={config} '
-        '-DCMAKE_CXX_FLAGS="-pthread -fwasm-exceptions" '
-        '-DCMAKE_C_FLAGS="-pthread -fwasm-exceptions" '
+        '-DCMAKE_CXX_FLAGS="-pthread" '
+        '-DCMAKE_C_FLAGS="-pthread" '
         # For libraries, EXE_LINKER_FLAGS might be ignored, but good to have for consistency
-        '-DCMAKE_EXE_LINKER_FLAGS="-pthread -fwasm-exceptions"'
+        '-DCMAKE_EXE_LINKER_FLAGS="-pthread"'
     )
 
     # Use Unix Makefiles (standard for Emscripten)
@@ -328,11 +343,12 @@ def build_web_tritonsimgui(ctx):
 
     log(">>> TritonSim.GUI.Browser Publish Complete.")
 
-def build_web(ctx, target="all"):
+def build_web(ctx):
     """
     Orchestrates the WebAssembly build.
     target: 'all', 'bgfx', 'sim', 'gui'
     """
+    target = ctx["target"]
     log(f"\nStarting Web Assembly Build Sequence (Target: {target})...")
     log("=" * 75)
 
@@ -377,6 +393,9 @@ def build_web(ctx, target="all"):
         build_web_tritonsim(ctx)
     elif target == "gui":
         build_web_tritonsimgui(ctx)
+    elif target == "sim_gui":
+        build_web_tritonsim(ctx)
+        build_web_tritonsimgui(ctx)
     else:
         log(f"Unknown web sub-target: {target}", "ERROR")
         sys.exit(1)
@@ -395,14 +414,7 @@ def main():
     
     # Map friendly names to internal target logic
     if platform == "web":
-        build_web(ctx, target="all")
-    elif platform == "web_bgfx":
-        build_web(ctx, target="bgfx")
-    elif platform == "build_web_tritonsim": # Strict match as requested
-        build_web(ctx, target="sim")
-    elif platform == "build_web_tritonsimgui": # Strict match as requested
-        build_web(ctx, target="gui")
-        
+        build_web(ctx)    
     elif platform in ["win_x64", "win_x86"]:
         build_win(ctx)
     else:

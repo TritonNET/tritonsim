@@ -55,17 +55,32 @@ if(EMSCRIPTEN)
     # Emscripten specific defines
     target_compile_definitions(TritonSimRenderer PRIVATE 
         __EMSCRIPTEN__ 
-        BX_CONFIG_DEBUG=0
+        BX_CONFIG_DEBUG=1
     )
+
+    set(CMAKE_CXX_FLAGS "-s MIN_WEBGL_VERSION=2 \
+        -s MAX_WEBGL_VERSION=2 \
+        -pthread \
+        --bind \
+        --use-preload-plugins \
+        -Wall \
+        -Wextra \
+        -Werror=return-type \
+        -s ASSERTIONS=1 \
+        -w \
+        -g4 \
+        -s DISABLE_EXCEPTION_CATCHING=1 \
+        -Os \
+        -s USE_GLFW=3 \
+        --no-heap-copy \
+        -s GL_ENABLE_GET_PROC_ADDRESS \
+        -static \
+        -s ALLOW_MEMORY_GROWTH=1 \
+        -s EXIT_RUNTIME=1")
 
     # B. Compile Options
     # FIX: Added -fwasm-exceptions and ensured -pthread is present
     target_compile_options(TritonSimRenderer PRIVATE 
-        -gsource-map
-        -Os 
-        -Wall 
-        -Wextra 
-        -Werror=return-type
         -pthread
         -fwasm-exceptions
     )
@@ -73,29 +88,8 @@ if(EMSCRIPTEN)
     # C. Link Options
     # Ensure static library objects are created with these flags too
     target_link_options(TritonSimRenderer PUBLIC
-                -pthread
+        -pthread
         -fwasm-exceptions
-        
-        # Canvas and display settings
-        "SHELL:-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0"
-        "SHELL:-s USE_WEBGL2=1"
-        "SHELL:-s FULL_ES3=1"
-        "SHELL:-s MIN_WEBGL_VERSION=2"
-        
-        # Allow BGFX to find canvas
-        "SHELL:-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=['$Browser','$HTML5']"
-        
-        # Export functions for testing
-        "SHELL:-s EXPORTED_FUNCTIONS=['_main','_test_webgl_availability','_get_canvas_width']"
-        "SHELL:-s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','UTF8ToString']"
-        
-        # Memory settings
-        "SHELL:-s ALLOW_MEMORY_GROWTH=1"
-        "SHELL:-s INITIAL_MEMORY=67108864"  # 64MB initial
-        
-        # Debugging
-        "SHELL:-s GL_DEBUG=1"
-        "SHELL:-s ASSERTIONS=2"
     )
 
     # Libraries to link

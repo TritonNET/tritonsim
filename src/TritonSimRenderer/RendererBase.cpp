@@ -9,7 +9,20 @@ RendererBase::RendererBase(ShaderPacker* sp, ShaderType st, const SimConfig& cfg
     , m_st(st)
     , m_sp(sp)
 {
-    
+    std::string rawId = "";
+    if (cfg.handle != nullptr) {
+        rawId = static_cast<const char*>(cfg.handle);
+    }
+
+    // 2. Formatting: Ensure it starts with '#' for CSS selector compatibility
+    if (!rawId.empty() && rawId[0] != '#') {
+        m_canvasid = "#" + rawId;
+    }
+    else {
+        m_canvasid = rawId;
+    }
+
+    LOG_DEBUG("[C++] Parsed Canvas Selector: '%s' (Length: %zu)\n", m_canvasid.c_str(), m_canvasid.length());
 }
 
 RendererBase::~RendererBase()
@@ -20,53 +33,92 @@ RendererBase::~RendererBase()
     delete m_sp;
 }
 
+int canvas_exists_main(const char* id)
+{
+    return EM_ASM_INT({
+        return document.getElementById(UTF8ToString($0)) !== null;
+        }, id);
+}
+
+int canvas_exists(const char* id)
+{
+    return emscripten_sync_run_in_main_runtime_thread(
+        EM_FUNC_SIG_II, canvas_exists_main, id
+    );
+}
+
+//int create_webgl_context_main_thread()
+//{
+//    LOG_DEBUG("Running on pthread: %s", emscripten_is_main_browser_thread() ? "MAIN" : "WORKER");
+//
+//    EmscriptenWebGLContextAttributes attrs;
+//    emscripten_webgl_init_context_attributes(&attrs);
+//    attrs.majorVersion = 2;
+//    attrs.minorVersion = 0;
+//
+//    EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context("#tbgfxcs", &attrs);
+//    if (ctx <= 0) {
+//        printf("Failed to create WebGL context on main thread\n");
+//        return 0;
+//    }
+//
+//    emscripten_webgl_make_context_current(ctx);
+//    bgfx::PlatformData pd;
+//    pd.nwh = nullptr;
+//    pd.context = (void*)ctx;
+//    bgfx::setPlatformData(pd);
+//
+//    return 1;
+//}
+
 ResponseCode RendererBase::Init()
 {
-    // Setup the Init struct
-    bgfx::Init init;
-
-    init.resolution.width = m_width;
-    init.resolution.height = m_height;
-    init.resolution.reset = m_resetFlags;
-
 #ifdef __EMSCRIPTEN__
-    // For WebAssembly, we need special handling
-    init.type = bgfx::RendererType::OpenGLES;
+    // -----------------------------------------------------------------------
+    // THE CLEAN FIX: Let BGFX create the context.
+    // -----------------------------------------------------------------------
+    // Since m_canvasid is now correctly set to "#tbgfxcs", BGFX will:
+    // 1. Find the canvas.
+    // 2. Create the WebGL 2.0 context internally.
+    // 3. Own the handle, preventing the 'GLctx' crash.
+    // -----------------------------------------------------------------------
 
-    // CRITICAL: In WebAssembly, BGFX needs to find the canvas through Emscripten
-    // The canvas should be set as Module.canvas in JavaScript
+    bgfx::Init init;
+    init.type = bgfx::RendererType::OpenGL; // Forces WebGL
 
-    // We don't pass the native window handle here for WebGL
-    init.platformData.nwh = nullptr;
+    // Pass the ID String so BGFX knows WHICH canvas to use
+    init.platformData.nwh = (void*)m_canvasid.c_str();
 
-    // For WebGL, BGFX uses the default canvas from Module.canvas
-    // or we need to explicitly set it using emscripten_set_canvas_element_size
-    std::string canvasId = "tbgfxcs";
-    emscripten_set_canvas_element_size(canvasId.c_str(), m_width, m_height);
+    // Pass NULL context so BGFX knows it must create one
+    init.platformData.context = nullptr;
 
-    LOG_DEBUG("WebGL initialization - using canvas: %s", canvasId.c_str());
+    init.platformData.backBuffer = nullptr;
+    init.platformData.backBufferDS = nullptr;
+
 #else
-    // Windows/Desktop Specifics
-    init.type = bgfx::RendererType::Direct3D11;
+    // Windows/Desktop
+    bgfx::Init init;
+    init.type = bgfx::RendererType::Count;
     init.platformData.nwh = m_nwh;
+    init.platformData.context = nullptr;
 #endif
 
-    init.platformData.ndt = NULL;
-    init.platformData.context = NULL;
-    init.platformData.backBuffer = NULL;
-    init.platformData.backBufferDS = NULL;
+    // Common Settings
+    init.resolution.width = m_width;
+    init.resolution.height = m_height;
+    init.resolution.reset = BGFX_RESET_VSYNC;
 
-    if (!bgfx::init(init))
-    {
+    if (!bgfx::init(init)) {
+        LOG_DEBUG("BGFX init failed");
         return RC_FAILED;
     }
 
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
-    bgfx::setViewRect(0, 0, 0, m_width, m_height);
-    bgfx::touch(0);
-    bgfx::frame();
+    LOG_DEBUG("BGFX initialized successfully");
 
-    LOG_DEBUG("RendererBase initialized successfully");
+    bgfx::setViewRect(0, 0, 0, m_width, m_height);
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, m_backgroundColor, 1.0f, 0);
+    bgfx::touch(0);
+
     return RC_SUCCESS;
 }
 

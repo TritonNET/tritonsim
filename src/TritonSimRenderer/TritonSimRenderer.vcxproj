@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(SolutionDir)Common\common.props" />
-  
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -31,26 +30,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -84,15 +83,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)TritonSimRenderer\build_win\bin\$(Configuration)\</OutDir>
   </PropertyGroup>
-  
   <Target Name="CheckBgfxLib" BeforeTargets="PrepareForBuild">
-    <Error Condition="'$(Configuration)' == 'Release' and !Exists('$(BgfxWinBinDir)bgfxRelease.lib')" 
-           Text="[Build Error] 'bgfxRelease.lib' is missing from '$(BgfxWinBinDir)'." />
-
-    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('$(BgfxWinBinDir)bgfxDebug.lib')" 
-           Text="[Build Error] 'bgfxDebug.lib' is missing from '$(BgfxWinBinDir)'." />
+    <Error Condition="'$(Configuration)' == 'Release' and !Exists('$(BgfxWinBinDir)bgfxRelease.lib')" Text="[Build Error] 'bgfxRelease.lib' is missing from '$(BgfxWinBinDir)'." />
+    <Error Condition="'$(Configuration)' == 'Debug' and !Exists('$(BgfxWinBinDir)bgfxDebug.lib')" Text="[Build Error] 'bgfxDebug.lib' is missing from '$(BgfxWinBinDir)'." />
   </Target>
-  
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

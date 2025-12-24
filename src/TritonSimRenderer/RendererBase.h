@@ -31,6 +31,10 @@ protected:
 
 	void* m_nwh;
 
+#ifdef TRITONSIM_EMSCRIPTEN
+	std::string m_canvasid;
+#endif // TRITONSIM_EMSCRIPTEN
+
 	std::atomic<bool> m_running{ false };
 	std::thread m_thread;
 

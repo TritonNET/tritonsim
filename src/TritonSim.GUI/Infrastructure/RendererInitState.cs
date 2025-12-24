@@ -12,6 +12,9 @@ namespace TritonSim.GUI.Infrastructure
         SizeSet = 1 << 2,
         AttachedToVisualTree = 1 << 3,
 
-        NativeInitialized = 1 << 5
+        NativeInitSuccess = 1 << 5,
+        NativeInitFailed = 1 << 6,
+
+        NativeInitCompleted = NativeInitSuccess | NativeInitFailed,
     }
 }

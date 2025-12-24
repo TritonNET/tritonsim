@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices.JavaScript;
+﻿using System;
+using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
 
 namespace TritonSim.GUI.Browser.Infrastructure
@@ -6,26 +7,29 @@ namespace TritonSim.GUI.Browser.Infrastructure
     [SupportedOSPlatform("browser")]
     public static partial class BrowserInterop
     {
-        [JSImport("createCanvas", "canvasProviderModule")]
-        private static partial JSObject? CreateCanvasInternal(string parentId, string divId);
+        private const string MODULE_NAME = "canvasProviderModule";
 
-        public static bool CreateCanvas(string parentId, string divId, out JSObject? canvas)
+        [JSImport("createCanvas", MODULE_NAME)]
+        [return: JSMarshalAs<JSType.Object>]
+        private static partial JSObject? CreateCanvasInternal(string parentId, string canvasId, double width, double height);
+
+        public static bool CreateCanvas(string parentId, string canvasId, double width, double height, out JSObject? canvas)
         {
-            canvas = CreateCanvasInternal(parentId, divId);
+            canvas = CreateCanvasInternal(parentId, canvasId, width, height);
             return canvas != null;
         }
 
-        [JSImport("updatePosition", "canvasProviderModule")]
+        [JSImport("updatePosition", MODULE_NAME)]
         [return: JSMarshalAs<JSType.Boolean>]
         public static partial bool UpdatePosition(
-            string divId,
+            string canvasId,
             double x,
             double y,
             double width,
             double height);
 
-        [JSImport("removeCanvas", "canvasProviderModule")]
+        [JSImport("removeCanvas", MODULE_NAME)]
         [return: JSMarshalAs<JSType.Boolean>]
-        public static partial bool RemoveCanvas(string divId);
+        public static partial bool RemoveCanvas(string canvasId);
     }
 }

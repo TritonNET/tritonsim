@@ -14,7 +14,7 @@ namespace TritonSim.GUI.Browser.Providers
 
         public BrowserCanvasHandle(JSObject obj, string canvasID) : base(obj)
         {
-            m_canvasHandle = Marshal.StringToHGlobalAnsi($"#{canvasID}");
+            m_canvasHandle = Marshal.StringToHGlobalAnsi($"{canvasID}");
         }
 
         public nint GetCanvasHandle()
@@ -44,11 +44,11 @@ namespace TritonSim.GUI.Browser.Providers
             m_logger = logger;
         }
 
-        public bool Create(IntPtr parent, double width, double height, out IPlatformCanvasHandle handle)
+        public bool Create(IntPtr parent, double width, double height, out IPlatformCanvasHandle? handle)
         {
             m_logger.Debug($"Creating Browser canvas. (Canvas ID: {m_canvasID}, Parent ID: {m_appParentID}, Width: {width}, Height: {height})");
 
-            if (!BrowserInterop.CreateCanvas(m_appParentID, m_canvasID, out var canvasObj))
+            if (!BrowserInterop.CreateCanvas(m_appParentID, m_canvasID, width, height, out var canvasObj))
             {
                 m_logger.Error($"Creating Browser canvas failed. (Canvas ID: {m_canvasID})");
                 handle = null;

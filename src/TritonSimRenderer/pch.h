@@ -23,10 +23,6 @@
 #include "framework.h"
 #endif // WINDOWS
 
-#ifdef __EMSCRIPTEN__
-#include "..\ShaderBin\tritonsim_asm.h"
-#endif
-
 #include <shader_types.h>
 #include <shader_def.h>
 #include <shader_packer.h>

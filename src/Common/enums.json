@@ -23,10 +23,14 @@
     { "name": "RC_INVALID_RENDER_SURFACE_HEIGHT", "type": "Renderer_Fail", "desc": "The render surface height is invalid." },
     { "name": "RC_INVALID_RENDER_SURFACE_WIDTH", "type": "Renderer_Fail", "desc": "The render surface width is invalid." },
     { "name": "RC_INVALID_RENDER_SURFACE_HANDLE", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is invalid." },
+    { "name": "RC_INVALID_RENDER_SURFACE_NOTADOMID", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is not a valid DOM Id." },
+    { "name": "RC_INVALID_RENDER_SURFACE_TOOLONGDOMID", "type": "Renderer_Fail", "desc": "The handle provided for the render surface is too long DOM Id." },
 
     { "name": "RC_FAILED_OPEN_FILE", "type": "IO_Fail", "desc": "Failed to open the specified file." },
     { "name": "RC_FAILED_TO_LOAD_RESOURCE_FILE", "type": "IO_Fail", "desc": "Failed to load the requested resource file." },
 
     { "name": "RC_FAILED_TO_DETERMINE_DLL_MODULE_HANDLE", "type": "System_Fail", "desc": "Could not determine the handle for the DLL module." }
+    
+
   ]
 }

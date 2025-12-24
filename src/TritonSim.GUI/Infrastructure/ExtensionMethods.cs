@@ -49,7 +49,7 @@ namespace TritonSim.GUI.Infrastructure
 
         public static bool IsInitCompleted(this RendererInitState state)
         {
-            return state.IsReadyToInit() && state.HasFlag(RendererInitState.NativeInitialized);
+            return state.IsReadyToInit() && (state.HasFlag(RendererInitState.NativeInitSuccess) || state.HasFlag(RendererInitState.NativeInitFailed));
         }
     }
 }

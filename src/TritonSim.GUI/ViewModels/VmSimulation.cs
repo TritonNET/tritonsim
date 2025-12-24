@@ -48,6 +48,13 @@ namespace TritonSim.GUI.ViewModels
 
             RendererTypes = new ObservableCollection<VmRendererType>();
 
+            logger.Debug("VmSimulation created.");
+        }
+
+        public void Init()
+        {
+            Logger.Debug("VmSimulation initializing.");
+
             foreach (RendererType type in Enum.GetValues(typeof(RendererType)))
             {
                 if ((type & RendererType.RT_MASK_ID) == 0 || type == RendererType.RT_UNKNOWN || type == RendererType.RT_MASK_ID)
@@ -60,9 +67,9 @@ namespace TritonSim.GUI.ViewModels
                 });
             }
 
-            SelectedRenderer = RendererTypes.Where(e=> e.Type == RendererType.RT_TEST_EDGES).FirstOrDefault();
+            SelectedRenderer = RendererTypes.Where(e => e.Type == RendererType.RT_TEST_COLOR_CHANGING).FirstOrDefault();
 
-            logger.Debug("VmSimulation created.");
+            Logger.Debug("VmSimulation initialized.");
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)

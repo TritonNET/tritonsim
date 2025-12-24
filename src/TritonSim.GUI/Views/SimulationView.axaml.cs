@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using System;
 using TritonSim.GUI.ViewModels;
@@ -19,6 +20,13 @@ public partial class SimulationView : UserControl
 
         m_vm = vm;
         DataContext = vm;
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+
+        m_vm?.Init();
     }
 
     protected override void OnDataContextChanged(EventArgs e)

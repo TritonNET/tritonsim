@@ -159,7 +159,6 @@ if not exist "%WASM_PROJECT_DIR%" (
 
 pushd "%WASM_PROJECT_DIR%"
 
-:: --- CRITICAL FIX: Patch Makefiles to enable Exceptions ---
 echo [INFO] Patching BGFX Makefiles to enable exceptions...
 powershell -Command "Get-ChildItem -Path '*.make' -Recurse | ForEach-Object { (Get-Content $_) -replace '-fno-exceptions', '-fexceptions' | Set-Content $_ }"
 :: ----------------------------------------------------------

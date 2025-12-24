@@ -9,6 +9,7 @@
 			HorizontalAlignment="Stretch" 
 			VerticalAlignment="Stretch" 
 			WindowProvider="{Binding WindowProvider, ElementName=Root}"
+			Logger="{Binding LogHandler, ElementName=Root}"
 			NativeHandleCreated="NativeContainer_NativeHandleCreated"
 			NativeHandleFailed="NativeContainer_NativeHandleFailed"/>
 

@@ -11,7 +11,7 @@ mimetypes.add_type('application/wasm', '.wasm')
 
 # The path to your published files relative to the csproj
 # Note: Ensure you have run 'dotnet publish -c Release' first!
-PUBLISH_DIR = os.path.join("TritonSim.GUI.Browser","bin", "Release", "net10.0-browser", "publish", "wwwroot")
+PUBLISH_DIR = os.path.join("TritonSim.GUI.Browser","bin", "Debug", "net10.0-browser", "publish", "wwwroot")
 
 class COOP_COEP_RequestHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
