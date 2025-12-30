@@ -7,39 +7,39 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TritonSimRenderer", "Triton
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bgfx", "bgfx", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgfx", "3rdparty\bgfx\.build\projects\vs2022\bgfx.vcxproj", "{6C90947C-58C7-950D-01B4-7B10EDC9110F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgfx", "3rdparty\bgfx\.build\projects\vs2026\bgfx.vcxproj", "{6C90947C-58C7-950D-01B4-7B10EDC9110F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg", "3rdparty\bgfx\.build\projects\vs2022\bimg.vcxproj", "{C499947C-B0D0-950D-59BD-7B1045D3110F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg", "3rdparty\bgfx\.build\projects\vs2026\bimg.vcxproj", "{C499947C-B0D0-950D-59BD-7B1045D3110F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg_decode", "3rdparty\bgfx\.build\projects\vs2022\bimg_decode.vcxproj", "{A7B931CA-136F-AABF-9C63-A4960818A1C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg_decode", "3rdparty\bgfx\.build\projects\vs2026\bimg_decode.vcxproj", "{A7B931CA-136F-AABF-9C63-A4960818A1C3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg_encode", "3rdparty\bgfx\.build\projects\vs2022\bimg_encode.vcxproj", "{D1BE29CD-3D74-A2C2-C668-9C99321D99C6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bimg_encode", "3rdparty\bgfx\.build\projects\vs2026\bimg_encode.vcxproj", "{D1BE29CD-3D74-A2C2-C668-9C99321D99C6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bx", "3rdparty\bgfx\.build\projects\vs2022\bx.vcxproj", "{5F775900-4B03-880B-B4B1-880BA05C880B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bx", "3rdparty\bgfx\.build\projects\vs2026\bx.vcxproj", "{5F775900-4B03-880B-B4B1-880BA05C880B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fcpp", "3rdparty\bgfx\.build\projects\vs2022\fcpp.vcxproj", "{2EB2967C-1AE9-970D-C3D5-7D10AFEB130F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fcpp", "3rdparty\bgfx\.build\projects\vs2026\fcpp.vcxproj", "{2EB2967C-1AE9-970D-C3D5-7D10AFEB130F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geometryc", "3rdparty\bgfx\.build\projects\vs2022\geometryc.vcxproj", "{D4DE4E6C-4049-03E3-8987-B488F530E137}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geometryc", "3rdparty\bgfx\.build\projects\vs2026\geometryc.vcxproj", "{D4DE4E6C-4049-03E3-8987-B488F530E137}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geometryv", "3rdparty\bgfx\.build\projects\vs2022\geometryv.vcxproj", "{E7DE4E6C-5349-03E3-9C87-B4880831E137}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geometryv", "3rdparty\bgfx\.build\projects\vs2026\geometryv.vcxproj", "{E7DE4E6C-5349-03E3-9C87-B4880831E137}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glslang", "3rdparty\bgfx\.build\projects\vs2022\glslang.vcxproj", "{0D19B900-79F8-379C-8210-C372EE6E9EFD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glslang", "3rdparty\bgfx\.build\projects\vs2026\glslang.vcxproj", "{0D19B900-79F8-379C-8210-C372EE6E9EFD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glsl-optimizer", "3rdparty\bgfx\.build\projects\vs2022\glsl-optimizer.vcxproj", "{4783A312-3351-9718-1CE5-073F0852737D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glsl-optimizer", "3rdparty\bgfx\.build\projects\vs2026\glsl-optimizer.vcxproj", "{4783A312-3351-9718-1CE5-073F0852737D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shaderc", "3rdparty\bgfx\.build\projects\vs2022\shaderc.vcxproj", "{FF44D591-6B24-542D-743C-DF03E09ABA8E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shaderc", "3rdparty\bgfx\.build\projects\vs2026\shaderc.vcxproj", "{FF44D591-6B24-542D-743C-DF03E09ABA8E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spirv-cross", "3rdparty\bgfx\.build\projects\vs2022\spirv-cross.vcxproj", "{F0E19980-5C97-1276-E58B-0C4D5140097A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spirv-cross", "3rdparty\bgfx\.build\projects\vs2026\spirv-cross.vcxproj", "{F0E19980-5C97-1276-E58B-0C4D5140097A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spirv-opt", "3rdparty\bgfx\.build\projects\vs2022\spirv-opt.vcxproj", "{F952D147-65BD-85BE-AEFB-36641AA56313}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spirv-opt", "3rdparty\bgfx\.build\projects\vs2026\spirv-opt.vcxproj", "{F952D147-65BD-85BE-AEFB-36641AA56313}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturec", "3rdparty\bgfx\.build\projects\vs2022\texturec.vcxproj", "{B9F8A108-A5C5-FC13-CEDE-EABBBA0A32A2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturec", "3rdparty\bgfx\.build\projects\vs2026\texturec.vcxproj", "{B9F8A108-A5C5-FC13-CEDE-EABBBA0A32A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturev", "3rdparty\bgfx\.build\projects\vs2022\texturev.vcxproj", "{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturev", "3rdparty\bgfx\.build\projects\vs2026\texturev.vcxproj", "{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example-common", "3rdparty\bgfx\.build\projects\vs2022\example-common.vcxproj", "{A788128C-9356-0692-7CEA-76B86857E2F6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example-common", "3rdparty\bgfx\.build\projects\vs2026\example-common.vcxproj", "{A788128C-9356-0692-7CEA-76B86857E2F6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example-glue", "3rdparty\bgfx\.build\projects\vs2022\example-glue.vcxproj", "{2B1D7912-1780-08B7-C005-416DAC47D439}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "example-glue", "3rdparty\bgfx\.build\projects\vs2026\example-glue.vcxproj", "{2B1D7912-1780-08B7-C005-416DAC47D439}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI", "TritonSim.GUI\TritonSim.GUI.csproj", "{83DD2F81-83B1-4A63-94A5-AD4E7D176FC9}"
 EndProject
@@ -92,12 +92,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E43020E6-63E3-4CCE-AC96-EF18103CEC0F}"
 	ProjectSection(SolutionItems) = preProject
 		build.bat = build.bat
-		build.config = build.config
+		build.json = build.json
 		build.py = build.py
-		build_complete.bat = build_complete.bat
-		build_web.bat = build_web.bat
-		build_web_wasm.bat = build_web_wasm.bat
-		build_win.bat = build_win.bat
+		build_utils.py = build_utils.py
+		build_web.py = build_web.py
+		build_win.py = build_win.py
+		Dockerfile = Dockerfile
 		run_web.py = run_web.py
 	EndProjectSection
 EndProject
@@ -109,6 +109,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{28F309
 		Common\enum_compile.py = Common\enum_compile.py
 		Common\enum_compile.sh = Common\enum_compile.sh
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritonSim.GUI.Browser.Host", "TritonSim.GUI.Browser.Host\TritonSim.GUI.Browser.Host.csproj", "{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -432,6 +434,18 @@ Global
 		{33334638-3F40-4671-9DCA-3267E08CB3F5}.Release|x64.Build.0 = Release|x64
 		{33334638-3F40-4671-9DCA-3267E08CB3F5}.Release|x86.ActiveCfg = Release|Win32
 		{33334638-3F40-4671-9DCA-3267E08CB3F5}.Release|x86.Build.0 = Release|Win32
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Debug|x64.Build.0 = Debug|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Debug|x86.Build.0 = Debug|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Release|x64.ActiveCfg = Release|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Release|x64.Build.0 = Release|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Release|x86.ActiveCfg = Release|Any CPU
+		{C85626D9-7471-CA5E-B7E7-D65F2C3E0D88}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

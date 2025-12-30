@@ -1,0 +1,27 @@
+{
+	"directories": {
+		"thirdparty": "3rdparty",
+		"renderer": "TritonSimRenderer",
+		"output": {
+			"win_debug": "build\\win_debug",
+			"win_release": "build\\win_release",
+			"linux_debug": "build\\linux_debug",
+			"linux_release": "build\\linux_release",
+			"web_debug": "build\\web_debug",
+			"web_release": "build\\web_release",
+			"android_debug": "build\\android_debug",
+			"android_release": "build\\android_release"
+		}
+
+	},
+	"tools": {
+		"vs_version": "2026",
+		"em_version": "3.1.56",
+		"vs_vars_path": "C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Auxiliary\\Build\\vcvars64.bat"
+	},
+	"docker": {
+		"image_name": "tritonnet/tritonsim",
+		"tag_debug": "debug",
+		"tag_release": "latest"
+	}
+}
