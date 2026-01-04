@@ -13,7 +13,7 @@ def create_build_context():
     parser.add_argument("-Config", default="build.json", help="Path to JSON configuration file")
     parser.add_argument("-Configuration", default="Release", help="Build Configuration (Debug/Release)")
     parser.add_argument("-Platform", default="win_x64", help="Target Platform (win_x64/web)")
-    parser.add_argument("-Target", default="all", help="Build Targets (all/bgfx/sim/gui/bgfx_sim/bgfx_sim_gui/sim_gui)")
+    parser.add_argument("-Target", default="all", help="Build Targets \n all or \n\t bgfx, sim, gui, host, docker \n or combination of them in any order seperated by underscore (ie: gui_docker). They will be executed in the correct order that they should be executed.")
 
     args = parser.parse_args()
     
