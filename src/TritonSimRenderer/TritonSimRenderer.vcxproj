@@ -188,6 +188,7 @@
     <ClInclude Include="defs_emscripten.h" />
     <ClInclude Include="defs_win.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="internal_dispatch.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RendererBase.h" />
     <ClInclude Include="RendererBouncingCircle.h" />

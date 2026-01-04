@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
-using System.Drawing;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
 
@@ -57,6 +56,7 @@ namespace TritonSim.GUI.Controls
         }
 
         private readonly DispatcherTimer? m_renderTimer;
+
         private RendererInitState m_initState = RendererInitState.None;
         private ILogger? m_logger => LogHandler;
 
@@ -153,7 +153,7 @@ namespace TritonSim.GUI.Controls
             var topLevel = TopLevel.GetTopLevel(this);
             var scale = topLevel?.RenderScaling ?? 1.0;
 
-            PerformProviderAction(() => SimProvider?.SetSize(new Avalonia.Size(size.Width * scale, size.Height * scale)));
+            PerformProviderAction(() => SimProvider?.SetSize(new Size(size.Width * scale, size.Height * scale)));
 
             return true;
         }
@@ -231,11 +231,17 @@ namespace TritonSim.GUI.Controls
         {
             if (SimProvider == null) return;
 
-            SimProvider.Shutdown();
+            PerformProviderAction(() =>
+            {
+                var success = SimProvider.Shutdown();
 
-            SetCurrentValue(ModeProperty, SimProvider.GetMode());
+                SetCurrentValue(ModeProperty, SimProvider.GetMode());
 
-            SetInitState(RendererInitState.NativeInitCompleted, set: false);
+                if (success)
+                    SetInitState(m_initState.IsInitSuccess() ? RendererInitState.NativeInitSuccess : RendererInitState.NativeInitFailed, set: false);
+
+                return success;
+            });
         }
 
         private void HandleRendererChange(RendererType newType)

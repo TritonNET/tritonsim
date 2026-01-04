@@ -75,6 +75,9 @@
     <ClInclude Include="defs_emscripten.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="internal_dispatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -122,6 +125,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="$(EnumJsonDef)" />
     <CustomBuild Include="$(EnumJsonDef)" />
   </ItemGroup>
 </Project>

@@ -51,5 +51,10 @@ namespace TritonSim.GUI.Infrastructure
         {
             return state.IsReadyToInit() && (state.HasFlag(RendererInitState.NativeInitSuccess) || state.HasFlag(RendererInitState.NativeInitFailed));
         }
+
+        public static bool IsInitSuccess(this RendererInitState state)
+        {
+            return state.HasFlag(RendererInitState.NativeInitSuccess);
+        }
     }
 }
