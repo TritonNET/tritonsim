@@ -6,15 +6,15 @@ namespace TritonSim.GUI.Providers
     {
         public void Log(LogLevel level, string message, Exception? ex = null)
         {
-            string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+            //string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
 
-            Console.WriteLine($"[{timestamp}] [{level.ToString().ToUpper()}] {message}");
+            //Console.WriteLine($"[{timestamp}] [{level.ToString().ToUpper()}] {message}");
 
-            if (ex != null)
-            {
-                Console.WriteLine($"\tException: {ex.Message}");
-                Console.WriteLine($"\tStack Trace: {ex.StackTrace}");
-            }
+            //if (ex != null)
+            //{
+            //    Console.WriteLine($"\tException: {ex.Message}");
+            //    Console.WriteLine($"\tStack Trace: {ex.StackTrace}");
+            //}
         }
 
         private ConsoleColor GetColorForLevel(LogLevel level)

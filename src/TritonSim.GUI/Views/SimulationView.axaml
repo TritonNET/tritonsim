@@ -38,12 +38,12 @@
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 
-				<ComboBox
+				<!--<ComboBox
 					Grid.Row="0"
 					HorizontalAlignment="Stretch"
 					ItemsSource="{Binding Path=RendererTypes, Mode=OneWay}"
 					SelectedItem="{Binding Path=SelectedRenderer, Mode=TwoWay}">
-				</ComboBox>
+				</ComboBox>-->
 
 				<Grid Grid.Row="2">
 					<Grid.ColumnDefinitions>

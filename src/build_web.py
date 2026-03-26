@@ -133,15 +133,28 @@ def build_web_tritonsimguihost(ctx):
         sys.exit(1)
 
     host_project_dir = ctx["src_paths"]["gui_browser_host"]
+    dirs_to_clean = [
+        os.path.join(host_project_dir, "bin"),
+        os.path.join(host_project_dir, "obj"),
+    ]
+
+    log("Cleaning old binaries...")
+    for d in dirs_to_clean:
+        if os.path.exists(d):
+            log(f"Deleting {d}")
+            try:
+                shutil.rmtree(d)
+            except Exception as e:
+                log(f"Failed to delete {d}: {e}", "WARNING")
 
     host_csproj = os.path.join(host_project_dir, "TritonSim.GUI.Browser.Host.csproj")
 
-    output_dir = os.path.join(ctx["src_root"], ctx["output_paths"]["web"])
-
-    config = ctx["configuration"]
     if not os.path.exists(host_csproj):
         log(f"Host project not found at {host_csproj}.", "ERROR")
         sys.exit(1)
+
+    output_dir = os.path.join(ctx["src_root"], ctx["output_paths"]["web"])
+    config = ctx["configuration"]
 
     log(f"Building Host: {host_csproj} [{config}]...")
 

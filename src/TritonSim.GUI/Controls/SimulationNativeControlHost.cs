@@ -75,7 +75,8 @@ namespace TritonSim.GUI.Controls
             {
                 Logger?.Error("SimulationNativeControlHost CreateNativeControlCore failed to create native canvas handle.");
                 NativeHandleFailed?.Invoke("Native window creation failed.");
-                return null!;
+
+                return base.CreateNativeControlCore(parent);
             }
             
             Debug.Assert(m_canvasHandle != null, "Canvas handle cannot be null here");

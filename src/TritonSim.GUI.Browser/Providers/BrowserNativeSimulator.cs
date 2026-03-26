@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using TritonSim.GUI.Infrastructure;
 using TritonSim.GUI.Providers;
@@ -20,7 +19,10 @@ public partial class BrowserNativeSimulator : INativeSimulator
         m_logger.Debug("[BrowserNative] Initializing Native Simulator...");
         try
         {
-            return NativeInit(ref config, out ctx);
+            ctx = new SimContext();
+            ctx.Renderer = 0x12345678;
+            return ResponseCode.Success;
+            //return NativeInit(ref config, out ctx);
         }
         catch (Exception ex)
         {
@@ -35,7 +37,8 @@ public partial class BrowserNativeSimulator : INativeSimulator
         m_logger.Debug("[BrowserNative] Updating Native Simulator Config...");
         try
         {
-            return NativeUpdateConfig(ref ctx, ref config);
+            return ResponseCode.Success;
+            //return NativeUpdateConfig(ref ctx, ref config);
         }
         catch (Exception ex)
         {
@@ -48,7 +51,8 @@ public partial class BrowserNativeSimulator : INativeSimulator
     {
         try
         {
-            return NativeRenderFrame(ref ctx);
+            return ResponseCode.Success;
+            //return NativeRenderFrame(ref ctx);
         }
         catch (Exception ex)
         {
@@ -62,7 +66,8 @@ public partial class BrowserNativeSimulator : INativeSimulator
         m_logger.Debug("[BrowserNative] Starting Native Simulator...");
         try
         {
-            return NativeStart(ref ctx);
+            return ResponseCode.Success;
+            //return NativeStart(ref ctx);
         }
         catch (Exception ex)
         {
@@ -76,7 +81,8 @@ public partial class BrowserNativeSimulator : INativeSimulator
         m_logger.Debug("[BrowserNative] Stopping Native Simulator...");
         try
         {
-            return NativeStop(ref ctx);
+            return ResponseCode.Success;
+            //return NativeStop(ref ctx);
         }
         catch (Exception ex)
         {
@@ -90,7 +96,8 @@ public partial class BrowserNativeSimulator : INativeSimulator
         m_logger.Debug("[BrowserNative] Shutting down Native Simulator...");
         try
         {
-            return NativeShutdown(ref ctx);
+            return ResponseCode.Success;
+            //return NativeShutdown(ref ctx);
         }
         catch (Exception ex)
         {
